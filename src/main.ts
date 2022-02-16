@@ -7,6 +7,12 @@ import * as compression from 'compression';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const origins = ['http://localhost'];
+
+  app.enableCors({
+    origin: origins,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Pet finder API')
     .setDescription('The Pet finder API description')
