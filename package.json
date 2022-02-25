@@ -1,7 +1,7 @@
 {
-  "name": "pet-finder-api",
+  "name": "mizipets-api",
   "version": "0.0.1",
-  "description": "",
+  "description": "Mizipets is a mobile application give services for pets",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
