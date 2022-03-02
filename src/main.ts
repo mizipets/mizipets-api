@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import helmet from 'helmet';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import helmet from 'helmet';
 import * as compression from 'compression';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
