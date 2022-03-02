@@ -7,7 +7,7 @@ export class RootController {
 
   @Get()
   hello(): string {
-    // eslint-disable-next-line prettier/prettier
-    return `Welcome to the ${this.config.get<string>('NAME')} in ${this.config.get<string>('ENV_NAME')}.`;
+    return `Welcome to ${this.config.get<string>('NAME')} in ${this.config.get<string>('ENV_NAME')} environment.`;
   }
 }
+
