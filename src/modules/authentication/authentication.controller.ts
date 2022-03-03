@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Post,
   Query,
@@ -18,16 +19,18 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   async createAccount(@Res() res, @Body() account: CreateUserDto) {
     const registeredAccount = await this.authService.register(account);
-    return res.status(HttpStatus.CREATED).json(registeredAccount);
+    return registeredAccount;
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Res() res, @Body() login: LoginDto) {
     const token = await this.authService.login(login);
-    return res.status(HttpStatus.OK).json(token);
+    return res.json(token);
   }
 
   // @UseGuards(JwtAuthGuard)
