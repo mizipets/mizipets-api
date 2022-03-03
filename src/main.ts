@@ -1,19 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
-import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
 import * as compression from 'compression';
-
+import helmet from 'helmet';
+import * as morgan from 'morgan';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const origins = ['http://localhost'];
-
   app.enableCors({
     origin: origins,
   });
+
+  app.use(compression());
+  app.use(helmet());
+  app.useGlobalPipes(new ValidationPipe());
+  app.use(morgan('tiny'));
 
   const config = new DocumentBuilder()
     .setTitle('Mizipets API')
@@ -22,15 +26,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  app.use(compression());
-  app.use(helmet());
-  app.useGlobalPipes(new ValidationPipe());
-  app.enableVersioning({
-    type: VersioningType.URI,
-    prefix: 'v',
-    defaultVersion: '1',
-  });
 
   await app.listen(process.env.PORT || 3000);
 }
