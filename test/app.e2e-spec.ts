@@ -20,6 +20,6 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Welcome to the pet-finder-api in developement.');
+      .expect('Welcome to the pet-finder-api in local.');
   });
 });
