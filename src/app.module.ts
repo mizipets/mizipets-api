@@ -32,7 +32,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     RootModule,
     AuthenticationModule,
     UsersModule,
-    
   ],
   controllers: [],
   providers: [
