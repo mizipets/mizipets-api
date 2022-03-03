@@ -110,9 +110,7 @@ export class AuthenticationService {
     };
 
     return {
-      token: this.jwtService.sign(jwtPayload, {
-        secret: process.env.JWT_SECRET,
-      }),
+      token: this.jwtService.sign(jwtPayload),
     };
   }
 }
