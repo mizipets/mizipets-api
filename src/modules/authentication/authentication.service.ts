@@ -1,24 +1,30 @@
-import {ConflictException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
-import {UsersService} from "../users/users.service";
-import {JwtService} from "@nestjs/jwt";
-import {User} from "../users/user.entity";
-import {compare, hash} from 'bcrypt';
-import {JwtResponseDto} from "./dto/jwt-response.dto";
-import {LoginDto} from "./dto/login.dto";
-import {JwtPayloadDto} from "./dto/jwt-payload.dto";
-
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/user.entity';
+import { compare, hash } from 'bcrypt';
+import { JwtResponseDto } from './dto/jwt-response.dto';
+import { LoginDto } from './dto/login.dto';
+import { JwtPayloadDto } from './dto/jwt-payload.dto';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly userService: UsersService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   public async register(registrationData: any): Promise<User> {
-    const emailCheck: User = await this.userService.getByEmail(registrationData.email);
-    if (emailCheck)
-      throw new ConflictException('This email already exists');
+    const emailCheck: User = await this.userService.getByEmail(
+      registrationData.email,
+    );
+    if (emailCheck) throw new ConflictException('This email already exists');
 
     registrationData.password = await hash(registrationData.password, 10);
     const user: User = await this.userService.create(registrationData);
@@ -30,16 +36,17 @@ export class AuthenticationService {
 
   public async login(login: LoginDto): Promise<JwtResponseDto> {
     const user: User = await this.userService.getByEmail(login.email);
-    if (!user)
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const isPasswordEquals: boolean = await compare(login.password, user.password);
+    const isPasswordEquals: boolean = await compare(
+      login.password,
+      user.password,
+    );
     if (!isPasswordEquals)
       throw new UnauthorizedException('Invalid credentials');
 
     return this.getJwtPayload(user);
   }
-
 
   // public async refreshToken(token: any): Promise<JwtResponseDto> {
   //   const account: Account = await this.accountsService.getAccountById(token._id);
@@ -102,6 +109,10 @@ export class AuthenticationService {
       // createDate: user.createDate
     };
 
-    return {token: this.jwtService.sign(jwtPayload)};
+    return {
+      token: this.jwtService.sign(jwtPayload, {
+        secret: process.env.JWT_SECRET,
+      }),
+    };
   }
 }
