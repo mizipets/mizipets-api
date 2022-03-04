@@ -9,13 +9,13 @@ import { JwtStrategy } from './passport/jwt.strategy';
 const { JWT_SECRET, JWT_EXPIRATION } = process.env;
 
 const JWT_CONFIG = {
-  secret: JWT_SECRET,
-  signOptions: { expiresIn: JWT_EXPIRATION },
+    secret: JWT_SECRET,
+    signOptions: { expiresIn: JWT_EXPIRATION }
 };
 
 @Module({
-  imports: [JwtModule.register(JWT_CONFIG), PassportModule, UsersModule],
-  providers: [AuthenticationService, JwtStrategy],
-  controllers: [AuthenticationController],
+    imports: [JwtModule.register(JWT_CONFIG), PassportModule, UsersModule],
+    providers: [AuthenticationService, JwtStrategy],
+    controllers: [AuthenticationController]
 })
 export class AuthenticationModule {}

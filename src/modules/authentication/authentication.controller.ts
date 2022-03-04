@@ -1,14 +1,14 @@
 import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Query,
-  Request,
-  Res,
-  UseGuards,
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    Query,
+    Request,
+    Res,
+    UseGuards
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -19,19 +19,19 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 export class AuthenticationController {
     constructor(private readonly authService: AuthenticationService) {}
 
-  @HttpCode(HttpStatus.CREATED)
-  @Post('register')
-  async createAccount(@Res() res, @Body() account: CreateUserDto) {
-    const registeredAccount = await this.authService.register(account);
-    return registeredAccount;
-  }
+    @HttpCode(HttpStatus.CREATED)
+    @Post('register')
+    async createAccount(@Res() res, @Body() account: CreateUserDto) {
+        const registeredAccount = await this.authService.register(account);
+        return registeredAccount;
+    }
 
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  async login(@Res() res, @Body() login: LoginDto) {
-    const token = await this.authService.login(login);
-    return res.json(token);
-  }
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    async login(@Res() res, @Body() login: LoginDto) {
+        const token = await this.authService.login(login);
+        return res.json(token);
+    }
 
     // @UseGuards(JwtAuthGuard)
     // @Get('token/refresh')

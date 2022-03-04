@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv';
 
 if (!process.env.ENV) {
-  process.stdout.write(
-    'ENV variable has not been set.\nWorking in local environment by default.\n',
-  );
+    process.stdout.write(
+        'ENV variable has not been set.\nWorking in local environment by default.\n'
+    );
 }
 
 const ENV = process.env.ENV || 'local';
