@@ -32,7 +32,7 @@ import * as path from 'path';
             parser: I18nJsonParser,
             parserOptions: {
                 path: path.join(__dirname, '/i18n/')
-            }
+            },
             resolvers: [new HeaderResolver(['x-custom-lang'])]
         }),
         RootModule,
