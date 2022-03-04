@@ -52,6 +52,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
         const msgLines = [
             `:bangbang:**${this.toDiscordBadgeString('Error')}**:bangbang:`,
+            `@Developper`,
             `**Mizipets API [${ENV}]** - ${request.hostname}`,
             `*${new Date().toLocaleString()}*`,
             `**${request.method}** \`\`${request.url}`,
