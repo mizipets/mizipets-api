@@ -17,7 +17,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthenticationController {
-  constructor(private readonly authService: AuthenticationService) {}
+    constructor(private readonly authService: AuthenticationService) {}
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
@@ -33,16 +33,16 @@ export class AuthenticationController {
     return res.json(token);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get('token/refresh')
-  // async refreshToken(@Res() res, @Request() req) {
-  //   const token = await this.authService.refreshToken(req.user);
-  //   return res.status(HttpStatus.OK).json(token);
-  // }
-  //
-  // @Post('reset/password')
-  // async resetPassword(@Res() res, @Query('code') code: string, @Body() login: LoginDto) {
-  //   const account = await this.authService.resetPassword(login, code);
-  //   return res.status(HttpStatus.OK).json(account);
-  // }
+    // @UseGuards(JwtAuthGuard)
+    // @Get('token/refresh')
+    // async refreshToken(@Res() res, @Request() req) {
+    //   const token = await this.authService.refreshToken(req.user);
+    //   return res.status(HttpStatus.OK).json(token);
+    // }
+    //
+    // @Post('reset/password')
+    // async resetPassword(@Res() res, @Query('code') code: string, @Body() login: LoginDto) {
+    //   const account = await this.authService.resetPassword(login, code);
+    //   return res.status(HttpStatus.OK).json(account);
+    // }
 }
