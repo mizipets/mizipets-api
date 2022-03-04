@@ -48,8 +48,6 @@ export class CustomExceptionFilter implements ExceptionFilter {
             exceptionMessage = exception.message;
         }
 
-        // const msg = \n\n\n\n\n\n\n\n\n`;
-
         const msgLines = [
             `:bangbang:**${this.toDiscordBadgeString('Error')}**:bangbang:`,
             `@Developper`,
