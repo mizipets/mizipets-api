@@ -1,14 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
+const { NAME, ENV } = process.env;
 @Controller()
 export class RootController {
-    constructor(private config: ConfigService) {}
+  constructor() {}
 
-    @Get()
-    hello(): string {
-        return `Welcome to ${this.config.get<string>(
-            'NAME'
-        )} in ${this.config.get<string>('ENV_NAME')} environment.`;
-    }
+  @Get()
+  hello(): string {
+    return `Welcome to ${NAME} in ${ENV} environment.`;
+  }
 }
+
