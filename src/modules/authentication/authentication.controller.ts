@@ -21,8 +21,8 @@ export class AuthenticationController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post('register')
-    async createAccount(@Body() account: CreateUserDto) {
-        return this.authService.register(account);
+    async createAccount(@Body() user: CreateUserDto) {
+        return this.authService.register(user);
     }
 
     @HttpCode(HttpStatus.OK)

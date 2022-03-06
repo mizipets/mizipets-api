@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import * as morgan from 'morgan';
+import { CustomExceptionFilter } from './shared/custom-exception.filter';
+import { DiscordService } from './shared/discord.service';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -17,6 +19,9 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
     app.setGlobalPrefix(process.env.API_PREFIX);
     app.use(morgan('tiny'));
+    app.useGlobalFilters(
+        new CustomExceptionFilter(app.get<DiscordService>(DiscordService))
+    );
 
     const config = new DocumentBuilder()
         .setTitle('Mizipets API')

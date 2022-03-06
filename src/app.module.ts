@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
 import { User } from './modules/users/user.entity';
 import { RootModule } from './modules/root/root.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { DiscordService } from './shared/discord.service';
+import * as path from 'path';
 
 @Module({
     imports: [
@@ -24,15 +27,25 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
             synchronize: true,
             ssl: false
         }),
+        I18nModule.forRoot({
+            fallbackLanguage: 'fr',
+            parser: I18nJsonParser,
+            parserOptions: {
+                path: path.join(__dirname, '/i18n/')
+            },
+            resolvers: [new HeaderResolver(['x-custom-lang'])]
+        }),
         RootModule,
         AuthenticationModule,
         UsersModule
     ],
+    controllers: [],
     providers: [
         {
             provide: APP_GUARD,
             useClass: ThrottlerGuard
-        }
+        },
+        DiscordService
     ]
 })
 export class AppModule {}
