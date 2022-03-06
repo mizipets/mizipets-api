@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Req } from '@nestjs/common';
+import { Controller, Get, Headers } from '@nestjs/common';
 import { I18nContext, I18n } from 'nestjs-i18n';
 
 const { NAME, ENV } = process.env;
