@@ -21,27 +21,26 @@ export class AuthenticationController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post('register')
-    async createAccount(@Body() account: CreateUserDto) {
-        return await this.authService.register(account);
+    async createAccount(@Body() user: CreateUserDto) {
+        return this.authService.register(user);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    async login(@Res() res, @Body() login: LoginDto) {
-        const token = await this.authService.login(login);
-        return res.json(token);
+    async login(@Body() login: LoginDto) {
+        return this.authService.login(login);
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get('token/refresh')
-    // async refreshToken(@Res() res, @Request() req) {
-    //   const token = await this.authService.refreshToken(req.user);
-    //   return res.status(HttpStatus.OK).json(token);
-    // }
-    //
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(JwtAuthGuard)
+    @Get('token/refresh')
+    async refreshToken(@Request() req) {
+        return this.authService.refreshToken(req.user);
+    }
+
+    // @HttpCode(HttpStatus.OK)
     // @Post('reset/password')
-    // async resetPassword(@Res() res, @Query('code') code: string, @Body() login: LoginDto) {
-    //   const account = await this.authService.resetPassword(login, code);
-    //   return res.status(HttpStatus.OK).json(account);
+    // async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
+    //   return this.authService.resetPassword(login, code);
     // }
 }

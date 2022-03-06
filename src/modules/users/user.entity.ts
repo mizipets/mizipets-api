@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Roles } from '../authentication/enum/roles.emum';
 
 @Entity()
 export class User {
@@ -11,18 +12,21 @@ export class User {
     @Column('text')
     password: string;
 
-    // @Column()
-    // firstname: string;
-    //
-    // @Column()
-    // lastname: string;
-    //
-    // @Column()
-    // photoUrl: string;
-    //
-    // @Column()
-    // createDate: Date;
-    //
-    // @Column()
-    // closeDate: Date;
+    @Column('text')
+    firstname: string;
+
+    @Column('text')
+    lastname: string;
+
+    @Column({ nullable: true })
+    photoUrl: string;
+
+    @Column()
+    role: Roles;
+
+    @Column()
+    createDate: Date;
+
+    @Column({ nullable: true })
+    closeDate: Date;
 }

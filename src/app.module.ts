@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
@@ -10,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DiscordService } from './shared/discord.service';
 import * as path from 'path';
+
 @Module({
     imports: [
         ThrottlerModule.forRoot({

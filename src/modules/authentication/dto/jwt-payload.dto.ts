@@ -19,21 +19,17 @@ export class JwtPayloadDto {
     @IsEmail()
     email: string;
 
-    // @IsString()
-    // @IsNotEmpty()
-    // @IsDefined()
-    // firstname: string;
-    //
-    // @IsString()
-    // @IsNotEmpty()
-    // @IsDefined()
-    // lastname: string;
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    firstname: string;
 
-    // @IsNotEmpty()
-    // @IsDefined()
-    // role: Roles;
-    //
-    // @IsNotEmpty()
-    // @IsDefined()
-    // createDate: Date;
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    lastname: string;
+
+    @IsNotEmpty()
+    @IsDefined()
+    role: Roles;
 }
