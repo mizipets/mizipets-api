@@ -4,20 +4,22 @@ import { User } from './user.entity';
 import { Column, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
+import { Animal } from '../animals/entity/animal.entity';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User) private repository: Repository<User>) {}
 
     async getAll(): Promise<User[]> {
-        return this.repository.find();
+        return this.repository.find({ relations: ['animals'] });
     }
 
     async getById(id: number): Promise<User> {
         return this.repository.findOne({
             where: {
                 id: id
-            }
+            },
+            relations: ['animals']
         });
     }
 
@@ -38,10 +40,16 @@ export class UsersService {
             photoUrl: null,
             role: Roles.STANDARD,
             createDate: new Date(),
-            closeDate: null
+            closeDate: null,
+            animals: []
         };
         const user: User = this.repository.create(newUser);
         await this.repository.save(newUser);
         return user;
+    }
+
+    async addAnimalToUser(animal: Animal, user: User): Promise<User> {
+        user.animals.push(animal);
+        return this.repository.save(user);
     }
 }
