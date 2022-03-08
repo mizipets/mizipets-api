@@ -5,7 +5,7 @@ import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
-import { Animal } from './entity/animal.entity';
+import { Animal } from './animal.entity';
 
 @Injectable()
 export class AnimalsService {
@@ -19,7 +19,7 @@ export class AnimalsService {
 
         animal.species = dto.species;
         animal.race = dto.race;
-        animal.sexe = dto.sexe;
+        animal.sex = dto.sex;
         animal.name = dto.name;
         animal.birthDate = dto.birthDate;
         animal.comment = dto.comment;
@@ -50,7 +50,7 @@ export class AnimalsService {
         const updated = await this.getById(id);
         updated.species = dto.species ?? updated.species;
         updated.race = dto.race ?? updated.race;
-        updated.sexe = dto.sexe ?? updated.sexe;
+        updated.sex = dto.sex ?? updated.sex;
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;

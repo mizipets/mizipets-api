@@ -4,7 +4,7 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
-import { Animal } from '../animals/entity/animal.entity';
+import { Animal } from '../animals/animal.entity';
 
 @Injectable()
 export class UsersService {
