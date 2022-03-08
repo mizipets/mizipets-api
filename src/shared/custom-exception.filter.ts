@@ -4,7 +4,6 @@ import {
     HttpException,
     ArgumentsHost,
     HttpStatus,
-    Inject,
     Injectable,
     Logger
 } from '@nestjs/common';
@@ -30,23 +29,24 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 ? exception.getStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        let exceptionMessage: string;
-        if (typeof exception.message !== 'object') {
-            exceptionMessage = JSON.stringify(
-                {
-                    statusCode: status,
-                    error: HttpStatusCode.getStatusText(status),
-                    message:
-                        exception instanceof HttpException
-                            ? exception.message
-                            : 'Internal Server Error'
-                },
-                null,
-                2
-            );
-        } else {
-            exceptionMessage = exception.message;
-        }
+        // let exceptionMessage: string;
+        // if (typeof exception.message !== 'object') {
+        //     exceptionMessage = JSON.stringify(
+        //         {
+        //             statusCode: status,
+        //             error: HttpStatusCode.getStatusText(status),
+        //             message:
+        //                 exception instanceof HttpException
+        //                     ? exception.message
+        //                     : 'Internal Server Error'
+        //         },
+        //         null,
+        //         2
+        //     );
+        //     console.log('hey');
+        // } else {
+        //     exceptionMessage = exception.message;
+        // }
 
         const msgLines = [
             `:bangbang:**${this.toDiscordBadgeString('Error')}**:bangbang:`,
@@ -59,7 +59,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
             `**Error ${this.toDiscordBadgeNumber(
                 status
             )}:** ${HttpStatusCode.getStatusText(status)}`,
-            `\`\`\`${exceptionMessage}\`\`\``,
+            `\`\`\`${JSON.stringify(exception.getResponse(), null, 2)}\`\`\``,
             `**Body:**`,
             `\`\`\`${JSON.stringify(
                 this.sanitize(request.body),
@@ -79,10 +79,10 @@ export class CustomExceptionFilter implements ExceptionFilter {
             status !== HttpStatus.FORBIDDEN &&
             status !== HttpStatus.TOO_MANY_REQUESTS
         ) {
-            this.logger.error(exception.toString());
+            this.logger.error(exception.getResponse());
             if (ENV === 'prod') await this.discordService.sendMsg(msg);
         }
-        return response.status(status).json(JSON.parse(exceptionMessage));
+        return response.status(status).json(exception.getResponse());
     }
 
     sanitize(body: any): any {

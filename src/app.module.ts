@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
-import { User } from './modules/users/user.entity';
 import { RootModule } from './modules/root/root.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UsersModule } from './modules/users/users.module';
@@ -9,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DiscordService } from './shared/discord.service';
 import * as path from 'path';
+import { AnimalsModule } from './modules/animals/animals.module';
 
 @Module({
     imports: [
@@ -23,7 +23,7 @@ import * as path from 'path';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DATABASE,
-            entities: [User],
+            autoLoadEntities: true,
             synchronize: true,
             ssl: false
         }),
@@ -37,7 +37,8 @@ import * as path from 'path';
         }),
         RootModule,
         AuthenticationModule,
-        UsersModule
+        UsersModule,
+        AnimalsModule
     ],
     controllers: [],
     providers: [

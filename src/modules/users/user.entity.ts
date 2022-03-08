@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Animal } from '../animals/animal.entity';
 import { Roles } from '../authentication/enum/roles.emum';
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -29,4 +30,7 @@ export class User {
 
     @Column({ nullable: true })
     closeDate: Date;
+
+    @OneToMany(() => Animal, (animal) => animal.owner)
+    animals: Animal[];
 }

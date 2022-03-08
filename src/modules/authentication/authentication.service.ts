@@ -2,7 +2,6 @@ import {
     ConflictException,
     ForbiddenException,
     Injectable,
-    NotFoundException,
     UnauthorizedException
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -37,14 +36,16 @@ export class AuthenticationService {
 
     public async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email);
-        if (!user) throw new UnauthorizedException('Invalid credentials');
+        console.log(user)
+
+        if (!user) throw new UnauthorizedException('Invalid credentials')
 
         const isPasswordEquals: boolean = await compare(
             login.password,
             user.password
         );
-        if (!isPasswordEquals)
-            throw new UnauthorizedException('Invalid credentials');
+
+        if (!isPasswordEquals) throw new UnauthorizedException('Invalid credentials');
 
         return this.getJwtPayload(user);
     }

@@ -16,8 +16,8 @@ async function bootstrap() {
     app.enableCors({ origin: origins });
     app.use(compression());
     app.use(helmet());
-    app.useGlobalPipes(new ValidationPipe());
     app.setGlobalPrefix(process.env.API_PREFIX);
+    app.useGlobalPipes(new ValidationPipe({ disableErrorMessages: false }));
     app.use(morgan('tiny'));
     app.useGlobalFilters(
         new CustomExceptionFilter(app.get<DiscordService>(DiscordService))
