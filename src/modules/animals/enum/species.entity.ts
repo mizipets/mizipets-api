@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Animal } from './animal.entity';
 import { SpeciesCategory } from './species-category.enum';
+import { Animal } from '../animal.entity';
 
 @Entity('species')
 export class Species {

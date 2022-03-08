@@ -1,7 +1,7 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Race } from '../enum/race.enum';
 import { Sex } from '../enum/sex.enum';
-import { Species } from '../enum/species.enum';
+import { Species } from '../enum/species.entity';
 
 export class UpdateAnimalDTO {
     @IsString()
