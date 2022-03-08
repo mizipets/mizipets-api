@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../users/user.entity';
 import { Race } from './race.enum';
 import { Sexe } from './sexe.enum';
-import { Species } from './species.enum';
+import { Species } from './species.entity';
 
 @Entity('animals')
 export class Animal {
@@ -15,7 +15,7 @@ export class Animal {
     @Column('text', { nullable: true })
     comment: string;
 
-    @Column()
+    @ManyToOne(() => Species, (specie) => specie.animals)
     species: Species;
 
     @Column({ nullable: true })
