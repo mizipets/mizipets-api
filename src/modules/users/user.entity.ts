@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Animal } from '../animals/entity/animal.entity';
+import { Animal } from '../animals/entities/animal.entity';
 import { Roles } from '../authentication/enum/roles.emum';
 
 @Entity('users')

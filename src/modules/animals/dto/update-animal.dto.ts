@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { Sexe } from '../entity/sexe.enum';
-import { Species } from '../entity/species.entity';
+import { Sex } from '../enum/sex.enum';
+import { Species } from '../entities/species.entity';
 
 export class UpdateAnimalDTO {
     @IsString()
@@ -17,8 +17,8 @@ export class UpdateAnimalDTO {
 
     @IsString()
     @IsOptional()
-    @IsEnum(Sexe)
-    readonly sexe: Sexe;
+    @IsEnum(Sex)
+    readonly sex: Sex;
 
     @IsString()
     @IsOptional()

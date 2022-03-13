@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Race } from '../src/modules/animals/entity/race.entity';
-import { Species } from '../src/modules/animals/entity/species.entity';
+import { Race } from '../src/modules/animals/entities/race.entity';
+import { Species } from '../src/modules/animals/entities/species.entity';
 import * as fs from 'fs';
 
 export class RaceSpecies1515769694450 implements MigrationInterface {

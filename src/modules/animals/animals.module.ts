@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
 import { AnimalsController } from './animals.controller';
 import { AnimalsService } from './animals.service';
-import { Animal } from './entity/animal.entity';
-import { Race } from './entity/race.entity';
-import { Species } from './entity/species.entity';
+import { Animal } from './entities/animal.entity';
+import { Race } from './entities/race.entity';
+import { Species } from './entities/species.entity';
 import { SpeciesController } from './species.controller';
 import { SpeciesService } from './species.service';
 

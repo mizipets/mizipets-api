@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Sexe } from '../entity/sexe.enum';
-import { Species } from '../entity/species.entity';
+import { Sex } from '../enum/sex.enum';
 
 export class CreateAnimalDTO {
     @IsString()
@@ -13,7 +12,7 @@ export class CreateAnimalDTO {
 
     @IsString()
     @IsOptional()
-    readonly sexe: Sexe;
+    readonly sex: Sex;
 
     @IsOptional()
     readonly birthDate: Date;
