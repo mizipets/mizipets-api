@@ -8,7 +8,7 @@ export class CreateAnimalDTO {
 
     @IsNumber()
     @IsNotEmpty()
-    readonly speciesId: number;
+    readonly raceId: number;
 
     @IsString()
     @IsOptional()

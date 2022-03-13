@@ -26,7 +26,8 @@ export class RaceSpecies1515769694450 implements MigrationInterface {
                         return {
                             id: counter++,
                             name: race,
-                            species: this.getSpecie(parseInt(speciesRace[0]))
+                            species: this.getSpecie(parseInt(speciesRace[0])),
+                            animals: []
                         };
                     })
                 );

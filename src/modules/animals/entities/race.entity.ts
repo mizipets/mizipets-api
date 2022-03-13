@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
+import { Animal } from './animal.entity';
 import { Species } from './species.entity';
 
 @Entity('races')
@@ -11,4 +18,7 @@ export class Race {
 
     @ManyToOne(() => Species, (specie) => specie.races)
     species: Species;
+
+    @OneToMany(() => Animal, (animal) => animal.race)
+    animals: Animal[];
 }
