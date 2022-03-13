@@ -6,19 +6,28 @@ import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entity/animal.entity';
+import { Species } from './entity/species.entity';
 
 @Injectable()
 export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
+        @InjectRepository(Species)
+        private speciesRepository: Repository<Species>,
         private usersService: UsersService
     ) {}
 
     async create(dto: CreateAnimalDTO, owner: User): Promise<Animal> {
         const animal = new Animal();
 
-        animal.species = dto.species;
-        animal.race = dto.race;
+        const specie = await this.speciesRepository.findOne(dto.speciesId);
+        if (!specie) {
+            throw new NotFoundException(
+                `specie with id '${dto.speciesId}' does not exist`
+            );
+        }
+
+        animal.species = specie;
         animal.sexe = dto.sexe;
         animal.name = dto.name;
         animal.birthDate = dto.birthDate;
@@ -49,7 +58,6 @@ export class AnimalsService {
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
         updated.species = dto.species ?? updated.species;
-        updated.race = dto.race ?? updated.race;
         updated.sexe = dto.sexe ?? updated.sexe;
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;

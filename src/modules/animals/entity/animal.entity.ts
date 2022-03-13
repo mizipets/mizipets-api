@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../users/user.entity';
-import { Race } from './race.enum';
 import { Sexe } from './sexe.enum';
 import { Species } from './species.entity';
 
@@ -17,9 +16,6 @@ export class Animal {
 
     @ManyToOne(() => Species, (specie) => specie.animals)
     species: Species;
-
-    @Column({ nullable: true })
-    race: Race;
 
     @Column({ nullable: true })
     sexe: Sexe;
