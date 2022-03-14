@@ -29,24 +29,18 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 ? exception.getStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        // let exceptionMessage: string;
-        // if (typeof exception.message !== 'object') {
-        //     exceptionMessage = JSON.stringify(
-        //         {
-        //             statusCode: status,
-        //             error: HttpStatusCode.getStatusText(status),
-        //             message:
-        //                 exception instanceof HttpException
-        //                     ? exception.message
-        //                     : 'Internal Server Error'
-        //         },
-        //         null,
-        //         2
-        //     );
-        //     console.log('hey');
-        // } else {
-        //     exceptionMessage = exception.message;
-        // }
+        console.log(typeof exception.getResponse);
+
+        let exceptionMessage;
+        if (typeof exception.getResponse !== 'undefined') {
+            exceptionMessage = exception.getResponse();
+        } else {
+            exceptionMessage = {
+                statusCode: status,
+                message: exception.message ?? 'Internal Server Error',
+                error: HttpStatusCode.getStatusText(status)
+            };
+        }
 
         const msgLines = [
             `:bangbang:**${this.toDiscordBadgeString('Error')}**:bangbang:`,
@@ -59,7 +53,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
             `**Error ${this.toDiscordBadgeNumber(
                 status
             )}:** ${HttpStatusCode.getStatusText(status)}`,
-            `\`\`\`${JSON.stringify(exception.getResponse(), null, 2)}\`\`\``,
+            `\`\`\`${JSON.stringify(exceptionMessage, null, 2)}\`\`\``,
             `**Body:**`,
             `\`\`\`${JSON.stringify(
                 this.sanitize(request.body),
@@ -79,10 +73,10 @@ export class CustomExceptionFilter implements ExceptionFilter {
             status !== HttpStatus.FORBIDDEN &&
             status !== HttpStatus.TOO_MANY_REQUESTS
         ) {
-            this.logger.error(exception.getResponse());
+            this.logger.error(exceptionMessage);
             if (ENV === 'prod') await this.discordService.sendMsg(msg);
         }
-        return response.status(status).json(exception.getResponse());
+        return response.status(status).json(exceptionMessage);
     }
 
     sanitize(body: any): any {
