@@ -1,5 +1,4 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Animal } from './animal.entity';
 import { Race } from './race.entity';
 import { SpeciesCategory } from '../enum/species-category.enum';
 

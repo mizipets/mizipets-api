@@ -36,7 +36,6 @@ export class AuthenticationService {
 
     public async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email);
-        console.log(user);
 
         if (!user) throw new UnauthorizedException('Invalid credentials');
 
