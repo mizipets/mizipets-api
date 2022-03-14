@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Sex } from '../enum/sex.enum';
 import { Species } from '../entities/species.entity';
 
@@ -11,9 +11,9 @@ export class UpdateAnimalDTO {
     @IsOptional()
     readonly comment: string;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    readonly species: Species;
+    readonly raceId: number;
 
     @IsString()
     @IsOptional()

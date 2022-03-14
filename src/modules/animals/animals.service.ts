@@ -39,7 +39,6 @@ export class AnimalsService {
             );
         }
 
-        animal.species = specie;
         animal.race = race;
         animal.sex = dto.sex;
         animal.name = dto.name;
@@ -54,12 +53,14 @@ export class AnimalsService {
     }
 
     async getAll(): Promise<Animal[]> {
-        return await this.repository.find({ relations: ['race', 'species'] });
+        return await this.repository.find({
+            relations: ['race', 'race.species', 'owner']
+        });
     }
 
     async getById(id: number): Promise<Animal> {
         const animalDB = await this.repository.findOne(id, {
-            relations: ['owner']
+            relations: ['race', 'race.species', 'owner']
         });
         if (!animalDB) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -70,7 +71,14 @@ export class AnimalsService {
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
-        updated.species = dto.species ?? updated.species;
+
+        let race: Race;
+        if (dto.raceId) {
+            race = await this.raceRepository.findOne(dto.raceId, {
+                relations: ['species']
+            });
+        }
+        updated.race = race ?? updated.race;
         updated.sex = dto.sex ?? updated.sex;
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;

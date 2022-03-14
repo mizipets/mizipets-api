@@ -15,9 +15,6 @@ export class Animal {
     @Column('text', { nullable: true })
     comment: string;
 
-    @ManyToOne(() => Species, (specie) => specie.animals)
-    species: Species;
-
     @ManyToOne(() => Race, (race) => race.animals)
     race: Race;
 

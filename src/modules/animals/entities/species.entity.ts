@@ -14,9 +14,6 @@ export class Species {
     @Column()
     category: SpeciesCategory;
 
-    @OneToMany(() => Animal, (animal) => animal.species)
-    animals: Animal[];
-
     @OneToMany(() => Race, (race) => race.species)
     races: Race[];
 }
