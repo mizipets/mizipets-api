@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "name": "Dog",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 1,
+        "name": "Cat",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 3,
+        "name": "Ferret",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 4,
+        "name": "Rabbit",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 5,
+        "name": "Horse",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 6,
+        "name": "Hamster",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 7,
+        "name": "Guinea pig",
+        "category": "MAMMAL"
+    },
+    {
+        "id": 8,
+        "name": "Snake",
+        "category": "REPTILE"
+    },
+    {
+        "id": 9,
+        "name": "Lezard",
+        "category": "REPTILE"
+    },
+    {
+        "id": 10,
+        "name": "Turtle",
+        "category": "REPTILE"
+    }
+]

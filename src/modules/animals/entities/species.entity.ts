@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { SpeciesCategory } from './species-category.enum';
-import { Animal } from '../animal.entity';
+import { Race } from './race.entity';
+import { SpeciesCategory } from '../enum/species-category.enum';
 
 @Entity('species')
 export class Species {
@@ -13,6 +13,6 @@ export class Species {
     @Column()
     category: SpeciesCategory;
 
-    @OneToMany(() => Animal, (animal) => animal.species)
-    animals: Animal[];
+    @OneToMany(() => Race, (race) => race.species)
+    races: Race[];
 }

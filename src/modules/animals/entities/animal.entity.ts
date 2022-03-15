@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Race } from './enum/race.enum';
-import { Sex } from './enum/sex.enum';
-import { User } from '../users/user.entity';
-import { Species } from './enum/species.entity';
+import { User } from '../../users/user.entity';
+import { Sex } from '../enum/sex.enum';
+import { Race } from './race.entity';
+import { Species } from './species.entity';
 
 @Entity('animals')
 export class Animal {
@@ -15,10 +15,7 @@ export class Animal {
     @Column('text', { nullable: true })
     comment: string;
 
-    @ManyToOne(() => Species, (specie) => specie.animals)
-    species: Species;
-
-    @Column({ nullable: true })
+    @ManyToOne(() => Race, (race) => race.animals)
     race: Race;
 
     @Column({ nullable: true })
