@@ -28,11 +28,39 @@ export class AnimalsController {
         return this.animalsService.create(dto, req.user);
     }
 
+    @Post('Favorites')
+    @HttpCode(HttpStatus.CREATED)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async Favorites(@Req() req, @Body() dto: CreateAnimalDTO) {
+        return this.animalsService.create(dto, req.user, true);
+    }
+
     @Get()
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async getAll() {
         return this.animalsService.getAll();
+    }
+
+    @Get('Favorites')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async getFavoritess(@Req() req) {
+        return this.animalsService.getFavoritess(req.user);
+    }
+
+    @Put('Favorites/:id/like')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async like(@Req() req, @Param('id') id: string) {
+        return this.animalsService.likeFavorites(req.user, parseInt(id));
+    }
+
+    @Put('Favorites/:id/dislike')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async dislike(@Req() req, @Param('id') id: string) {
+        return this.animalsService.dislikeFavorites(req.user, parseInt(id));
     }
 
     @Get(':id')

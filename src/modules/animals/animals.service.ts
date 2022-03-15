@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, In, Not, Repository } from 'typeorm';
+import { FavoritesService } from '../favorites/Favorites.service';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
@@ -17,10 +18,15 @@ export class AnimalsService {
         private raceRepository: Repository<Race>,
         @InjectRepository(Species)
         private speciesRepository: Repository<Species>,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private FavoritesService: FavoritesService
     ) {}
 
-    async create(dto: CreateAnimalDTO, owner: User): Promise<Animal> {
+    async create(
+        dto: CreateAnimalDTO,
+        owner: User,
+        isFavorites = false
+    ): Promise<Animal> {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
@@ -43,6 +49,8 @@ export class AnimalsService {
         animal.sex = dto.sex;
         animal.name = dto.name;
         animal.birthDate = dto.birthDate;
+        animal.isFavorites = isFavorites;
+        animal.isLost = false;
         animal.comment = dto.comment;
         animal.createDate = new Date();
         animal.images = [];
@@ -69,6 +77,19 @@ export class AnimalsService {
         }
     }
 
+    async getFavoritess(user: User): Promise<Animal[]> {
+        const userDB = this.usersService.getById(user.id, true);
+        return await this.repository
+            .createQueryBuilder()
+            .select('Favorites')
+            .from(Animal, 'Favorites')
+            .where('Favorites.isFavorites = :isFavorites', {
+                isFavorites: true
+            })
+            .andWhere({ id: Not(In((await userDB).Favorites.disliked)) })
+            .getMany();
+    }
+
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
 
@@ -90,5 +111,20 @@ export class AnimalsService {
 
     async delete(id: number): Promise<DeleteResult> {
         return await this.repository.delete(id);
+    }
+
+    async likeFavorites(user: User, id: number): Promise<any> {
+        return await this.repository.delete(id);
+    }
+
+    async dislikeFavorites(user: User, id: number): Promise<any> {
+        const userDB = await this.usersService.getById(user.id, true);
+        if (!userDB.Favorites.disliked.includes(id)) {
+            userDB.Favorites.disliked.push(id);
+        }
+        return await this.FavoritesService.update(
+            userDB.Favorites.id,
+            userDB.Favorites
+        );
     }
 }
