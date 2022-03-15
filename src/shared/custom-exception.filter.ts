@@ -29,8 +29,6 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 ? exception.getStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        console.log(typeof exception.getResponse);
-
         let exceptionMessage;
         if (typeof exception.getResponse !== 'undefined') {
             exceptionMessage = exception.getResponse();
