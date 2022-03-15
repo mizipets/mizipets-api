@@ -1,0 +1,3 @@
+{
+    "welcome": "Bienvenue à {name} en environment {env}."
+}

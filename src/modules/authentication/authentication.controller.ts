@@ -1,36 +1,44 @@
-import {Body, Controller, Get, HttpStatus, Post, Query, Request, Res, UseGuards } from '@nestjs/common';
-import {AuthenticationService} from './authentication.service';
-import {CreateUserDto} from '../users/dto/create-user.dto';
-import {LoginDto} from './dto/login.dto';
-import {JwtAuthGuard} from "./guards/jwt-auth.guard";
-
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    Request,
+    UseGuards
+} from '@nestjs/common';
+import { AuthenticationService } from './authentication.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthenticationController {
-  constructor(private readonly authService: AuthenticationService) {}
+    constructor(private readonly authService: AuthenticationService) {}
 
-  @Post('register')
-  async createAccount(@Res() res, @Body() account: CreateUserDto) {
-    const registeredAccount = await this.authService.register(account);
-    return res.status(HttpStatus.CREATED).json(registeredAccount);
-  }
+    @HttpCode(HttpStatus.CREATED)
+    @Post('register')
+    async createAccount(@Body() user: CreateUserDto) {
+        return this.authService.register(user);
+    }
 
-  @Post('login')
-  async login(@Res() res, @Body() login: LoginDto) {
-    const token = await this.authService.login(login);
-    return res.status(HttpStatus.OK).json(token);
-  }
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    async login(@Body() login: LoginDto) {
+        return this.authService.login(login);
+    }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get('token/refresh')
-  // async refreshToken(@Res() res, @Request() req) {
-  //   const token = await this.authService.refreshToken(req.user);
-  //   return res.status(HttpStatus.OK).json(token);
-  // }
-  //
-  // @Post('reset/password')
-  // async resetPassword(@Res() res, @Query('code') code: string, @Body() login: LoginDto) {
-  //   const account = await this.authService.resetPassword(login, code);
-  //   return res.status(HttpStatus.OK).json(account);
-  // }
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(JwtAuthGuard)
+    @Get('token/refresh')
+    async refreshToken(@Request() req) {
+        return this.authService.refreshToken(req.user);
+    }
+
+    // @HttpCode(HttpStatus.OK)
+    // @Post('reset/password')
+    // async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
+    //   return this.authService.resetPassword(login, code);
+    // }
 }

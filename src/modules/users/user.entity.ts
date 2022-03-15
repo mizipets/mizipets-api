@@ -1,28 +1,36 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Animal } from '../animals/entities/animal.entity';
+import { Roles } from '../authentication/enum/roles.emum';
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('text',  { unique: true })
+    @Column('text', { unique: true })
     email: string;
 
     @Column('text')
     password: string;
 
-    // @Column()
-    // firstname: string;
-    //
-    // @Column()
-    // lastname: string;
-    //
-    // @Column()
-    // photoUrl: string;
-    //
-    // @Column()
-    // createDate: Date;
-    //
-    // @Column()
-    // closeDate: Date;
+    @Column('text')
+    firstname: string;
+
+    @Column('text')
+    lastname: string;
+
+    @Column({ nullable: true })
+    photoUrl: string;
+
+    @Column()
+    role: Roles;
+
+    @Column()
+    createDate: Date;
+
+    @Column({ nullable: true })
+    closeDate: Date;
+
+    @OneToMany(() => Animal, (animal) => animal.owner)
+    animals: Animal[];
 }

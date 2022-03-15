@@ -1,40 +1,52 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/users/user.entity';
+import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
 import { RootModule } from './modules/root/root.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { DiscordService } from './shared/discord.service';
+import * as path from 'path';
+import { AnimalsModule } from './modules/animals/animals.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['envs/.env', 'envs/.env.staging', 'envs/.env.production'],
-      isGlobal: true,
-    }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DATABASE,
-      entities: [User],
-      synchronize: true,
-      ssl: JSON.parse(process.env.POSTGRES_SSL_ACTIVATE),
-    }),
-    RootModule,
-    AuthenticationModule,
-    UsersModule,
-  ],
-  controllers: [],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+    imports: [
+        ThrottlerModule.forRoot({
+            ttl: 60,
+            limit: 10
+        }),
+        TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: process.env.POSTGRES_HOST,
+            port: parseInt(process.env.POSTGRES_PORT),
+            username: process.env.POSTGRES_USER,
+            password: process.env.POSTGRES_PASSWORD,
+            database: process.env.POSTGRES_DATABASE,
+            autoLoadEntities: true,
+            synchronize: true,
+            ssl: false
+        }),
+        I18nModule.forRoot({
+            fallbackLanguage: 'fr',
+            parser: I18nJsonParser,
+            parserOptions: {
+                path: path.join(__dirname, '/i18n/')
+            },
+            resolvers: [new HeaderResolver(['x-custom-lang'])]
+        }),
+        RootModule,
+        AuthenticationModule,
+        UsersModule,
+        AnimalsModule
+    ],
+    controllers: [],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard
+        },
+        DiscordService
+    ]
 })
 export class AppModule {}
