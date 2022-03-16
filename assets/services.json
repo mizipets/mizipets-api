@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "Adopt an Animal",
+        "type": "ADOPTION",
+        "description": "description",
+        "image": "https://example.com",
+        "isActive": true
+    },
+    {
+        "id": 2,
+        "name": "Your Pets",
+        "type": "PETS",
+        "description": "description",
+        "image": "https://example.com",
+        "isActive": true
+    },
+    {
+        "id": 3,
+        "name": "Advice Service",
+        "type": "ADVICE",
+        "description": "description",
+        "image": "https://example.com",
+        "isActive": true
+    },
+    {
+        "id": 4,
+        "name": "Find your vet",
+        "type": "VET",
+        "description": "description",
+        "image": "https://example.com",
+        "isActive": true
+    }
+]
