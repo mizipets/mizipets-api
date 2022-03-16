@@ -1,7 +1,8 @@
 import {
     ConflictException,
     ForbiddenException,
-    Injectable, NotFoundException,
+    Injectable,
+    NotFoundException,
     UnauthorizedException
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -11,7 +12,7 @@ import { compare, hash } from 'bcrypt';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
-import {MailService} from "../../shared/mail/mail.service";
+import { MailService } from '../../shared/mail/mail.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -25,7 +26,8 @@ export class AuthenticationService {
         const emailCheck: User = await this.userService.getByEmail(
             registrationData.email
         );
-        if (emailCheck) throw new ConflictException('This email already exists');
+        if (emailCheck)
+            throw new ConflictException('This email already exists');
 
         registrationData.password = await hash(registrationData.password, 10);
         const user: User = await this.userService.create(registrationData);
@@ -40,9 +42,13 @@ export class AuthenticationService {
 
         if (!user) throw new UnauthorizedException('Invalid credentials');
 
-        const isPasswordEquals: boolean = await compare(login.password, user.password);
+        const isPasswordEquals: boolean = await compare(
+            login.password,
+            user.password
+        );
 
-        if (!isPasswordEquals) throw new UnauthorizedException('Invalid credentials');
+        if (!isPasswordEquals)
+            throw new UnauthorizedException('Invalid credentials');
 
         return this.getJwtPayload(user);
     }
@@ -75,21 +81,21 @@ export class AuthenticationService {
     // }
 
     public async resetPassword(login: LoginDto, code: string): Promise<User> {
-      const user: User = await this.userService.getByEmail(login.email);
+        const user: User = await this.userService.getByEmail(login.email);
 
-      if(!user) throw new NotFoundException('User does not exist!');
+        if (!user) throw new NotFoundException('User does not exist!');
 
-      // if(user.code !== code) throw new ForbiddenException('Invalid code!');
+        // if(user.code !== code) throw new ForbiddenException('Invalid code!');
 
-      user.password = await hash(login.password, 10);
+        user.password = await hash(login.password, 10);
 
-      // await this.userService.updatePassword(user);
+        // await this.userService.updatePassword(user);
 
-      user.password = undefined;
+        user.password = undefined;
 
-      await this.mailService.sendChangedPassword(user);
+        await this.mailService.sendChangedPassword(user);
 
-      return user;
+        return user;
     }
 
     // private generateCode(): number {
