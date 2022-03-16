@@ -6,10 +6,14 @@ import { RootModule } from './modules/root/root.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10
+  }),
     ConfigModule.forRoot({
       envFilePath: ['envs/.env', 'envs/.env.staging', 'envs/.env.production'],
       isGlobal: true,
@@ -23,7 +27,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
       database: process.env.POSTGRES_DATABASE,
       entities: [User],
       synchronize: true,
-      ssl: JSON.parse(process.env.POSTGRES_SSL_ACTIVATE),
+      //ssl: JSON.parse(process.env.POSTGRES_SSL_ACTIVATE),
     }),
     RootModule,
     AuthenticationModule,

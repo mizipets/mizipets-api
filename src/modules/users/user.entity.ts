@@ -20,9 +20,9 @@ export class User {
     // @Column()
     // photoUrl: string;
     //
-    // @Column()
-    // createDate: Date;
+    @Column()
+    createDate: Date;
     //
-    // @Column()
-    // closeDate: Date;
+    @Column('date')
+    closeDate: Date;
 }
