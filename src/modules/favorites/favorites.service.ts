@@ -47,22 +47,6 @@ export class FavoritesService {
 
     async update(id: number, update: Favorites): Promise<Favorites> {
         const updateDB = await this.getById(id);
-
-        // switch(updateDB.type) {
-        //     case ServiceType.ADOPTION:
-        //         updateDB.reference = update.reference ?? updateDB.reference;
-
-        //         break;
-        //     case ServiceType.PETS:
-        //         updateDB.reference = update.disliked ?? updateDB.disliked;
-
-        //         break;
-        //     case ServiceType.ADVICE:
-        //         updateDB.reference = update.disliked ?? updateDB.disliked;
-
-        //         break;
-        //     case ServiceType.VETS:
-        // }
         updateDB.reference = update.reference ?? updateDB.reference;
         return await this.repository.save(updateDB);
     }
