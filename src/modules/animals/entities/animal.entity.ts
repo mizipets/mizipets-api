@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
+import { Room } from '../../room/room.entity';
 import { User } from '../../users/user.entity';
 import { Sex } from '../enum/sex.enum';
 import { Race } from './race.entity';
@@ -22,7 +29,7 @@ export class Animal {
     sex: Sex;
 
     @Column({ nullable: true })
-    isFavorites: boolean;
+    isAdoption: boolean;
 
     @Column({ nullable: true })
     isLost: boolean;
@@ -38,4 +45,7 @@ export class Animal {
 
     @ManyToOne(() => User, (user) => user.animals)
     owner: User;
+
+    @OneToMany(() => Room, (room) => room.animal)
+    rooms: Room[];
 }
