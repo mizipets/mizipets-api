@@ -18,7 +18,8 @@ export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
         @InjectRepository(Race) private raceRepository: Repository<Race>,
-        @InjectRepository(Species) private speciesRepository: Repository<Species>,
+        @InjectRepository(Species)
+        private speciesRepository: Repository<Species>,
         private usersService: UsersService,
         private favoritesService: FavoritesService,
         private roomService: RoomService
