@@ -5,21 +5,27 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private repository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private repository: Repository<User>,
+        private favoritesService: FavoritesService
+    ) {}
 
-    async getAll(): Promise<User[]> {
-        return this.repository.find({ relations: ['animals'] });
+    async getAll(favorites = false): Promise<User[]> {
+        return this.repository.find({
+            relations: favorites ? ['animals', 'favorites'] : ['animals']
+        });
     }
 
-    async getById(id: number): Promise<User> {
+    async getById(id: number, favorites = false): Promise<User> {
         return this.repository.findOne({
             where: {
                 id: id
             },
-            relations: ['animals']
+            relations: favorites ? ['animals', 'favorites'] : ['animals']
         });
     }
 
@@ -32,6 +38,8 @@ export class UsersService {
     }
 
     async create(data: CreateUserDto): Promise<User> {
+        const favorites = await this.favoritesService.createFavoritesForUser();
+
         const newUser = {
             email: data.email,
             password: data.password,
@@ -41,11 +49,12 @@ export class UsersService {
             role: Roles.STANDARD,
             createDate: new Date(),
             closeDate: null,
-            animals: []
-        };
-        const user: User = this.repository.create(newUser);
-        await this.repository.save(newUser);
-        return user;
+            animals: [],
+            favorites: favorites
+        } as User;
+
+        this.repository.create(newUser);
+        return await this.repository.save(newUser);
     }
 
     async addAnimalToUser(animal: Animal, user: User): Promise<User> {

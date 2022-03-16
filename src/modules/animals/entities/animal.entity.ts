@@ -22,6 +22,12 @@ export class Animal {
     sex: Sex;
 
     @Column({ nullable: true })
+    isFavorites: boolean;
+
+    @Column({ nullable: true })
+    isLost: boolean;
+
+    @Column({ nullable: true })
     birthDate: Date;
 
     @Column()
