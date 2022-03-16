@@ -94,7 +94,6 @@ export class AnimalsService {
                 isFavorites: true
             })
             .andWhere({ id: Not(In(reference.disliked)) })
-            .andWhere({ id: Not(In(reference.liked)) })
             .getMany();
     }
 
