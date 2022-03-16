@@ -19,4 +19,22 @@ export class ServicesService {
     async getAll(): Promise<Service[]> {
         return this.repository.find();
     }
+
+    async getById(id: number): Promise<Service> {
+        return this.repository.findOneOrFail(id);
+    }
+
+    async activate(id: number) {
+        const service = await this.getById(id);
+        if (service.isActive) return service;
+        service.isActive = true;
+        return this.repository.save(service);
+    }
+
+    async deactivate(id: number) {
+        const service = await this.getById(id);
+        if (!service.isActive) return service;
+        service.isActive = false;
+        return this.repository.save(service);
+    }
 }
