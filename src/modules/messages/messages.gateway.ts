@@ -8,6 +8,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { RoomService } from '../room/room.service';
 const { MESSAGE_PORT } = process.env;
 
 @WebSocketGateway(parseInt(MESSAGE_PORT), {
@@ -18,7 +19,7 @@ const { MESSAGE_PORT } = process.env;
 export class MessagesGateway
     implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor() {
+    constructor(private roomService: RoomService) {
         console.log(parseInt(MESSAGE_PORT));
     }
 
@@ -39,20 +40,31 @@ export class MessagesGateway
         this.logger.log('client connected! ' + client.id);
     }
 
-    @SubscribeMessage('msgToServer')
-    handleMessage(client: Socket, payload: string): void {
-        this.server.emit('msgToClient', 'yooooooooooo');
+    @SubscribeMessage('sendMsgToRoom')
+    async handleMessage(client: Socket, body: MsgToRoom): Promise<void> {
+        if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
+            // TODO: Send notif to other user
+        }
+        this.server.to(body.roomCode).emit('receiveMsgToRoom', body.msg);
+        await this.roomService.writeMessage(body.roomId, body.msg, body.userId);
     }
 
     @SubscribeMessage('join')
-    handleJoinRoom(client: Socket, room: string) {
-        client.join(room);
-        client.emit('joined', room);
+    async handleJoinRoom(client: Socket, room: string) {
+        await client.join(room);
+        await client.emit('joined', room);
     }
 
     @SubscribeMessage('leave')
-    handleLeaveRoom(client: Socket, room: string) {
-        client.leave(room);
-        client.emit('left', room);
+    async handleLeaveRoom(client: Socket, room: string) {
+        await client.leave(room);
+        await client.emit('left', room);
     }
 }
+
+export type MsgToRoom = {
+    roomCode: string;
+    roomId: number;
+    userId: number;
+    msg: string;
+};

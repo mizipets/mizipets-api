@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { User } from '../users/user.entity';
+import { Message } from './message';
 
 @Entity('rooms')
 export class Room {
@@ -18,6 +19,9 @@ export class Room {
 
     @CreateDateColumn()
     created: Date;
+
+    @Column('json')
+    messages: Message[];
 
     @ManyToOne(() => Animal, (animal) => animal.rooms)
     animal: Animal;

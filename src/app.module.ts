@@ -44,7 +44,8 @@ import { RoomService } from './modules/room/room.service';
         UsersModule,
         AnimalsModule,
         ServicesModule,
-        RoomModule
+        RoomModule,
+        MessagesModule
     ],
     controllers: [],
     providers: [
