@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
-import { FavoritesService } from '../favorites/Favorites.service';
+import { AdoptionReferences } from '../favorites/favorites.entity';
+import { FavoritesService } from '../favorites/favorites.service';
+import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
@@ -19,7 +21,7 @@ export class AnimalsService {
         @InjectRepository(Species)
         private speciesRepository: Repository<Species>,
         private usersService: UsersService,
-        private FavoritesService: FavoritesService
+        private favoritesService: FavoritesService
     ) {}
 
     async create(
@@ -77,8 +79,17 @@ export class AnimalsService {
         }
     }
 
-    async getFavoritess(user: User): Promise<Animal[]> {
-        const userDB = this.usersService.getById(user.id, true);
+    async getAdoption(user: User): Promise<Animal[]> {
+        const userDB = await this.usersService.getById(user.id, true);
+
+        console.log('here');
+
+        const reference = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
+        ).reference as AdoptionReferences;
+
+        console.log('here 2');
+
         return await this.repository
             .createQueryBuilder()
             .select('Favorites')
@@ -86,7 +97,7 @@ export class AnimalsService {
             .where('Favorites.isFavorites = :isFavorites', {
                 isFavorites: true
             })
-            .andWhere({ id: Not(In((await userDB).Favorites.disliked)) })
+            .andWhere({ id: Not(In(reference.disliked)) })
             .getMany();
     }
 
@@ -113,18 +124,39 @@ export class AnimalsService {
         return await this.repository.delete(id);
     }
 
-    async likeFavorites(user: User, id: number): Promise<any> {
-        return await this.repository.delete(id);
+    async like(user: User, new_id: number): Promise<any> {
+        const userDB = await this.usersService.getById(user.id, true);
+        const favorite = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
+        );
+        const reference = favorite.reference as AdoptionReferences;
+
+        if (!reference.liked.includes(new_id)) {
+            reference.liked.push(new_id);
+            reference.disliked = reference.disliked.filter(
+                (id) => id !== new_id
+            );
+            favorite.reference = reference;
+            return await this.favoritesService.update(favorite.id, favorite);
+        } else {
+            return favorite;
+        }
     }
 
-    async dislikeFavorites(user: User, id: number): Promise<any> {
+    async dislike(user: User, new_id: number): Promise<any> {
         const userDB = await this.usersService.getById(user.id, true);
-        if (!userDB.Favorites.disliked.includes(id)) {
-            userDB.Favorites.disliked.push(id);
-        }
-        return await this.FavoritesService.update(
-            userDB.Favorites.id,
-            userDB.Favorites
+        const favorite = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
         );
+        const reference = favorite.reference as AdoptionReferences;
+
+        if (!reference.disliked.includes(new_id)) {
+            reference.disliked.push(new_id);
+            reference.liked = reference.liked.filter((id) => id !== new_id);
+            favorite.reference = reference;
+            return await this.favoritesService.update(favorite.id, favorite);
+        } else {
+            return favorite;
+        }
     }
 }

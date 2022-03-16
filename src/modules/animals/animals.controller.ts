@@ -28,7 +28,7 @@ export class AnimalsController {
         return this.animalsService.create(dto, req.user);
     }
 
-    @Post('Favorites')
+    @Post('adoption')
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async Favorites(@Req() req, @Body() dto: CreateAnimalDTO) {
@@ -42,25 +42,25 @@ export class AnimalsController {
         return this.animalsService.getAll();
     }
 
-    @Get('Favorites')
+    @Get('adoption')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async getFavoritess(@Req() req) {
-        return this.animalsService.getFavoritess(req.user);
+        return this.animalsService.getAdoption(req.user);
     }
 
-    @Put('Favorites/:id/like')
+    @Put('adoption/:id/like')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async like(@Req() req, @Param('id') id: string) {
-        return this.animalsService.likeFavorites(req.user, parseInt(id));
+        return this.animalsService.like(req.user, parseInt(id));
     }
 
-    @Put('Favorites/:id/dislike')
+    @Put('adoption/:id/dislike')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async dislike(@Req() req, @Param('id') id: string) {
-        return this.animalsService.dislikeFavorites(req.user, parseInt(id));
+        return this.animalsService.dislike(req.user, parseInt(id));
     }
 
     @Get(':id')

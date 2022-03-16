@@ -1,11 +1,4 @@
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    OneToMany,
-    OneToOne,
-    PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Favorites } from '../favorites/favorites.entity';
@@ -43,5 +36,5 @@ export class User {
     animals: Animal[];
 
     @OneToMany(() => Favorites, (favorite) => favorite.user)
-    favorites: Favorites;
+    favorites: Favorites[];
 }

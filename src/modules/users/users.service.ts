@@ -5,28 +5,27 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
-import { Favorites } from './Favorites.entity';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User) private repository: Repository<User>,
-        @InjectRepository(Favorites)
-        private seenRepository: Repository<Favorites>
+        private favoritesService: FavoritesService
     ) {}
 
-    async getAll(Favorites = false): Promise<User[]> {
+    async getAll(favorites = false): Promise<User[]> {
         return this.repository.find({
-            relations: Favorites ? ['animals', 'Favorites'] : ['animals']
+            relations: favorites ? ['animals', 'favorites'] : ['animals']
         });
     }
 
-    async getById(id: number, Favorites = false): Promise<User> {
+    async getById(id: number, favorites = false): Promise<User> {
         return this.repository.findOne({
             where: {
                 id: id
             },
-            relations: Favorites ? ['animals', 'Favorites'] : ['animals']
+            relations: favorites ? ['animals', 'favorites'] : ['animals']
         });
     }
 
@@ -39,9 +38,7 @@ export class UsersService {
     }
 
     async create(data: CreateUserDto): Promise<User> {
-        const seen = new Favorites();
-        seen.disliked = [];
-        const seenDB = await this.seenRepository.save(seen);
+        const favorites = await this.favoritesService.createFavoritesForUser();
 
         const newUser = {
             email: data.email,
@@ -53,11 +50,11 @@ export class UsersService {
             createDate: new Date(),
             closeDate: null,
             animals: [],
-            Favorites: seenDB
-        };
+            favorites: favorites
+        } as User;
+
         const user: User = this.repository.create(newUser);
-        await this.repository.save(newUser);
-        return user;
+        return await this.repository.save(newUser);
     }
 
     async addAnimalToUser(animal: Animal, user: User): Promise<User> {
