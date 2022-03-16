@@ -9,6 +9,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DiscordService } from './shared/discord.service';
 import * as path from 'path';
 import { AnimalsModule } from './modules/animals/animals.module';
+import { ServicesModule } from './modules/services/services.module';
 
 @Module({
     imports: [
@@ -38,7 +39,8 @@ import { AnimalsModule } from './modules/animals/animals.module';
         RootModule,
         AuthenticationModule,
         UsersModule,
-        AnimalsModule
+        AnimalsModule,
+        ServicesModule
     ],
     controllers: [],
     providers: [
