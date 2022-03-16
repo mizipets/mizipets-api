@@ -50,4 +50,12 @@ export class FavoritesService {
         updateDB.reference = update.reference ?? updateDB.reference;
         return await this.repository.save(updateDB);
     }
+
+    async getFavoritesOfUser(userId: number): Promise<Favorites[]> {
+        return this.repository.find({
+            user: {
+                id: userId
+            }
+        });
+    }
 }
