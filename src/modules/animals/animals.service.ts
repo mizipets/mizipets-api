@@ -82,19 +82,15 @@ export class AnimalsService {
     async getAdoption(user: User): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, true);
 
-        console.log('here');
-
         const reference = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         ).reference as AdoptionReferences;
 
-        console.log('here 2');
-
         return await this.repository
             .createQueryBuilder()
-            .select('Favorites')
-            .from(Animal, 'Favorites')
-            .where('Favorites.isFavorites = :isFavorites', {
+            .select('animal')
+            .from(Animal, 'animal')
+            .where('animal.isFavorites = :isFavorites', {
                 isFavorites: true
             })
             .andWhere({ id: Not(In(reference.disliked)) })
