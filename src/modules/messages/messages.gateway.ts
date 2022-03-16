@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { RoomService } from '../room/room.service';
+
 const { MESSAGE_PORT } = process.env;
 
 @WebSocketGateway(parseInt(MESSAGE_PORT), {
@@ -19,9 +20,7 @@ const { MESSAGE_PORT } = process.env;
 export class MessagesGateway
     implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor(private roomService: RoomService) {
-        console.log(parseInt(MESSAGE_PORT));
-    }
+    constructor(private roomService: RoomService) {}
 
     @WebSocketServer()
     server: Server;

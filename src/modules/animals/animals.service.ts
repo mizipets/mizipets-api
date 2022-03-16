@@ -1,9 +1,4 @@
-import {
-    forwardRef,
-    Inject,
-    Injectable,
-    NotFoundException
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
 import { AdoptionReferences } from '../favorites/favorites.entity';

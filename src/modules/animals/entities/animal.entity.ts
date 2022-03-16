@@ -9,7 +9,6 @@ import { Room } from '../../room/room.entity';
 import { User } from '../../users/user.entity';
 import { Sex } from '../enum/sex.enum';
 import { Race } from './race.entity';
-import { Species } from './species.entity';
 
 @Entity('animals')
 export class Animal {
