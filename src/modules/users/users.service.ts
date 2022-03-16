@@ -53,7 +53,7 @@ export class UsersService {
             favorites: favorites
         } as User;
 
-        const user: User = this.repository.create(newUser);
+        this.repository.create(newUser);
         return await this.repository.save(newUser);
     }
 

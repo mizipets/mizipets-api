@@ -45,7 +45,7 @@ export class AnimalsController {
     @Get('adoption')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getFavoritess(@Req() req) {
+    async getFavorites(@Req() req) {
         return this.animalsService.getAdoption(req.user);
     }
 

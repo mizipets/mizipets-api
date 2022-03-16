@@ -17,10 +17,8 @@ import { Species } from './entities/species.entity';
 export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
-        @InjectRepository(Race)
-        private raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private speciesRepository: Repository<Species>,
+        @InjectRepository(Race) private raceRepository: Repository<Race>,
+        @InjectRepository(Species) private speciesRepository: Repository<Species>,
         private usersService: UsersService,
         private favoritesService: FavoritesService,
         private roomService: RoomService
@@ -96,6 +94,7 @@ export class AnimalsService {
                 isAdoption: true
             })
             .andWhere({ id: Not(In(reference.disliked)) })
+            .andWhere({ id: Not(In(reference.liked)) })
             .getMany();
     }
 
