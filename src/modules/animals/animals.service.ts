@@ -16,19 +16,13 @@ import { Species } from './entities/species.entity';
 export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
-        @InjectRepository(Race)
-        private raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private speciesRepository: Repository<Species>,
+        @InjectRepository(Race) private raceRepository: Repository<Race>,
+        @InjectRepository(Species) private speciesRepository: Repository<Species>,
         private usersService: UsersService,
         private favoritesService: FavoritesService
     ) {}
 
-    async create(
-        dto: CreateAnimalDTO,
-        owner: User,
-        isFavorites = false
-    ): Promise<Animal> {
+    async create(dto: CreateAnimalDTO, owner: User, isFavorites = false): Promise<Animal> {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
@@ -94,6 +88,7 @@ export class AnimalsService {
                 isFavorites: true
             })
             .andWhere({ id: Not(In(reference.disliked)) })
+            .andWhere({ id: Not(In(reference.liked)) })
             .getMany();
     }
 
