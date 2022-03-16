@@ -20,7 +20,7 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./jest-e2e.json",
         "test:unit": "jest --config ./jest-unit.json",
-        "seed:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
+        "seed:run": "npm run seed:revert && ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
         "seed:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c seed"
     },
     "dependencies": {

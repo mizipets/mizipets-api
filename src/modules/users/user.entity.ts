@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { Roles } from '../authentication/enum/roles.emum';
+import { Favorites } from '../favorites/favorites.entity';
 
 @Entity('users')
 export class User {
@@ -33,4 +34,7 @@ export class User {
 
     @OneToMany(() => Animal, (animal) => animal.owner)
     animals: Animal[];
+
+    @OneToMany(() => Favorites, (favorite) => favorite.user)
+    favorites: Favorites[];
 }
