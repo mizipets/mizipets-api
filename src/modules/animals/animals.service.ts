@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
 import { AdoptionReferences } from '../favorites/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
+import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
@@ -17,12 +18,18 @@ export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
         @InjectRepository(Race) private raceRepository: Repository<Race>,
-        @InjectRepository(Species) private speciesRepository: Repository<Species>,
+        @InjectRepository(Species)
+        private speciesRepository: Repository<Species>,
         private usersService: UsersService,
-        private favoritesService: FavoritesService
+        private favoritesService: FavoritesService,
+        private roomService: RoomService
     ) {}
 
-    async create(dto: CreateAnimalDTO, owner: User, isFavorites = false): Promise<Animal> {
+    async create(
+        dto: CreateAnimalDTO,
+        owner: User,
+        isAdoption = false
+    ): Promise<Animal> {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
@@ -45,7 +52,7 @@ export class AnimalsService {
         animal.sex = dto.sex;
         animal.name = dto.name;
         animal.birthDate = dto.birthDate;
-        animal.isFavorites = isFavorites;
+        animal.isAdoption = isAdoption;
         animal.isLost = false;
         animal.comment = dto.comment;
         animal.createDate = new Date();
@@ -84,8 +91,8 @@ export class AnimalsService {
             .createQueryBuilder()
             .select('animal')
             .from(Animal, 'animal')
-            .where('animal.isFavorites = :isFavorites', {
-                isFavorites: true
+            .where('animal.isAdoption = :isAdoption', {
+                isAdoption: true
             })
             .andWhere({ id: Not(In(reference.disliked)) })
             .andWhere({ id: Not(In(reference.liked)) })
@@ -121,6 +128,9 @@ export class AnimalsService {
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
         const reference = favorite.reference as AdoptionReferences;
+
+        const animal = await this.getById(new_id);
+        await this.roomService.create(user, animal);
 
         if (!reference.liked.includes(new_id)) {
             reference.liked.push(new_id);
