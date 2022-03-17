@@ -13,7 +13,6 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const origins = ['http://localhost'];
 
-    
     app.enableCors({ origin: origins });
     app.use(compression());
     app.use(helmet());
