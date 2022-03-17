@@ -20,7 +20,7 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./jest-e2e.json",
         "test:unit": "jest --config ./jest-unit.json",
-        "seed:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
+        "seed:run": "npm run seed:revert && ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
         "seed:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c seed"
     },
     "dependencies": {
@@ -31,9 +31,12 @@
         "@nestjs/jwt": "^8.0.0",
         "@nestjs/passport": "^8.2.1",
         "@nestjs/platform-express": "^8.0.0",
+        "@nestjs/platform-socket.io": "^8.4.1",
         "@nestjs/swagger": "^5.2.0",
         "@nestjs/throttler": "^2.0.0",
         "@nestjs/typeorm": "^8.0.3",
+        "@nestjs/websockets": "^8.4.1",
+        "@types/socket.io": "^3.0.2",
         "axios": "^0.26.0",
         "bcrypt": "^5.0.1",
         "class-transformer": "^0.5.1",

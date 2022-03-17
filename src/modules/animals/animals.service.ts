@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, In, Not, Repository } from 'typeorm';
+import { AdoptionReferences } from '../favorites/favorites.entity';
+import { FavoritesService } from '../favorites/favorites.service';
+import { RoomService } from '../room/room.service';
+import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
@@ -13,14 +17,19 @@ import { Species } from './entities/species.entity';
 export class AnimalsService {
     constructor(
         @InjectRepository(Animal) private repository: Repository<Animal>,
-        @InjectRepository(Race)
-        private raceRepository: Repository<Race>,
+        @InjectRepository(Race) private raceRepository: Repository<Race>,
         @InjectRepository(Species)
         private speciesRepository: Repository<Species>,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private favoritesService: FavoritesService,
+        private roomService: RoomService
     ) {}
 
-    async create(dto: CreateAnimalDTO, owner: User): Promise<Animal> {
+    async create(
+        dto: CreateAnimalDTO,
+        owner: User,
+        isAdoption = false
+    ): Promise<Animal> {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
@@ -43,6 +52,8 @@ export class AnimalsService {
         animal.sex = dto.sex;
         animal.name = dto.name;
         animal.birthDate = dto.birthDate;
+        animal.isAdoption = isAdoption;
+        animal.isLost = false;
         animal.comment = dto.comment;
         animal.createDate = new Date();
         animal.images = [];
@@ -69,6 +80,25 @@ export class AnimalsService {
         }
     }
 
+    async getAdoption(user: User): Promise<Animal[]> {
+        const userDB = await this.usersService.getById(user.id, true);
+
+        const reference = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
+        ).reference as AdoptionReferences;
+
+        return await this.repository
+            .createQueryBuilder()
+            .select('animal')
+            .from(Animal, 'animal')
+            .where('animal.isAdoption = :isAdoption', {
+                isAdoption: true
+            })
+            .andWhere({ id: Not(In(reference.disliked)) })
+            .andWhere({ id: Not(In(reference.liked)) })
+            .getMany();
+    }
+
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
 
@@ -90,5 +120,44 @@ export class AnimalsService {
 
     async delete(id: number): Promise<DeleteResult> {
         return await this.repository.delete(id);
+    }
+
+    async like(user: User, new_id: number): Promise<any> {
+        const userDB = await this.usersService.getById(user.id, true);
+        const favorite = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
+        );
+        const reference = favorite.reference as AdoptionReferences;
+
+        const animal = await this.getById(new_id);
+        await this.roomService.create(user, animal);
+
+        if (!reference.liked.includes(new_id)) {
+            reference.liked.push(new_id);
+            reference.disliked = reference.disliked.filter(
+                (id) => id !== new_id
+            );
+            favorite.reference = reference;
+            return await this.favoritesService.update(favorite.id, favorite);
+        } else {
+            return favorite;
+        }
+    }
+
+    async dislike(user: User, new_id: number): Promise<any> {
+        const userDB = await this.usersService.getById(user.id, true);
+        const favorite = userDB.favorites.find(
+            (favorite) => favorite.type === ServiceType.ADOPTION
+        );
+        const reference = favorite.reference as AdoptionReferences;
+
+        if (!reference.disliked.includes(new_id)) {
+            reference.disliked.push(new_id);
+            reference.liked = reference.liked.filter((id) => id !== new_id);
+            favorite.reference = reference;
+            return await this.favoritesService.update(favorite.id, favorite);
+        } else {
+            return favorite;
+        }
     }
 }

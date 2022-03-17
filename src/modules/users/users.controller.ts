@@ -1,4 +1,11 @@
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Query
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
@@ -12,5 +19,15 @@ export class UsersController {
     @Get()
     async getAll() {
         return await this.userService.getAll();
+    }
+
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async getById(
+        @Param('id') id: number,
+        @Query('Favorites') Favorites: string
+    ) {
+        return this.userService.getById(id, Favorites === 'true');
     }
 }
