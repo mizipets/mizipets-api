@@ -20,6 +20,10 @@ export class ServicesService {
         return this.repository.find();
     }
 
+    async getAllActive(): Promise<Service[]> {
+        return this.repository.find({ where: { isActive: true } });
+    }
+
     async getById(id: number): Promise<Service> {
         return this.repository.findOneOrFail(id);
     }

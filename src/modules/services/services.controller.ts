@@ -23,8 +23,15 @@ export class ServicesController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.ADMIN, Roles.STANDARD)
     public async getAll() {
         return await this.servicesService.getAll();
+    }
+
+    @Get('active')
+    @HttpCode(HttpStatus.OK)
+    public async getAllActive() {
+        return await this.servicesService.getAllActive();
     }
 
     @Put(':id/activate')

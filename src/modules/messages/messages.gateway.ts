@@ -51,13 +51,13 @@ export class MessagesGateway
     @SubscribeMessage('join')
     async handleJoinRoom(client: Socket, room: string) {
         await client.join(room);
-        await client.emit('joined', room);
+        client.emit('joined', room);
     }
 
     @SubscribeMessage('leave')
     async handleLeaveRoom(client: Socket, room: string) {
         await client.leave(room);
-        await client.emit('left', room);
+        client.emit('left', room);
     }
 }
 
