@@ -24,7 +24,6 @@ export class UpdateAnimalDTO {
     @IsOptional()
     readonly birthDate: Date;
 
-    @IsString()
     @IsOptional()
     readonly images: string[];
 }
