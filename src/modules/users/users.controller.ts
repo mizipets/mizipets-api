@@ -1,3 +1,4 @@
+
 import { Put } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Body } from '@nestjs/common';
@@ -6,15 +7,37 @@ import {Controller, Get, HttpStatus, Res} from '@nestjs/common';
 import { identity } from 'rxjs';
 import { User } from './user.entity';
 import {UsersService} from "./users.service";
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Query
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { OnlyRoles } from '../authentication/guards/role.decorator';
+import { Roles } from '../authentication/enum/roles.emum';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    @Get('')
-    async getAll(@Res() res) {
-        const token = await this.userService.getAll();
-        return res.status(HttpStatus.OK).json(token);
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.API, Roles.STANDARD)
+    @Get()
+    async getAll() {
+        return await this.userService.getAll();
+    }
+
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async getById(
+        @Param('id') id: number,
+        @Query('Favorites') Favorites: string
+    ) {
+        return this.userService.getById(id, Favorites === 'true');
     }
 
     @Get(':id/user')
