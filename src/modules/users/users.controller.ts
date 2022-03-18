@@ -1,23 +1,8 @@
-
-import { Put } from '@nestjs/common';
-import { Param } from '@nestjs/common';
-import { Body } from '@nestjs/common';
-import { Post } from '@nestjs/common';
-import {Controller, Get, HttpStatus, Res} from '@nestjs/common';
-import { identity } from 'rxjs';
-import { User } from './user.entity';
+import {Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Res} from '@nestjs/common';
+import {User} from './user.entity';
 import {UsersService} from "./users.service";
-import {
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    Query
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { OnlyRoles } from '../authentication/guards/role.decorator';
-import { Roles } from '../authentication/enum/roles.emum';
+import {OnlyRoles} from '../authentication/guards/role.decorator';
+import {Roles} from '../authentication/enum/roles.emum';
 
 @Controller('users')
 export class UsersController {
@@ -35,15 +20,10 @@ export class UsersController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async getById(
         @Param('id') id: number,
-        @Query('Favorites') Favorites: string
+        @Query('favorites') favorites: string
     ) {
-        return this.userService.getById(id, Favorites === 'true');
-    }
-
-    @Get(':id/user')
-    async getUserById(@Param('id')id, @Res() res) {
-        const token = await this.userService.getById(id);
-        return res.status(HttpStatus.OK).json(token);
+        const fav = favorites.toLowerCase() === 'true';
+        return this.userService.getById(id, fav);
     }
 
     @Get(':email/user')
