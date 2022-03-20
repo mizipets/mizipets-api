@@ -52,7 +52,11 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 status
             )}:** ${HttpStatusCode.getStatusText(status)}`,
             `\`\`\`${JSON.stringify(exceptionMessage, null, 2)}\`\`\``,
-            `**Body:**`,
+            `**Body:** ${
+                request.user
+                    ? '(user id: ' + request.user.id + ')'
+                    : '(no user)'
+            }`,
             `\`\`\`${JSON.stringify(
                 this.sanitize(request.body),
                 null,
@@ -71,7 +75,14 @@ export class CustomExceptionFilter implements ExceptionFilter {
             status !== HttpStatus.FORBIDDEN &&
             status !== HttpStatus.TOO_MANY_REQUESTS
         ) {
-            this.logger.error(exceptionMessage);
+            console.log();
+
+            this.logger.error(
+                `${Date().toString()}
+                ${request.user ? '\nuid: ' + request.user.id : ''}
+                \n${JSON.stringify(exceptionMessage, null, 2)}
+                \n${exception.stack}`
+            );
             if (ENV === 'prod') await this.discordService.sendMsg(msg);
         }
         return response.status(status).json(exceptionMessage);
@@ -80,7 +91,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
     sanitize(body: any): any {
         const passwordReplace = '**************';
         const res = {};
-        if(body) {
+        if (body) {
             const entries = Object.entries(body);
             for (const entry of entries) {
                 if (typeof entry[1] === 'object')
