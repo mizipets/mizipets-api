@@ -8,6 +8,8 @@ import { AnimalsService } from './animals.service';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
+import { RacesController } from './races.controller';
+import { RacesService } from './races.service';
 import { SpeciesController } from './species.controller';
 import { SpeciesService } from './species.service';
 
@@ -18,8 +20,8 @@ import { SpeciesService } from './species.service';
         FavoritesModule,
         RoomModule
     ],
-    controllers: [AnimalsController, SpeciesController],
-    providers: [AnimalsService, SpeciesService],
-    exports: [AnimalsService, SpeciesService]
+    controllers: [AnimalsController, SpeciesController, RacesController],
+    providers: [AnimalsService, SpeciesService, RacesService],
+    exports: [AnimalsService, SpeciesService, RacesService]
 })
 export class AnimalsModule {}

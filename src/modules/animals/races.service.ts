@@ -1,24 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Species } from './entities/species.entity';
+import { Race } from './entities/race.entity';
 
 @Injectable()
-export class SpeciesService {
-    constructor(
-        @InjectRepository(Species) private repository: Repository<Species>
-    ) {}
+export class RacesService {
+    constructor(@InjectRepository(Race) private repository: Repository<Race>) {}
 
-    async getAll(): Promise<Species[]> {
+    async getAll(): Promise<Race[]> {
         return await this.repository.find({ relations: [] });
     }
 
-    async getById(id: number): Promise<Species> {
+    async getById(id: number): Promise<Race> {
         const db = await this.repository.findOne(id, {
-            relations: ['races']
+            relations: []
         });
         if (!db) {
-            throw new NotFoundException(`No specie with id: ${id}`);
+            throw new NotFoundException(`No race with id: ${id}`);
         } else {
             return db;
         }
