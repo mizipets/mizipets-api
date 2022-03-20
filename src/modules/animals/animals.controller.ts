@@ -52,8 +52,8 @@ export class AnimalsController {
     @Get('adoption/:userId')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getAdoption(@Req() req, @Param('userId') userId: string) {
-        return this.animalsService.getAdoptionByOwner(parseInt(userId));
+    async getAdoptionsByOwner(@Req() req, @Param('userId') userId: string) {
+        return this.animalsService.getAdoptionsByOwner(parseInt(userId));
     }
 
     @Put('adoption/:id/like')

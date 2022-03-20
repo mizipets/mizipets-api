@@ -101,17 +101,15 @@ export class AnimalsService {
             .getMany();
     }
 
-    async getAdoptionByOwner(userId: number): Promise<Animal[]> {
-        return await this.repository
-            .createQueryBuilder()
-            .select('animal')
-            .from(Animal, 'animal')
-            .leftJoinAndSelect('animal.race', 'r')
-            .where('animal.isAdoption = :isAdoption', {
-                isAdoption: true
-            })
-            .andWhere('animal.ownerId = :ownerId', { ownerId: userId })
-            .getMany();
+    async getAdoptionsByOwner(userId: number): Promise<Animal[]> {
+        return await this.repository.find({
+            where: {
+                owner: {
+                    id: userId
+                }
+            },
+            relations: ['race', 'race.species']
+        });
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
