@@ -106,6 +106,7 @@ export class AnimalsService {
             .createQueryBuilder()
             .select('animal')
             .from(Animal, 'animal')
+            .leftJoinAndSelect('animal.race', 'r')
             .where('animal.isAdoption = :isAdoption', {
                 isAdoption: true
             })
