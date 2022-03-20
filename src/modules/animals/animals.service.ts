@@ -81,7 +81,9 @@ export class AnimalsService {
     }
 
     async getAdoption(user: User): Promise<Animal[]> {
-        const userDB = await this.usersService.getById(user.id, true);
+        const userDB = await this.usersService.getById(user.id, {
+            favorites: true
+        });
 
         const reference = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
@@ -123,7 +125,9 @@ export class AnimalsService {
     }
 
     async like(user: User, new_id: number): Promise<any> {
-        const userDB = await this.usersService.getById(user.id, true);
+        const userDB = await this.usersService.getById(user.id, {
+            favorites: true
+        });
         const favorite = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
@@ -145,7 +149,9 @@ export class AnimalsService {
     }
 
     async dislike(user: User, new_id: number): Promise<any> {
-        const userDB = await this.usersService.getById(user.id, true);
+        const userDB = await this.usersService.getById(user.id, {
+            favorites: true
+        });
         const favorite = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );

@@ -1,8 +1,20 @@
-import {Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Res} from '@nestjs/common';
-import {User} from './user.entity';
-import {UsersService} from "./users.service";
-import {OnlyRoles} from '../authentication/guards/role.decorator';
-import {Roles} from '../authentication/enum/roles.emum';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Post,
+    Put,
+    Query,
+    Res
+} from '@nestjs/common';
+import { User } from './user.entity';
+import { UsersService } from './users.service';
+import { OnlyRoles } from '../authentication/guards/role.decorator';
+import { Roles } from '../authentication/enum/roles.emum';
 
 @Controller('users')
 export class UsersController {
@@ -20,14 +32,19 @@ export class UsersController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async getById(
         @Param('id') id: number,
-        @Query('favorites') favorites: string
+        @Query('favorites') favorites: string,
+        @Query('animals') animals: string
     ) {
-        const fav = favorites.toLowerCase() === 'true';
-        return this.userService.getById(id, fav);
+        const user = await this.userService.getById(id, {
+            favorites: favorites === 'true',
+            animals: animals === 'true'
+        });
+        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
+        return user;
     }
 
     @Get(':email/user')
-    async getUserByEmail(@Param('email')email, @Res() res) {
+    async getUserByEmail(@Param('email') email, @Res() res) {
         const token = await this.userService.getByEmail(email);
         return res.status(HttpStatus.OK).json(token);
     }
@@ -39,15 +56,15 @@ export class UsersController {
     }
 
     @Put(':id/update')
-    async update(@Param('id')id, @Body() userData: User): Promise<any>{
+    async update(@Param('id') id, @Body() userData: User): Promise<any> {
         userData.id = id;
         return this.userService.update(userData);
     }
 
     @Put(':id/close')
-    async close(@Param('id')id, @Body() userData: User): Promise<any> {
+    async close(@Param('id') id, @Body() userData: User): Promise<any> {
         userData.id = id;
-        userData.closeDate = Date.prototype
+        userData.closeDate = Date.prototype;
         return this.userService.update(userData);
     }
-}   
+}

@@ -21,12 +21,16 @@ export class UsersService {
         });
     }
 
-    async getById(id: number, favorites = false): Promise<User> {
+    async getById(id: number, options: FindUserOptions = {}): Promise<User> {
+        const relations = [];
+        if (options.favorites) relations.push('favorites');
+        if (options.animals) relations.push('animals');
+
         return this.repository.findOne({
             where: {
                 id: id
             },
-            relations: favorites ? ['favorites'] : []
+            relations: relations
         });
     }
 
@@ -62,8 +66,14 @@ export class UsersService {
         return this.repository.update(data.id, data);
     }
 
-    async addAnimalToUser(animal: Animal, user: User): Promise<User> {
+    async addAnimalToUser(animal: Animal, owner: User): Promise<User> {
+        const user = await this.getById(owner.id, { animals: true });
         user.animals.push(animal);
         return this.repository.save(user);
     }
+}
+
+export interface FindUserOptions {
+    favorites?: boolean;
+    animals?: boolean;
 }
