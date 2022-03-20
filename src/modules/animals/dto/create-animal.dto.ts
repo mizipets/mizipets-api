@@ -8,7 +8,7 @@ export class CreateAnimalDTO {
 
     @IsString()
     @IsOptional()
-    readonly comment: string;*
+    readonly comment: string;
 
     @IsOptional()
     readonly birthDate: Date;
