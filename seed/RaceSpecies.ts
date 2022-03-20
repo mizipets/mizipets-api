@@ -22,6 +22,12 @@ export class RaceSpecies1515769694450 implements MigrationInterface {
         Object.entries(this.races).forEach(
             (speciesRace: [string, string[]]) => {
                 races.push(
+                    {
+                        id: counter++,
+                        name: 'Unknown',
+                        species: this.getSpecie(parseInt(speciesRace[0])),
+                        animals: []
+                    },
                     ...speciesRace[1].map((race) => {
                         return {
                             id: counter++,
