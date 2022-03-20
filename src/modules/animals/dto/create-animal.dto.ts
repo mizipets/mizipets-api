@@ -6,18 +6,18 @@ export class CreateAnimalDTO {
     @IsNotEmpty()
     readonly name: string;
 
-    @IsNumber()
-    @IsNotEmpty()
-    readonly raceId: number;
-
     @IsString()
     @IsOptional()
-    readonly sex: Sex;
+    readonly comment: string;*
 
     @IsOptional()
     readonly birthDate: Date;
 
     @IsString()
     @IsOptional()
-    readonly comment: string;
+    readonly sex: Sex;
+
+    @IsNumber()
+    @IsNotEmpty()
+    readonly raceId: number;
 }
