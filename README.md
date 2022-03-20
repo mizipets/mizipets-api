@@ -1,7 +1,6 @@
+# Mizipets Api
 
 ## Description
-
-Mizipets Api
 
 ## Authors
 
