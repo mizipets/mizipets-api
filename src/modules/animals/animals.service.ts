@@ -101,6 +101,17 @@ export class AnimalsService {
             .getMany();
     }
 
+    async getAdoptionsByOwner(userId: number): Promise<Animal[]> {
+        return await this.repository.find({
+            where: {
+                owner: {
+                    id: userId
+                }
+            },
+            relations: ['race', 'race.species']
+        });
+    }
+
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
 
