@@ -101,6 +101,18 @@ export class AnimalsService {
             .getMany();
     }
 
+    async getAdoptionByOwner(userId: number): Promise<Animal[]> {
+        return await this.repository
+            .createQueryBuilder()
+            .select('animal')
+            .from(Animal, 'animal')
+            .where('animal.isAdoption = :isAdoption', {
+                isAdoption: true
+            })
+            .andWhere('animal.ownerId = :ownerId', { ownerId: userId })
+            .getMany();
+    }
+
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
 
