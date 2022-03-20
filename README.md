@@ -22,7 +22,7 @@ $ npm install
 $ npm run seed:run
 
 # clear and reset concearned tables in db
-$ npm run seed:reset
+$ npm run seed:revert
 ```
 
 ## Running the app
