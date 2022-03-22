@@ -12,7 +12,7 @@ export class Favorites {
         | AdoptionReferences
         | AdviceReferences
         | PetsReferences
-        | VetReferences;
+        | VetsReferences;
 
     @Column()
     type: ServiceType;
@@ -34,6 +34,6 @@ export class AdviceReferences {
     id?: number;
 }
 
-export class VetReferences {
+export class VetsReferences {
     id?: number;
 }
