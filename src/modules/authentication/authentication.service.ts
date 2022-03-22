@@ -40,7 +40,7 @@ export class AuthenticationService {
     public async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email);
 
-        if (!user) throw new UnauthorizedException('Invalid credentials');
+        if (!user) throw new UnauthorizedException('Invalid credentials1');
 
         const isPasswordEquals: boolean = await compare(
             login.password,
@@ -48,7 +48,7 @@ export class AuthenticationService {
         );
 
         if (!isPasswordEquals)
-            throw new UnauthorizedException('Invalid credentials');
+            throw new UnauthorizedException('Invalid credentials2');
 
         return this.getJwtPayload(user);
     }

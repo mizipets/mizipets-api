@@ -5,7 +5,7 @@ module.exports = [
         host: 'localhost',
         port: 5432,
         username: 'postgres',
-        password: 'postgres',
+        password: 'krew',
         database: 'postgres',
         entities: ['./src/**/*.entity.ts'],
         migrations: ['./seed/*.ts'],

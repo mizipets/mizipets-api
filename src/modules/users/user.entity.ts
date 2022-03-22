@@ -21,11 +21,32 @@ export class User {
     @Column('text')
     lastname: string;
 
+    @Column('json')
+    address: {
+        city: string;
+        country: string;
+        roadName: string;
+        roadNumber: string;
+    };
+
     @Column({ nullable: true })
     photoUrl: string;
 
+    @Column('json')
+    preferences: {
+        lang: string;
+        darkMode: boolean;
+        notifications: string;
+        update: string;
+    };
+
     @Column()
     role: Roles;
+
+    @Column('json')
+    shelter: {
+        name: string;
+    };
 
     @Column()
     createDate: Date;

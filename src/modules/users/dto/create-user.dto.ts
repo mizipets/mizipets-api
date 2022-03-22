@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsObject } from 'class-validator';
+
+export class AddressDto {
+    readonly city: string;
+    readonly country: string;
+    readonly roadName: string;
+    readonly roadNumber: string;
+}
 
 export class CreateUserDto {
     @IsEmail()
@@ -16,4 +23,7 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     readonly lastname: string;
+
+    @IsObject()
+    readonly address: AddressDto;
 }
