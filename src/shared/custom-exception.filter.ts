@@ -80,7 +80,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
     sanitize(body: any): any {
         const passwordReplace = '**************';
         const res = {};
-        if(body) {
+        if (body) {
             const entries = Object.entries(body);
             for (const entry of entries) {
                 if (typeof entry[1] === 'object')
