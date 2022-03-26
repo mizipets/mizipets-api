@@ -20,8 +20,8 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./jest-e2e.json",
         "test:unit": "jest --config ./jest-unit.json",
-        "seed:run": "npm run seed:revert && ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
-        "seed:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c seed"
+        "seed:run": "npm run seed:revert && ts-node ./seed/seed-run.ts",
+        "seed:revert": "ts-node ./seed/seed-revert.ts"
     },
     "dependencies": {
         "@nestjs-modules/mailer": "^1.6.1",

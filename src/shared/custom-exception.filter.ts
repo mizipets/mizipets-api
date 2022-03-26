@@ -52,7 +52,11 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 status
             )}:** ${HttpStatusCode.getStatusText(status)}`,
             `\`\`\`${JSON.stringify(exceptionMessage, null, 2)}\`\`\``,
-            `**Body:**`,
+            `**Body:** ${
+                request.user
+                    ? '(user id: ' + request.user.id + ')'
+                    : '(no user)'
+            }`,
             `\`\`\`${JSON.stringify(
                 this.sanitize(request.body),
                 null,
@@ -71,7 +75,14 @@ export class CustomExceptionFilter implements ExceptionFilter {
             status !== HttpStatus.FORBIDDEN &&
             status !== HttpStatus.TOO_MANY_REQUESTS
         ) {
-            this.logger.error(exceptionMessage);
+            console.log();
+
+            this.logger.error(
+                `${Date().toString()}
+                ${request.user ? '\nuid: ' + request.user.id : ''}
+                \n${JSON.stringify(exceptionMessage, null, 2)}
+                \n${exception.stack}`
+            );
             if (ENV === 'prod') await this.discordService.sendMsg(msg);
         }
         return response.status(status).json(exceptionMessage);
@@ -79,13 +90,15 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     sanitize(body: any): any {
         const passwordReplace = '**************';
-        const entries = Object.entries(body);
         const res = {};
-        for (const entry of entries) {
-            if (typeof entry[1] === 'object')
-                entry[1] = this.sanitize(entry[1]);
-            else if (entry[0] === 'password') entry[1] = passwordReplace;
-            res[entry[0]] = entry[1];
+        if (body) {
+            const entries = Object.entries(body);
+            for (const entry of entries) {
+                if (typeof entry[1] === 'object')
+                    entry[1] = this.sanitize(entry[1]);
+                else if (entry[0] === 'password') entry[1] = passwordReplace;
+                res[entry[0]] = entry[1];
+            }
         }
         return res;
     }
