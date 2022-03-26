@@ -4,6 +4,24 @@ import { Roles } from '../authentication/enum/roles.emum';
 import { Favorites } from '../favorites/favorites.entity';
 import { Room } from '../room/room.entity';
 
+export class Address {
+    readonly city: string;
+    readonly country: string;
+    readonly roadName: string;
+    readonly roadNumber: string;
+}
+
+export class Preferences {
+    lang: string;
+    darkMode: boolean;
+    notifications: boolean;
+    update: boolean;
+}
+
+export class Shelter {
+    name: string;
+}
+
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
@@ -36,14 +54,14 @@ export class User {
     preferences: {
         lang: string;
         darkMode: boolean;
-        notifications: string;
-        update: string;
+        notifications: boolean;
+        update: boolean;
     };
 
     @Column()
     role: Roles;
 
-    @Column('json')
+    @Column('json', { nullable: true })
     shelter: {
         name: string;
     };

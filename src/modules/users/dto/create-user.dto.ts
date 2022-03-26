@@ -1,11 +1,5 @@
 import { IsNotEmpty, IsEmail, IsString, IsObject } from 'class-validator';
-
-export class AddressDto {
-    readonly city: string;
-    readonly country: string;
-    readonly roadName: string;
-    readonly roadNumber: string;
-}
+import { Address, Preferences } from '../user.entity';
 
 export class CreateUserDto {
     @IsEmail()
@@ -25,5 +19,8 @@ export class CreateUserDto {
     readonly lastname: string;
 
     @IsObject()
-    readonly address: AddressDto;
+    readonly address: Address;
+
+    @IsObject()
+    readonly preferences: Preferences;
 }
