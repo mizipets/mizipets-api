@@ -11,7 +11,7 @@ import { DiscordService } from './shared/discord.service';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const origins = ['http://localhost'];
+    const origins = ['http://localhost:4200'];
 
     app.enableCors({ origin: origins });
     app.use(compression());
