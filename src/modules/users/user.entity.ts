@@ -40,23 +40,13 @@ export class User {
     lastname: string;
 
     @Column('json')
-    address: {
-        city: string;
-        country: string;
-        roadName: string;
-        roadNumber: string;
-    };
+    address: Address;
 
     @Column({ nullable: true })
     photoUrl: string;
 
     @Column('json')
-    preferences: {
-        lang: string;
-        darkMode: boolean;
-        notifications: boolean;
-        update: boolean;
-    };
+    preferences: Preferences;
 
     @Column()
     role: Roles;
