@@ -17,16 +17,16 @@ export class UsersService {
 
     async getAll(favorites = false): Promise<User[]> {
         return this.repository.find({
-            relations: favorites ? ['animals', 'favorites'] : ['animals']
+            relations: favorites ? ['favorites'] : []
         });
     }
 
-    async getById(id: number, favorites = false): Promise<User> {
+    async getById(id: number, favorites= false): Promise<User> {
         return this.repository.findOne({
             where: {
                 id: id
             },
-            relations: favorites ? ['animals', 'favorites'] : ['animals']
+            relations: relations
         });
     }
 
@@ -46,7 +46,9 @@ export class UsersService {
             password: data.password,
             firstname: data.firstname,
             lastname: data.lastname,
+            address: data.address,
             photoUrl: null,
+            preferences: data.preferences,
             role: Roles.STANDARD,
             createDate: new Date(),
             closeDate: null,
@@ -62,8 +64,14 @@ export class UsersService {
         return this.repository.update(data.id, data);
     }
 
-    async addAnimalToUser(animal: Animal, user: User): Promise<User> {
+    async addAnimalToUser(animal: Animal, owner: User): Promise<User> {
+        const user = await this.getById(owner.id, { animals: true });
         user.animals.push(animal);
         return this.repository.save(user);
     }
+}
+
+export interface FindUserOptions {
+    favorites?: boolean;
+    animals?: boolean;
 }

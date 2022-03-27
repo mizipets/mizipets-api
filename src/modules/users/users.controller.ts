@@ -4,6 +4,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    NotFoundException,
     Param,
     Post,
     Put,
@@ -31,10 +32,15 @@ export class UsersController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async getById(
         @Param('id') id: number,
-        @Query('favorites') favorites: string
+        @Query('favorites') favorites: string,
+        @Query('animals') animals: string
     ) {
-        const fav = favorites.toLowerCase() === 'true';
-        return this.userService.getById(id, fav);
+        const user = await this.userService.getById(id, {
+            favorites: favorites === 'true',
+            animals: animals === 'true'
+        });
+        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
+        return user;
     }
 
     @Get(':email/user')
