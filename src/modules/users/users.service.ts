@@ -21,7 +21,11 @@ export class UsersService {
         });
     }
 
-    async getById(id: number, favorites= false): Promise<User> {
+    async getById(id: number, options: FindUserOptions = {}): Promise<User> {
+        const relations = [];
+        if (options.favorites) relations.push('favorites');
+        if (options.animals) relations.push('animals');
+
         return this.repository.findOne({
             where: {
                 id: id

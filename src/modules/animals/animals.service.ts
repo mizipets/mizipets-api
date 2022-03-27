@@ -160,9 +160,7 @@ export class AnimalsService {
     }
 
     async dislike(user: User, new_id: number): Promise<any> {
-        const userDB = await this.usersService.getById(user.id, {
-            favorites: true
-        });
+        const userDB = await this.usersService.getById(user.id, {favorites: true});
         const favorite = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );

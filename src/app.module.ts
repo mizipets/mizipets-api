@@ -11,7 +11,9 @@ import { ServicesModule } from './modules/services/services.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import {APP_GUARD} from "@nestjs/core";
 import * as path from 'path';
+
 
 @Module({
     imports: [

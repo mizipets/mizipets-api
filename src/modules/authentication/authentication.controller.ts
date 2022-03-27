@@ -5,6 +5,7 @@ import {
     HttpCode,
     HttpStatus,
     Post,
+    Query,
     Request,
     UseGuards
 } from '@nestjs/common';
@@ -36,9 +37,9 @@ export class AuthenticationController {
         return this.authService.refreshToken(req.user);
     }
 
-    // @HttpCode(HttpStatus.OK)
-    // @Post('reset/password')
-    // async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
-    //   return this.authService.resetPassword(login, code);
-    // }
+    @HttpCode(HttpStatus.OK)
+    @Post('reset/password')
+    async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
+      return this.authService.resetPassword(login, code);
+    }
 }
