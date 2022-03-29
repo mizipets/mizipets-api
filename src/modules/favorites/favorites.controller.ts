@@ -10,13 +10,13 @@ import { FavoritesService } from './favorites.service';
 
 @Controller('favorites')
 export class FavoritesController {
-    constructor(private favoritesService: FavoritesService) {}
+    constructor(private readonly favoritesService: FavoritesService) {}
 
     @Get(':userId')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async getFavoritesOfUser(@Param('userId') userId: string) {
-        return await this.favoritesService.getFavoritesOfUser(parseInt(userId));
+        return this.favoritesService.getFavoritesOfUser(parseInt(userId));
     }
 
     @Delete(':userId/:type/:referenceID')
@@ -27,6 +27,6 @@ export class FavoritesController {
         @Param('type') type: ServiceType,
         @Param('referenceID') referenceID: string
     ) {
-        return await this.favoritesService.removeFavorite(parseInt(userId), type, parseInt(referenceID));
+        return this.favoritesService.removeFavorite(parseInt(userId), type, parseInt(referenceID));
     }
 }
