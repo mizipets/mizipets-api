@@ -2,15 +2,15 @@
  * @author Julien DA CORTE & Latif SAGNA
  * @create 2022-03-11
  */
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {User} from './entities/user.entity';
-import {Repository} from 'typeorm';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
-import {Roles} from '../authentication/enum/roles.emum';
-import {Animal} from '../animals/entities/animal.entity';
-import {FavoritesService} from '../favorites/favorites.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from '../authentication/enum/roles.emum';
+import { Animal } from '../animals/entities/animal.entity';
+import { FavoritesService } from '../favorites/favorites.service';
 
 export interface FindUserOptions {
     favorites?: boolean;
@@ -60,10 +60,10 @@ export class UsersService {
 
     async create(userDto: CreateUserDto): Promise<User> {
         const favorites = await this.favoritesService.createFavoritesForUser();
-        const newUser = new User;
+        const newUser = new User();
         let role: Roles = Roles.STANDARD;
 
-        if(userDto.shelter) role = Roles.PRO;
+        if (userDto.shelter) role = Roles.PRO;
 
         newUser.email = userDto.email;
         newUser.password = userDto.password;
@@ -73,7 +73,7 @@ export class UsersService {
         newUser.photoUrl = null;
         newUser.role = role;
         newUser.createDate = new Date();
-        newUser.closeDate =  null;
+        newUser.closeDate = null;
         newUser.animals = [];
         newUser.favorites = favorites;
         newUser.preferences = userDto.preferences;

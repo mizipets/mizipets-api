@@ -2,7 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-25
  */
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceType } from '../services/enums/service-type.enum';
@@ -22,14 +22,23 @@ export class FavoritesService {
     ) {}
 
     async getById(id: number): Promise<Favorites> {
-        const favorite: Favorites = await this.repository.findOne({ where: { id: id } });
+        const favorite: Favorites = await this.repository.findOne({
+            where: { id: id }
+        });
 
-        if(!favorite) throw new NotFoundException(`Favorite with id: ${id} not found`);
+        if (!favorite)
+            throw new NotFoundException(`Favorite with id: ${id} not found`);
         return favorite;
     }
 
-    async getByUserIdAndType(userId: number, type: ServiceType): Promise<Favorites> {
-        return this.repository.findOneOrFail({ user: { id: userId }, type: type });
+    async getByUserIdAndType(
+        userId: number,
+        type: ServiceType
+    ): Promise<Favorites> {
+        return this.repository.findOneOrFail({
+            user: { id: userId },
+            type: type
+        });
     }
 
     async createFavoritesForUser(): Promise<Favorites[]> {
@@ -66,7 +75,7 @@ export class FavoritesService {
     }
 
     async getFavoritesOfUser(userId: number): Promise<Favorites[]> {
-        return this.repository.find({ user: { id: userId }});
+        return this.repository.find({ user: { id: userId } });
     }
 
     async removeFavorite(

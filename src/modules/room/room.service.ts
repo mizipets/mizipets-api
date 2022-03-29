@@ -12,7 +12,9 @@ import { Room } from './entities/room.entity';
 
 @Injectable()
 export class RoomService {
-    constructor(@InjectRepository(Room) private readonly repository: Repository<Room>) {}
+    constructor(
+        @InjectRepository(Room) private readonly repository: Repository<Room>
+    ) {}
 
     async create(user: User, animal: Animal) {
         const room = new Room();

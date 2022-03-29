@@ -2,7 +2,14 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-25
  */
-import {Controller, Delete, Get, HttpCode, HttpStatus, Param} from '@nestjs/common';
+import {
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param
+} from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServiceType } from '../services/enums/service-type.enum';
@@ -27,6 +34,10 @@ export class FavoritesController {
         @Param('type') type: ServiceType,
         @Param('referenceID') referenceID: string
     ) {
-        return this.favoritesService.removeFavorite(parseInt(userId), type, parseInt(referenceID));
+        return this.favoritesService.removeFavorite(
+            parseInt(userId),
+            type,
+            parseInt(referenceID)
+        );
     }
 }
