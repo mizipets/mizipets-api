@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
+ * @create 2022-02-14
+ */
 import './initEnv';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

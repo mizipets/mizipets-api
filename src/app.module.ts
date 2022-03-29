@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
+ * @create 2022-02-14
+ */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
