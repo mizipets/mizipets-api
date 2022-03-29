@@ -1,6 +1,9 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-5
+ */
 import {
     ConflictException,
-    ForbiddenException,
     Injectable,
     NotFoundException,
     UnauthorizedException
@@ -22,7 +25,7 @@ export class AuthenticationService {
         private readonly jwtService: JwtService
     ) {}
 
-    public async register(registrationData: any): Promise<User> {
+    async register(registrationData: any): Promise<User> {
         const emailCheck: User = await this.userService.getByEmail(
             registrationData.email
         );
@@ -38,7 +41,7 @@ export class AuthenticationService {
         return user;
     }
 
-    public async login(login: LoginDto): Promise<JwtResponseDto> {
+    async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email);
 
         if (!user) throw new UnauthorizedException('Invalid credentials');
@@ -54,14 +57,12 @@ export class AuthenticationService {
         return this.getJwtPayload(user);
     }
 
-    public async refreshToken(currentUser: User): Promise<JwtResponseDto> {
+    async refreshToken(currentUser: User): Promise<JwtResponseDto> {
         const user: User = await this.userService.getById(currentUser.id);
-        if (!user) throw new ForbiddenException("Can't refresh token");
-
         return this.getJwtPayload(user);
     }
 
-    // public async sendCode(email: string): Promise<void> {
+    // async sendCode(email: string): Promise<void> {
     //   const code = this.generateCode();
     //   const account: Account = await this.accountsService.getAccountByEmail(email);
     //
@@ -81,7 +82,7 @@ export class AuthenticationService {
     //   return account.code === data.code;
     // }
 
-    public async resetPassword(login: LoginDto, code: string): Promise<User> {
+    async resetPassword(login: LoginDto, code: string): Promise<User> {
         const user: User = await this.userService.getByEmail(login.email);
 
         if (!user) throw new NotFoundException('User does not exist!');
@@ -95,7 +96,6 @@ export class AuthenticationService {
         user.password = undefined;
 
         await this.mailService.sendChangedPassword(user);
-
         return user;
     }
 

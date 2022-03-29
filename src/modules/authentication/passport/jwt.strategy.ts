@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-5
+ */
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
