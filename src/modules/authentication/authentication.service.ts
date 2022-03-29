@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';

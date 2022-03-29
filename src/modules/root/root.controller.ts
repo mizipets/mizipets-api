@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import { Controller, Get, Headers } from '@nestjs/common';
 import { I18nContext, I18n } from 'nestjs-i18n';
 
@@ -6,7 +10,6 @@ const { NAME, ENV } = process.env;
 @Controller()
 export class RootController {
     @Get()
-    // eslint-disable-next-line prettier/prettier
     hello(
         @I18n() i18n: I18nContext,
         @Headers('accept-language') lang: string

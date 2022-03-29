@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import {
     Column,
     CreateDateColumn,
@@ -6,8 +10,8 @@ import {
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
-import { User } from '../users/user.entity';
-import { Message } from './message';
+import { User } from '../users/entities/user.entity';
+import { Message } from './messages/message';
 
 @Entity('rooms')
 export class Room {

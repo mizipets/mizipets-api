@@ -6,7 +6,7 @@ import {
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Room } from '../../room/room.entity';
-import { User } from '../../users/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
 import { Race } from './race.entity';
 

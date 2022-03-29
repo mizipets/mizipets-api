@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import { Logger } from '@nestjs/common';
 import {
     OnGatewayConnection,
@@ -8,7 +12,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { RoomService } from '../room/room.service';
+import { RoomService } from '../room.service';
 
 const { MESSAGE_PORT } = process.env;
 

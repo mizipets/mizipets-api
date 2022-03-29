@@ -18,7 +18,7 @@ import { UsersService } from './users.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {User} from "./user.entity";
+import {User} from "./entities/user.entity";
 
 @Controller('users')
 export class UsersController {

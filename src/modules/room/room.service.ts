@@ -1,14 +1,18 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
-import { User } from '../users/user.entity';
-import { Message } from './message';
+import { User } from '../users/entities/user.entity';
+import { Message } from './messages/message';
 import { Room } from './room.entity';
 
 @Injectable()
 export class RoomService {
-    constructor(@InjectRepository(Room) private repository: Repository<Room>) {}
+    constructor(@InjectRepository(Room) private readonly repository: Repository<Room>) {}
 
     async create(user: User, animal: Animal) {
         const room = new Room();

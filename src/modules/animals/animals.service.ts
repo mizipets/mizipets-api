@@ -5,7 +5,7 @@ import { AdoptionReferences } from '../favorites/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';

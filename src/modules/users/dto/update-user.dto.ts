@@ -3,7 +3,7 @@
  * @create 2022-03-11
  */
 import { IsEmail, IsObject, IsString } from 'class-validator';
-import { Address, Preferences, Shelter } from '../user.entity';
+import { Address, Preferences, Shelter } from '../entities/user.entity';
 
 export class UpdateUserDto {
     @IsString()
