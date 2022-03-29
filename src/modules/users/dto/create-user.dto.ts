@@ -1,6 +1,9 @@
+/**
+ * @author Julien DA CORTE & Latif SAGNA
+ * @create 2022-03-11
+ */
 import { IsNotEmpty, IsEmail, IsString, IsObject } from 'class-validator';
 import { Address, Preferences } from '../user.entity';
-
 
 export class CreateUserDto {
     @IsEmail()

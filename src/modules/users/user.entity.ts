@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE & Latif SAGNA & Maxime D'HARBOULLE
+ * @create 2022-03-11
+ */
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { Roles } from '../authentication/enum/roles.emum';
@@ -52,9 +56,7 @@ export class User {
     role: Roles;
 
     @Column('json', { nullable: true })
-    shelter: {
-        name: string;
-    };
+    shelter: Shelter;
 
     @Column()
     createDate: Date;

@@ -1,5 +1,5 @@
 /**
- * @author Maxime d'Harboullé
+ * @author Maxime D'HARBOULLE
  * @email maxime.dharboulle@gmail.com
  * @create date 2022-03-16 00:35:23
  * @modify date 2022-03-16 00:35:23

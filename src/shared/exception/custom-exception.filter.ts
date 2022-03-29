@@ -8,7 +8,7 @@ import {
     Logger
 } from '@nestjs/common';
 import * as HttpStatusCode from 'http-status-codes';
-import { DiscordService } from './discord.service';
+import { DiscordService } from '../discord/discord.service';
 
 const { ENV } = process.env;
 

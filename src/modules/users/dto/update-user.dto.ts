@@ -1,21 +1,16 @@
-import { IsNotEmpty, IsEmail, IsString, IsEmpty } from 'class-validator';
+/**
+ * @author Julien DA CORTE & Latif SAGNA
+ * @create 2022-03-11
+ */
+import { IsEmail, IsString } from 'class-validator';
 
 export class UpdateUserDto {
     @IsString()
-    @IsEmpty()
     readonly firstname: string;
 
     @IsString()
-    @IsEmpty()
     readonly lastname: string;
 
     @IsEmail()
-    @IsNotEmpty()
     readonly email: string;
-
-    @IsNotEmpty()
-    readonly password: string;
-
-    @IsNotEmpty()
-    readonly id: number;
 }

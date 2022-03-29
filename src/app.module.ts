@@ -4,16 +4,15 @@ import { I18nModule, I18nJsonParser, HeaderResolver } from 'nestjs-i18n';
 import { RootModule } from './modules/root/root.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { UsersModule } from './modules/users/users.module';
-import { DiscordService } from './shared/discord.service';
+import { DiscordService } from './shared/discord/discord.service';
 import { AnimalsModule } from './modules/animals/animals.module';
 import { MailModule } from './shared/mail/mail.module';
 import { ServicesModule } from './modules/services/services.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import {APP_GUARD} from "@nestjs/core";
+import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
-
 
 @Module({
     imports: [

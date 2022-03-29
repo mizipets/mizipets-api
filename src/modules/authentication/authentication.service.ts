@@ -26,6 +26,7 @@ export class AuthenticationService {
         const emailCheck: User = await this.userService.getByEmail(
             registrationData.email
         );
+
         if (emailCheck)
             throw new ConflictException('This email already exists');
 
@@ -70,7 +71,7 @@ export class AuthenticationService {
     //   await this.accountsService.updateCode(account.email, code.toString());
     //   await this.mailService.sendResetCode(account, code.toString());
     // }
-    //
+
     // public async checkCode(data: any): Promise<boolean> {
     //   const account: Account = await this.accountsService.getAccountByEmail(data.email);
     //

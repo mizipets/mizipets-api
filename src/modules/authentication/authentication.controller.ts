@@ -40,6 +40,6 @@ export class AuthenticationController {
     @HttpCode(HttpStatus.OK)
     @Post('reset/password')
     async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
-      return this.authService.resetPassword(login, code);
+        return this.authService.resetPassword(login, code);
     }
 }

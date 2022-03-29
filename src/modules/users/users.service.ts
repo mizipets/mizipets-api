@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+/**
+ * @author Julien DA CORTE & Latif SAGNA
+ * @create 2022-03-11
+ */
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
@@ -8,38 +12,50 @@ import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 
+export interface FindUserOptions {
+    favorites?: boolean;
+    animals?: boolean;
+}
+
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectRepository(User) private repository: Repository<User>,
-        private favoritesService: FavoritesService
+        @InjectRepository(User) private readonly repository: Repository<User>,
+        private readonly favoritesService: FavoritesService
     ) {}
 
-    async getAll(favorites = false): Promise<User[]> {
-        return this.repository.find({
-            relations: favorites ? ['favorites'] : []
-        });
+    async getAll(options: FindUserOptions = {}): Promise<User[]> {
+        const relations = [];
+
+        if (options.favorites) relations.push('favorites');
+        if (options.animals) relations.push('animals');
+
+        return this.repository.find({ relations: relations });
     }
 
     async getById(id: number, options: FindUserOptions = {}): Promise<User> {
         const relations = [];
+
         if (options.favorites) relations.push('favorites');
         if (options.animals) relations.push('animals');
 
-        return this.repository.findOne({
-            where: {
-                id: id
-            },
+        const user: User = await this.repository.findOne({
+            where: { id: id },
             relations: relations
         });
+
+        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
+        return user;
     }
 
     async getByEmail(email: string): Promise<User> {
-        return this.repository.findOne({
-            where: {
-                email: email
-            }
+        const user: User = await this.repository.findOne({
+            where: { email: email }
         });
+
+        if (!user)
+            throw new NotFoundException(`User with email: ${email} not found`);
+        return user;
     }
 
     async create(data: CreateUserDto): Promise<User> {
@@ -64,8 +80,12 @@ export class UsersService {
         return await this.repository.save(newUser);
     }
 
-    async update(data: UpdateUserDto): Promise<UpdateResult> {
-        return this.repository.update(data.id, data);
+    async update(id, userDto: UpdateUserDto): Promise<UpdateResult> {
+        return this.repository.update(id, userDto);
+    }
+
+    async close(id: string): Promise<void> {
+        //@TODO
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {
@@ -73,9 +93,4 @@ export class UsersService {
         user.animals.push(animal);
         return this.repository.save(user);
     }
-}
-
-export interface FindUserOptions {
-    favorites?: boolean;
-    animals?: boolean;
 }
