@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-25
+ */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,7 +12,7 @@ import {
     Favorites,
     PetsReferences,
     VetsReferences
-} from './favorites.entity';
+} from './entities/favorites.entity';
 
 @Injectable()
 export class FavoritesService {

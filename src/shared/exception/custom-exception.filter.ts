@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-10
+ */
 import {
     ExceptionFilter,
     Catch,

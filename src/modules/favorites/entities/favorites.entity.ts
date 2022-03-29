@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ServiceType } from '../services/enums/service-type.enum';
-import { User } from '../users/entities/user.entity';
+import { ServiceType } from '../../services/enums/service-type.enum';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('favorites')
 export class Favorites {

@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { User } from '../users/entities/user.entity';
 import { Message } from './messages/message';
-import { Room } from './room.entity';
+import { Room } from './entities/room.entity';
 
 @Injectable()
 export class RoomService {

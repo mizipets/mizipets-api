@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
-import { AdoptionReferences } from '../favorites/favorites.entity';
+import { AdoptionReferences } from '../favorites/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';

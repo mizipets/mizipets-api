@@ -5,7 +5,7 @@ import {
     OneToMany,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { Room } from '../../room/room.entity';
+import { Room } from '../../room/entities/room.entity';
 import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
 import { Race } from './race.entity';

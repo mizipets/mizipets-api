@@ -9,9 +9,9 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { Animal } from '../animals/entities/animal.entity';
-import { User } from '../users/entities/user.entity';
-import { Message } from './messages/message';
+import { Animal } from '../../animals/entities/animal.entity';
+import { User } from '../../users/entities/user.entity';
+import { Message } from '../messages/message';
 
 @Entity('rooms')
 export class Room {
