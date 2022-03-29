@@ -43,20 +43,20 @@ export class User {
     @Column('text')
     lastname: string;
 
-    @Column('json')
-    address: Address;
-
     @Column({ nullable: true })
     photoUrl: string;
 
     @Column('json')
-    preferences: Preferences;
+    address: Address;
 
-    @Column()
-    role: Roles;
+    @Column('json')
+    preferences: Preferences;
 
     @Column('json', { nullable: true })
     shelter: Shelter;
+
+    @Column()
+    role: Roles;
 
     @Column()
     createDate: Date;

@@ -18,6 +18,7 @@ import { UsersService } from './users.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {User} from "./user.entity";
 
 @Controller('users')
 export class UsersController {
@@ -25,7 +26,7 @@ export class UsersController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.STANDARD)
+    @OnlyRoles(Roles.ADMIN)
     async getAll(
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
@@ -52,7 +53,7 @@ export class UsersController {
 
     @Get('email/:email')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    @OnlyRoles(Roles.ADMIN)
     async getByEmail(@Param('email') email: string) {
         return this.userService.getByEmail(email);
     }
@@ -64,7 +65,7 @@ export class UsersController {
         @Request() req,
         @Param('id') id,
         @Body() userDto: UpdateUserDto
-    ): Promise<any> {
+    ): Promise<User> {
         if (req.user.id !== id)
             throw new ForbiddenException("Can't update this user");
         return this.userService.update(id, userDto);
@@ -73,7 +74,7 @@ export class UsersController {
     @Put(':id/close')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async close(@Request() req, @Param('id') id): Promise<any> {
+    async close(@Request() req, @Param('id') id): Promise<void> {
         if (req.user.id !== id)
             throw new ForbiddenException("Can't close this user account");
         return this.userService.close(id);

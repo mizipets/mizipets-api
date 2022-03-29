@@ -2,15 +2,15 @@
  * @author Julien DA CORTE & Latif SAGNA
  * @create 2022-03-11
  */
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { Repository, UpdateResult } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Roles } from '../authentication/enum/roles.emum';
-import { Animal } from '../animals/entities/animal.entity';
-import { FavoritesService } from '../favorites/favorites.service';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {User} from './user.entity';
+import {Repository} from 'typeorm';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {Roles} from '../authentication/enum/roles.emum';
+import {Animal} from '../animals/entities/animal.entity';
+import {FavoritesService} from '../favorites/favorites.service';
 
 export interface FindUserOptions {
     favorites?: boolean;
@@ -58,34 +58,48 @@ export class UsersService {
         return user;
     }
 
-    async create(data: CreateUserDto): Promise<User> {
+    async create(userDto: CreateUserDto): Promise<User> {
         const favorites = await this.favoritesService.createFavoritesForUser();
+        const newUser = new User;
+        let role: Roles = Roles.STANDARD;
 
-        const newUser = {
-            email: data.email,
-            password: data.password,
-            firstname: data.firstname,
-            lastname: data.lastname,
-            address: data.address,
-            photoUrl: null,
-            preferences: data.preferences,
-            role: Roles.STANDARD,
-            createDate: new Date(),
-            closeDate: null,
-            animals: [],
-            favorites: favorites
-        } as User;
+        if(userDto.shelter) role = Roles.PRO;
+
+        newUser.email = userDto.email;
+        newUser.password = userDto.password;
+        newUser.firstname = userDto.firstname;
+        newUser.lastname = userDto.lastname;
+        newUser.address = userDto.address;
+        newUser.photoUrl = null;
+        newUser.role = role;
+        newUser.createDate = new Date();
+        newUser.closeDate =  null;
+        newUser.animals = [];
+        newUser.favorites = favorites;
+        newUser.preferences = userDto.preferences;
+        newUser.shelter = userDto.shelter;
 
         this.repository.create(newUser);
-        return await this.repository.save(newUser);
+        return this.repository.save(newUser);
     }
 
-    async update(id, userDto: UpdateUserDto): Promise<UpdateResult> {
-        return this.repository.update(id, userDto);
+    async update(id, userDto: UpdateUserDto): Promise<User> {
+        const user: User = await this.getById(id);
+
+        user.firstname = userDto.firstname ?? user.firstname;
+        user.lastname = userDto.lastname ?? user.lastname;
+        user.email = userDto.email ?? user.email;
+        user.address = userDto.address ?? user.address;
+        user.preferences = userDto.preferences ?? user.preferences;
+        user.shelter = userDto.shelter ?? user.shelter;
+
+        return this.repository.save(user);
     }
 
-    async close(id: string): Promise<void> {
-        //@TODO
+    async close(id: number): Promise<void> {
+        const user: User = await this.getById(id);
+        user.closeDate = new Date();
+        await this.repository.save(user);
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {

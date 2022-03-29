@@ -2,7 +2,8 @@
  * @author Julien DA CORTE & Latif SAGNA
  * @create 2022-03-11
  */
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsObject, IsString } from 'class-validator';
+import { Address, Preferences, Shelter } from '../user.entity';
 
 export class UpdateUserDto {
     @IsString()
@@ -13,4 +14,16 @@ export class UpdateUserDto {
 
     @IsEmail()
     readonly email: string;
+
+    @IsString()
+    readonly photoUrl: string;
+
+    @IsObject()
+    readonly address: Address;
+
+    @IsObject()
+    readonly preferences: Preferences;
+
+    @IsObject()
+    readonly shelter: Shelter;
 }
