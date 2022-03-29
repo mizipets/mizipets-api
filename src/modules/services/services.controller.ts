@@ -1,9 +1,6 @@
 /**
- * @author Maxime d'Harboullé
- * @email maxime.dharboulle@gmail.com
- * @create date 2022-03-16 00:35:16
- * @modify date 2022-03-16 00:35:16
- * @desc [description]
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-16
  */
 import {
     Controller,
@@ -19,32 +16,32 @@ import { ServicesService } from './services.service';
 
 @Controller('services')
 export class ServicesController {
-    constructor(private servicesService: ServicesService) {}
+    constructor(private readonly servicesService: ServicesService) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.ADMIN, Roles.STANDARD)
+    @OnlyRoles(Roles.ADMIN)
     public async getAll() {
-        return await this.servicesService.getAll();
+        return this.servicesService.getAll();
     }
 
     @Get('active')
     @HttpCode(HttpStatus.OK)
     public async getAllActive() {
-        return await this.servicesService.getAllActive();
+        return this.servicesService.getAllActive();
     }
 
     @Put(':id/activate')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async activate(@Param('id') id: string) {
-        return await this.servicesService.activate(parseInt(id));
+        return this.servicesService.activate(parseInt(id));
     }
 
     @Put(':id/deactivate')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async deactivate(@Param('id') id: string) {
-        return await this.servicesService.deactivate(parseInt(id));
+        return this.servicesService.deactivate(parseInt(id));
     }
 }

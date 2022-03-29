@@ -1,6 +1,6 @@
 /**
- * @author Maxime d'Harboullé
- * @create date 2022-03-16 00:27:04
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-16
  */
 
 import {

@@ -1,11 +1,8 @@
 /**
  * @author Maxime D'HARBOULLE
- * @email maxime.dharboulle@gmail.com
- * @create date 2022-03-16 00:35:23
- * @modify date 2022-03-16 00:35:23
- * @desc [description]
+ * @create 2022-03-16
  */
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Service } from './entities/service.entity';
@@ -13,7 +10,7 @@ import { Service } from './entities/service.entity';
 @Injectable()
 export class ServicesService {
     constructor(
-        @InjectRepository(Service) private repository: Repository<Service>
+        @InjectRepository(Service) private readonly repository: Repository<Service>
     ) {}
 
     async getAll(): Promise<Service[]> {
@@ -25,7 +22,10 @@ export class ServicesService {
     }
 
     async getById(id: number): Promise<Service> {
-        return this.repository.findOneOrFail(id);
+        const service: Service = await this.repository.findOne({ where: { id: id } });
+
+        if (!service) throw new NotFoundException(`Service with id: ${id} not found`);
+        return service;
     }
 
     async activate(id: number) {
