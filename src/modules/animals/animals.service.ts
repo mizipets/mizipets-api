@@ -1,7 +1,14 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-23
+ */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
-import { AdoptionReferences } from '../favorites/entities/favorites.entity';
+import {
+    AdoptionReferences,
+    Favorites
+} from '../favorites/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
@@ -135,7 +142,7 @@ export class AnimalsService {
         return await this.repository.delete(id);
     }
 
-    async like(user: User, new_id: number): Promise<any> {
+    async like(user: User, new_id: number): Promise<Favorites> {
         const userDB = await this.usersService.getById(user.id, {
             favorites: true
         });
@@ -153,13 +160,13 @@ export class AnimalsService {
                 (id) => id !== new_id
             );
             favorite.reference = reference;
-            return await this.favoritesService.update(favorite.id, favorite);
+            return this.favoritesService.update(favorite.id, favorite);
         } else {
             return favorite;
         }
     }
 
-    async dislike(user: User, new_id: number): Promise<any> {
+    async dislike(user: User, new_id: number): Promise<Favorites> {
         const userDB = await this.usersService.getById(user.id, {
             favorites: true
         });

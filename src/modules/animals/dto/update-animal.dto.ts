@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-23
+ */
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Sex } from '../enum/sex.enum';
 

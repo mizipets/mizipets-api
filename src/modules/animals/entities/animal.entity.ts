@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-23
+ */
 import {
     Column,
     Entity,

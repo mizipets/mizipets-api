@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-23
+ */
 import {
     Body,
     Controller,
@@ -16,57 +20,62 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { AnimalsService } from './animals.service';
 import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
+import { Animal } from './entities/animal.entity';
+import { Favorites } from '../favorites/entities/favorites.entity';
 
 @Controller('animals')
 export class AnimalsController {
-    constructor(private animalsService: AnimalsService) {}
+    constructor(private readonly animalsService: AnimalsService) {}
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async create(@Req() req, @Body() dto: CreateAnimalDTO) {
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async create(@Req() req, @Body() dto: CreateAnimalDTO): Promise<Animal> {
         return this.animalsService.create(dto, req.user);
     }
 
     @Post('adoption')
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async Favorites(@Req() req, @Body() dto: CreateAnimalDTO) {
+    async favorites(@Req() req, @Body() dto: CreateAnimalDTO): Promise<Animal> {
         return this.animalsService.create(dto, req.user, true);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getAll() {
+    async getAll(): Promise<Animal[]> {
         return this.animalsService.getAll();
     }
 
     @Get('adoption')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getFavorites(@Req() req) {
+    async getFavorites(@Req() req): Promise<Animal[]> {
         return this.animalsService.getAdoption(req.user);
     }
 
     @Get('adoption/:userId')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getAdoptionsByOwner(@Req() req, @Param('userId') userId: string) {
+    async getAdoptionsByOwner(
+        @Req() req,
+        @Param('userId') userId: string
+    ): Promise<Animal[]> {
         return this.animalsService.getAdoptionsByOwner(parseInt(userId));
     }
 
     @Put('adoption/:id/like')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async like(@Req() req, @Param('id') id: string) {
+    async like(@Req() req, @Param('id') id: string): Promise<Favorites> {
         return this.animalsService.like(req.user, parseInt(id));
     }
 
     @Put('adoption/:id/dislike')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async dislike(@Req() req, @Param('id') id: string) {
+    async dislike(@Req() req, @Param('id') id: string): Promise<Favorites> {
         return this.animalsService.dislike(req.user, parseInt(id));
     }
 
@@ -92,7 +101,7 @@ export class AnimalsController {
                 "Can't update the animal of someone else!"
             );
         }
-        return await this.animalsService.update(id, dto);
+        return this.animalsService.update(id, dto);
     }
 
     @Delete(':id')
