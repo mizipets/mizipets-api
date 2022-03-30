@@ -83,7 +83,7 @@ export class UsersService {
         return this.repository.save(newUser);
     }
 
-    async update(id, userDto: UpdateUserDto): Promise<User> {
+    async update(id: number, userDto: UpdateUserDto): Promise<User> {
         const user: User = await this.getById(id);
 
         user.firstname = userDto.firstname ?? user.firstname;

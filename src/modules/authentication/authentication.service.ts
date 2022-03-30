@@ -44,7 +44,7 @@ export class AuthenticationService {
     async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email);
 
-        if (!user) throw new UnauthorizedException('Invalid credentials');
+        if (!user || user.closeDate) throw new UnauthorizedException('Invalid credentials');
 
         const isPasswordEquals: boolean = await compare(
             login.password,
