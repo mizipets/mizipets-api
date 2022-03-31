@@ -30,7 +30,7 @@ export class UsersController {
     async getAll(
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
-    ) {
+    ): Promise<User[]> {
         return this.userService.getAll({
             favorites: favorites === 'true',
             animals: animals === 'true'
@@ -44,7 +44,7 @@ export class UsersController {
         @Param('id') id: number,
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
-    ) {
+    ): Promise<User> {
         return this.userService.getById(id, {
             favorites: favorites === 'true',
             animals: animals === 'true'
@@ -54,7 +54,7 @@ export class UsersController {
     @Get('email/:email')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
-    async getByEmail(@Param('email') email: string) {
+    async getByEmail(@Param('email') email: string): Promise<User> {
         return this.userService.getByEmail(email);
     }
 
@@ -66,16 +66,16 @@ export class UsersController {
         @Param('id') id: string,
         @Body() userDto: UpdateUserDto
     ): Promise<User> {
-        if (req.user.id !== parseInt(id))
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
         return this.userService.update(parseInt(id), userDto);
     }
 
     @Put(':id/close')
-    @HttpCode(HttpStatus.OK)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async close(@Request() req, @Param('id') id: string): Promise<void> {
-        if (req.user.id !== parseInt(id))
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't close this user account");
         return this.userService.close(parseInt(id));
     }

@@ -1,6 +1,6 @@
 /**
  * @author Julien DA CORTE
- * @create 2022-03-5
+ * @create 2022-03-05
  */
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';

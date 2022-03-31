@@ -30,7 +30,9 @@ export class UsersService {
         if (options.favorites) relations.push('favorites');
         if (options.animals) relations.push('animals');
 
-        return this.repository.find({ relations: relations });
+        return this.repository.find({
+            relations: relations
+        });
     }
 
     async getById(id: number, options: FindUserOptions = {}): Promise<User> {
@@ -44,18 +46,39 @@ export class UsersService {
             relations: relations
         });
 
-        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
+        if (!user)
+            throw new NotFoundException(`User with id: ${id} not found`);
+        user.password = undefined;
         return user;
     }
 
-    async getByEmail(email: string): Promise<User> {
-        const user: User = await this.repository.findOne({
-            where: { email: email }
-        });
+    async getByEmail(email: string, addPassword= false): Promise<User> {
+        let user: User;
+
+        if(addPassword) {
+            user = await this.repository.createQueryBuilder('user')
+                .addSelect('user.password')
+                .where('user.email = :email', {
+                    email: email
+                })
+                .getOne();
+        } else {
+            user = await this.repository.findOne({
+                where: { email: email }
+            });
+        }
 
         if (!user)
             throw new NotFoundException(`User with email: ${email} not found`);
+
         return user;
+    }
+
+    async isEmailExist(email: string): Promise<boolean> {
+        const user: User = await this.repository.findOne({
+            where: { email: email }
+        });
+        return !!user;
     }
 
     async create(userDto: CreateUserDto): Promise<User> {

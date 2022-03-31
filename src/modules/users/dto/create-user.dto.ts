@@ -12,7 +12,7 @@ export class CreateUserDto {
 
     @IsString()
     @IsNotEmpty()
-    readonly password: string;
+    password: string;
 
     @IsString()
     @IsNotEmpty()

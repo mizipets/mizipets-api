@@ -1,6 +1,6 @@
 /**
  * @author Julien DA CORTE
- * @create 2022-03-5
+ * @create 2022-03-05
  */
 import {
     ConflictException,
@@ -16,6 +16,7 @@ import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
+import {CreateUserDto} from "../users/dto/create-user.dto";
 
 @Injectable()
 export class AuthenticationService {
@@ -25,24 +26,25 @@ export class AuthenticationService {
         private readonly jwtService: JwtService
     ) {}
 
-    async register(registrationData: any): Promise<User> {
-        const emailCheck: User = await this.userService.getByEmail(
+    async register(registrationData: CreateUserDto): Promise<User> {
+        const emailExist: boolean = await this.userService.isEmailExist(
             registrationData.email
         );
 
-        if (emailCheck)
+        if (emailExist)
             throw new ConflictException('This email already exists');
 
         registrationData.password = await hash(registrationData.password, 10);
         const user: User = await this.userService.create(registrationData);
-        user.password = undefined;
+        delete user.password;
 
         await this.mailService.sendWelcome(user);
+
         return user;
     }
 
     async login(login: LoginDto): Promise<JwtResponseDto> {
-        const user: User = await this.userService.getByEmail(login.email);
+        const user: User = await this.userService.getByEmail(login.email, true);
 
         if (!user || user.closeDate) throw new UnauthorizedException('Invalid credentials');
 

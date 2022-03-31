@@ -1,6 +1,6 @@
 /**
  * @author Julien DA CORTE
- * @create 2022-03-5
+ * @create 2022-03-05
  */
 import {
     Body,
@@ -24,8 +24,8 @@ export class AuthenticationController {
 
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
-    async createAccount(@Body() user: CreateUserDto) {
-        return this.authService.register(user);
+    async createAccount(@Body() userDto: CreateUserDto) {
+        return this.authService.register(userDto);
     }
 
     @Post('login')
