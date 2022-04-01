@@ -38,7 +38,7 @@ export class AuthenticationController {
 
     @Get('token/refresh')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN, Roles.API)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async refreshToken(@Request() req): Promise<JwtResponseDto> {
         return this.authService.refreshToken(req.user);
     }

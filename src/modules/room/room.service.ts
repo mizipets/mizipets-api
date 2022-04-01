@@ -2,7 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-02-25
  */
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
@@ -28,13 +28,16 @@ export class RoomService {
 
     async getById(id: number): Promise<Room> {
         const room: Room = await this.repository.findOne(id);
-        if (!room)
-            throw new NotFoundException(`Room with id: ${id} not found`);
+        if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
 
-        return room
+        return room;
     }
 
-    async writeMessage(id: number, text: string, userId: number): Promise<Room> {
+    async writeMessage(
+        id: number,
+        text: string,
+        userId: number
+    ): Promise<Room> {
         const message = new Message();
         message.created = new Date();
         message.text = text;

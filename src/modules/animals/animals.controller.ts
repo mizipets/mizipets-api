@@ -22,6 +22,7 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Favorites } from '../favorites/entities/favorites.entity';
+import {DeleteResult} from "typeorm";
 
 @Controller('animals')
 export class AnimalsController {
@@ -36,28 +37,28 @@ export class AnimalsController {
 
     @Post('adoption')
     @HttpCode(HttpStatus.CREATED)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async favorites(@Req() req, @Body() dto: CreateAnimalDTO): Promise<Animal> {
         return this.animalsService.create(dto, req.user, true);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getAll(): Promise<Animal[]> {
         return this.animalsService.getAll();
     }
 
     @Get('adoption')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getFavorites(@Req() req): Promise<Animal[]> {
         return this.animalsService.getAdoption(req.user);
     }
 
     @Get('adoption/:userId')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getAdoptionsByOwner(
         @Req() req,
         @Param('userId') userId: string
@@ -67,33 +68,33 @@ export class AnimalsController {
 
     @Put('adoption/:id/like')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async like(@Req() req, @Param('id') id: string): Promise<Favorites> {
         return this.animalsService.like(req.user, parseInt(id));
     }
 
     @Put('adoption/:id/dislike')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async dislike(@Req() req, @Param('id') id: string): Promise<Favorites> {
         return this.animalsService.dislike(req.user, parseInt(id));
     }
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getById(@Param('id') id: number) {
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async getById(@Param('id') id: number): Promise<Animal> {
         return this.animalsService.getById(id);
     }
 
     @Put(':id')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async update(
         @Req() req,
         @Param('id') id: number,
         @Body() dto: UpdateAnimalDTO
-    ) {
+    ): Promise<Animal> {
         const animal = await this.animalsService.getById(id);
 
         if (req.user.id !== animal.owner.id) {
@@ -106,8 +107,8 @@ export class AnimalsController {
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async delete(@Req() req, @Param('id') id: number) {
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async delete(@Req() req, @Param('id') id: number): Promise<void> {
         const animal = await this.animalsService.getById(id);
         if (req.user.id !== animal.owner.id) {
             throw new ForbiddenException(

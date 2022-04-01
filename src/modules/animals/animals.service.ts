@@ -19,17 +19,17 @@ import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
+import {JwtPayloadDto} from "../authentication/dto/jwt-payload.dto";
 
 @Injectable()
 export class AnimalsService {
     constructor(
-        @InjectRepository(Animal) private repository: Repository<Animal>,
-        @InjectRepository(Race) private raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private speciesRepository: Repository<Species>,
-        private usersService: UsersService,
-        private favoritesService: FavoritesService,
-        private roomService: RoomService
+        @InjectRepository(Animal) private readonly repository: Repository<Animal>,
+        @InjectRepository(Race) private readonly raceRepository: Repository<Race>,
+        @InjectRepository(Species) private readonly speciesRepository: Repository<Species>,
+        private readonly usersService: UsersService,
+        private readonly favoritesService: FavoritesService,
+        private readonly roomService: RoomService
     ) {}
 
     async create(
@@ -139,14 +139,14 @@ export class AnimalsService {
     }
 
     async delete(id: number): Promise<DeleteResult> {
-        return await this.repository.delete(id);
+        return this.repository.delete(id);
     }
 
-    async like(user: User, new_id: number): Promise<Favorites> {
-        const userDB = await this.usersService.getById(user.id, {
+    async like(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
+        const user: User = await this.usersService.getById(token.id, {
             favorites: true
         });
-        const favorite = userDB.favorites.find(
+        const favorite = user.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
         const reference = favorite.reference as AdoptionReferences;
@@ -166,11 +166,11 @@ export class AnimalsService {
         }
     }
 
-    async dislike(user: User, new_id: number): Promise<Favorites> {
-        const userDB = await this.usersService.getById(user.id, {
+    async dislike(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
+        const user: User = await this.usersService.getById(token.id, {
             favorites: true
         });
-        const favorite = userDB.favorites.find(
+        const favorite = user.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
         const reference = favorite.reference as AdoptionReferences;
@@ -179,7 +179,7 @@ export class AnimalsService {
             reference.disliked.push(new_id);
             reference.liked = reference.liked.filter((id) => id !== new_id);
             favorite.reference = reference;
-            return await this.favoritesService.update(favorite.id, favorite);
+            return this.favoritesService.update(favorite.id, favorite);
         } else {
             return favorite;
         }
