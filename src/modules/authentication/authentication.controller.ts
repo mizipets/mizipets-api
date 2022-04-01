@@ -17,6 +17,8 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { OnlyRoles } from './guards/role.decorator';
 import { Roles } from './enum/roles.emum';
+import { User } from '../users/entities/user.entity';
+import { JwtResponseDto } from './dto/jwt-response.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -24,26 +26,29 @@ export class AuthenticationController {
 
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
-    async createAccount(@Body() userDto: CreateUserDto) {
+    async createAccount(@Body() userDto: CreateUserDto): Promise<User> {
         return this.authService.register(userDto);
     }
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    async login(@Body() login: LoginDto) {
+    async login(@Body() login: LoginDto): Promise<JwtResponseDto> {
         return this.authService.login(login);
     }
 
     @Get('token/refresh')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN, Roles.API)
-    async refreshToken(@Request() req) {
+    async refreshToken(@Request() req): Promise<JwtResponseDto> {
         return this.authService.refreshToken(req.user);
     }
 
     @Post('reset/password')
     @HttpCode(HttpStatus.OK)
-    async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
+    async resetPassword(
+        @Query('code') code: string,
+        @Body() login: LoginDto
+    ): Promise<User> {
         return this.authService.resetPassword(login, code);
     }
 }

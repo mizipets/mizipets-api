@@ -14,6 +14,7 @@ import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { FavoritesService } from './favorites.service';
+import { Favorites } from './entities/favorites.entity';
 
 @Controller('favorites')
 export class FavoritesController {
@@ -22,7 +23,9 @@ export class FavoritesController {
     @Get(':userId')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async getFavoritesOfUser(@Param('userId') userId: string) {
+    async getFavoritesOfUser(
+        @Param('userId') userId: string
+    ): Promise<Favorites[]> {
         return this.favoritesService.getFavoritesOfUser(parseInt(userId));
     }
 
@@ -33,7 +36,7 @@ export class FavoritesController {
         @Param('userId') userId: string,
         @Param('type') type: ServiceType,
         @Param('referenceID') referenceID: string
-    ) {
+    ): Promise<Favorites> {
         return this.favoritesService.removeFavorite(
             parseInt(userId),
             type,

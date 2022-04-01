@@ -33,7 +33,7 @@ export class Room {
     @ManyToOne(() => User, (user) => user.rooms)
     adoptant: User;
 
-    getCode() {
+    getCode(): string {
         return `${this.adoptant.id}-room-${this.animal.id}`;
     }
 }
