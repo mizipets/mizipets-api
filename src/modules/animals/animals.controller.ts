@@ -22,7 +22,6 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Favorites } from '../favorites/entities/favorites.entity';
-import {DeleteResult} from "typeorm";
 
 @Controller('animals')
 export class AnimalsController {
@@ -96,8 +95,7 @@ export class AnimalsController {
         @Body() dto: UpdateAnimalDTO
     ): Promise<Animal> {
         const animal = await this.animalsService.getById(id);
-
-        if (req.user.id !== animal.owner.id) {
+        if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't update the animal of someone else!"
             );
@@ -110,7 +108,7 @@ export class AnimalsController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async delete(@Req() req, @Param('id') id: number): Promise<void> {
         const animal = await this.animalsService.getById(id);
-        if (req.user.id !== animal.owner.id) {
+        if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't delete the animal of someone else!"
             );

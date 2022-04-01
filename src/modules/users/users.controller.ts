@@ -63,20 +63,20 @@ export class UsersController {
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async update(
         @Request() req,
-        @Param('id') id: string,
+        @Param('id') id: number,
         @Body() userDto: UpdateUserDto
     ): Promise<User> {
-        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
-        return this.userService.update(parseInt(id), userDto);
+        return this.userService.update(id, userDto);
     }
 
     @Put(':id/close')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async close(@Request() req, @Param('id') id: string): Promise<void> {
-        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+    async close(@Request() req, @Param('id') id: number): Promise<void> {
+        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't close this user account");
-        return this.userService.close(parseInt(id));
+        return this.userService.close(id);
     }
 }
