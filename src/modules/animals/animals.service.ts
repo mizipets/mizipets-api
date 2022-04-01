@@ -19,14 +19,17 @@ import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
-import {JwtPayloadDto} from "../authentication/dto/jwt-payload.dto";
+import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 
 @Injectable()
 export class AnimalsService {
     constructor(
-        @InjectRepository(Animal) private readonly repository: Repository<Animal>,
-        @InjectRepository(Race) private readonly raceRepository: Repository<Race>,
-        @InjectRepository(Species) private readonly speciesRepository: Repository<Species>,
+        @InjectRepository(Animal)
+        private readonly repository: Repository<Animal>,
+        @InjectRepository(Race)
+        private readonly raceRepository: Repository<Race>,
+        @InjectRepository(Species)
+        private readonly speciesRepository: Repository<Species>,
         private readonly usersService: UsersService,
         private readonly favoritesService: FavoritesService,
         private readonly roomService: RoomService
