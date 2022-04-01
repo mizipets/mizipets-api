@@ -16,7 +16,7 @@ import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
-import {CreateUserDto} from "../users/dto/create-user.dto";
+import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -46,7 +46,8 @@ export class AuthenticationService {
     async login(login: LoginDto): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email, true);
 
-        if (!user || user.closeDate) throw new UnauthorizedException('Invalid credentials');
+        if (!user || user.closeDate)
+            throw new UnauthorizedException('Invalid credentials');
 
         const isPasswordEquals: boolean = await compare(
             login.password,

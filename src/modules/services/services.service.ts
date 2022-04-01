@@ -32,14 +32,14 @@ export class ServicesService {
         return service;
     }
 
-    async activate(id: number) {
+    async activate(id: number): Promise<Service> {
         const service = await this.getById(id);
         if (service.isActive) return service;
         service.isActive = true;
         return this.repository.save(service);
     }
 
-    async deactivate(id: number) {
+    async deactivate(id: number): Promise<Service> {
         const service = await this.getById(id);
         if (!service.isActive) return service;
         service.isActive = false;

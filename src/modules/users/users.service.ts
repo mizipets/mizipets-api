@@ -46,17 +46,17 @@ export class UsersService {
             relations: relations
         });
 
-        if (!user)
-            throw new NotFoundException(`User with id: ${id} not found`);
+        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
         user.password = undefined;
         return user;
     }
 
-    async getByEmail(email: string, addPassword= false): Promise<User> {
+    async getByEmail(email: string, addPassword = false): Promise<User> {
         let user: User;
 
-        if(addPassword) {
-            user = await this.repository.createQueryBuilder('user')
+        if (addPassword) {
+            user = await this.repository
+                .createQueryBuilder('user')
                 .addSelect('user.password')
                 .where('user.email = :email', {
                     email: email
