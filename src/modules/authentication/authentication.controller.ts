@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-05
+ */
 import {
     Body,
     Controller,
@@ -5,40 +9,46 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    Request,
-    UseGuards
+    Query,
+    Request
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { OnlyRoles } from './guards/role.decorator';
+import { Roles } from './enum/roles.emum';
+import { User } from '../users/entities/user.entity';
+import { JwtResponseDto } from './dto/jwt-response.dto';
 
 @Controller('auth')
 export class AuthenticationController {
     constructor(private readonly authService: AuthenticationService) {}
 
-    @HttpCode(HttpStatus.CREATED)
     @Post('register')
-    async createAccount(@Body() user: CreateUserDto) {
-        return this.authService.register(user);
+    @HttpCode(HttpStatus.CREATED)
+    async createAccount(@Body() userDto: CreateUserDto): Promise<User> {
+        return this.authService.register(userDto);
     }
 
-    @HttpCode(HttpStatus.OK)
     @Post('login')
-    async login(@Body() login: LoginDto) {
+    @HttpCode(HttpStatus.OK)
+    async login(@Body() login: LoginDto): Promise<JwtResponseDto> {
         return this.authService.login(login);
     }
 
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(JwtAuthGuard)
     @Get('token/refresh')
-    async refreshToken(@Request() req) {
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async refreshToken(@Request() req): Promise<JwtResponseDto> {
         return this.authService.refreshToken(req.user);
     }
 
-    // @HttpCode(HttpStatus.OK)
-    // @Post('reset/password')
-    // async resetPassword(@Query('code') code: string, @Body() login: LoginDto) {
-    //   return this.authService.resetPassword(login, code);
-    // }
+    @Post('reset/password')
+    @HttpCode(HttpStatus.OK)
+    async resetPassword(
+        @Query('code') code: string,
+        @Body() login: LoginDto
+    ): Promise<User> {
+        return this.authService.resetPassword(login, code);
+    }
 }

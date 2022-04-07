@@ -1,8 +1,12 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-05
+ */
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
-import { User } from '../../users/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 
 @Injectable()
@@ -15,10 +19,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: JwtPayloadDto): Promise<User> {
+    async validate(payload: JwtPayloadDto): Promise<JwtPayloadDto> {
         const user: User = await this.usersService.getById(payload.id);
         if (!user) throw new UnauthorizedException('Invalid token.');
 
-        return user;
+        return payload;
     }
 }

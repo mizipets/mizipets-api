@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import * as dotenv from 'dotenv';
 
 if (!process.env.ENV) {

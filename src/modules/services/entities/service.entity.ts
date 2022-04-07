@@ -1,9 +1,6 @@
 /**
- * @author Maxime d'Harboullé
- * @email maxime.dharboulle@gmail.com
- * @create date 2022-03-16 00:27:04
- * @modify date 2022-03-16 00:27:04
- * @desc [description]
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-16
  */
 import {
     Entity,

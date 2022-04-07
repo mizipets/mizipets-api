@@ -1,5 +1,9 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import { Module } from '@nestjs/common';
-import { RoomModule } from '../room/room.module';
+import { RoomModule } from '../room.module';
 import { MessagesGateway } from './messages.gateway';
 
 @Module({

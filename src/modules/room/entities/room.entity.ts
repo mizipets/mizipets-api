@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import {
     Column,
     CreateDateColumn,
@@ -5,9 +9,9 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { Animal } from '../animals/entities/animal.entity';
-import { User } from '../users/user.entity';
-import { Message } from './message';
+import { Animal } from '../../animals/entities/animal.entity';
+import { User } from '../../users/entities/user.entity';
+import { Message } from '../messages/message';
 
 @Entity('rooms')
 export class Room {
@@ -29,7 +33,7 @@ export class Room {
     @ManyToOne(() => User, (user) => user.rooms)
     adoptant: User;
 
-    getCode() {
+    getCode(): string {
         return `${this.adoptant.id}-room-${this.animal.id}`;
     }
 }
