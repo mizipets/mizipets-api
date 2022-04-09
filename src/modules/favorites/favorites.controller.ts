@@ -1,27 +1,43 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-25
+ */
+import {
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param
+} from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { FavoritesService } from './favorites.service';
+import { Favorites } from './entities/favorites.entity';
 
 @Controller('favorites')
 export class FavoritesController {
-    constructor(private favoritesService: FavoritesService) {}
+    constructor(private readonly favoritesService: FavoritesService) {}
 
     @Get(':userId')
-    @OnlyRoles(Roles.STANDARD)
-    async getFavoritesOfUser(@Param('userId') userId: string) {
-        return await this.favoritesService.getFavoritesOfUser(parseInt(userId));
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async getFavoritesOfUser(
+        @Param('userId') userId: string
+    ): Promise<Favorites[]> {
+        return this.favoritesService.getFavoritesOfUser(parseInt(userId));
     }
 
     @Delete(':userId/:type/:referenceID')
-    @OnlyRoles(Roles.STANDARD)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async removeFavorite(
         @Param('userId') userId: string,
         @Param('type') type: ServiceType,
         @Param('referenceID') referenceID: string
-    ) {
-        return await this.favoritesService.removeFavorite(
+    ): Promise<Favorites> {
+        return this.favoritesService.removeFavorite(
             parseInt(userId),
             type,
             parseInt(referenceID)

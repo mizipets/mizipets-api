@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-23
+ */
 import {
     Column,
     Entity,
@@ -5,8 +9,8 @@ import {
     OneToMany,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { Room } from '../../room/room.entity';
-import { User } from '../../users/user.entity';
+import { Room } from '../../room/entities/room.entity';
+import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
 import { Race } from './race.entity';
 

@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-08
+ */
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';

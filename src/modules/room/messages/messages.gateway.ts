@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-02-25
+ */
 import { Logger } from '@nestjs/common';
 import {
     OnGatewayConnection,
@@ -8,7 +12,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { RoomService } from '../room/room.service';
+import { RoomService } from '../room.service';
 
 const { MESSAGE_PORT } = process.env;
 
@@ -20,22 +24,22 @@ const { MESSAGE_PORT } = process.env;
 export class MessagesGateway
     implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor(private roomService: RoomService) {}
+    constructor(private readonly roomService: RoomService) {}
 
     @WebSocketServer()
     server: Server;
 
     private logger: Logger = new Logger('MessagesGateway');
 
-    afterInit(server: Server) {
+    afterInit(server: Server): void {
         this.logger.log('Initialized!');
     }
 
-    handleDisconnect(client: Socket) {
+    handleDisconnect(client: Socket): void {
         this.logger.log('client disconnected! ' + client.id);
     }
 
-    handleConnection(client: Socket, ...args: any[]) {
+    handleConnection(client: Socket, ...args: any[]): void {
         this.logger.log('client connected! ' + client.id);
     }
 
@@ -49,13 +53,13 @@ export class MessagesGateway
     }
 
     @SubscribeMessage('join')
-    async handleJoinRoom(client: Socket, room: string) {
+    async handleJoinRoom(client: Socket, room: string): Promise<void> {
         await client.join(room);
         client.emit('joined', room);
     }
 
     @SubscribeMessage('leave')
-    async handleLeaveRoom(client: Socket, room: string) {
+    async handleLeaveRoom(client: Socket, room: string): Promise<void> {
         await client.leave(room);
         client.emit('left', room);
     }

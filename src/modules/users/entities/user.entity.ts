@@ -1,8 +1,12 @@
+/**
+ * @author Julien DA CORTE & Latif SAGNA & Maxime D'HARBOULLE
+ * @create 2022-03-11
+ */
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Animal } from '../animals/entities/animal.entity';
-import { Roles } from '../authentication/enum/roles.emum';
-import { Favorites } from '../favorites/favorites.entity';
-import { Room } from '../room/room.entity';
+import { Animal } from '../../animals/entities/animal.entity';
+import { Roles } from '../../authentication/enum/roles.emum';
+import { Favorites } from '../../favorites/entities/favorites.entity';
+import { Room } from '../../room/entities/room.entity';
 
 export class Address {
     readonly city: string;
@@ -30,7 +34,7 @@ export class User {
     @Column('text', { unique: true })
     email: string;
 
-    @Column('text')
+    @Column('text', { select: false })
     password: string;
 
     @Column('text')
@@ -39,22 +43,20 @@ export class User {
     @Column('text')
     lastname: string;
 
-    @Column('json')
-    address: Address;
-
     @Column({ nullable: true })
     photoUrl: string;
 
     @Column('json')
+    address: Address;
+
+    @Column('json')
     preferences: Preferences;
+
+    @Column('json', { nullable: true })
+    shelter: Shelter;
 
     @Column()
     role: Roles;
-
-    @Column('json', { nullable: true })
-    shelter: {
-        name: string;
-    };
 
     @Column()
     createDate: Date;

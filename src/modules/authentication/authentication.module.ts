@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-05
+ */
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthenticationService } from './authentication.service';

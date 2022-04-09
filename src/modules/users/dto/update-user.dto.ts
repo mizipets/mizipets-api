@@ -1,22 +1,29 @@
-import {IsNotEmpty, IsEmail, IsString, IsEmpty} from 'class-validator'
+/**
+ * @author Julien DA CORTE & Latif SAGNA
+ * @create 2022-03-11
+ */
+import { IsEmail, IsObject, IsString } from 'class-validator';
+import { Address, Preferences, Shelter } from '../entities/user.entity';
 
 export class UpdateUserDto {
+    @IsString()
+    readonly firstname: string;
 
     @IsString()
-    @IsEmpty()
-    readonly firstname: string
-
-    @IsString()
-    @IsEmpty()
-    readonly lastname: string
+    readonly lastname: string;
 
     @IsEmail()
-    @IsNotEmpty()
-    readonly email: string
+    readonly email: string;
 
-    @IsNotEmpty()
-    readonly password: string
+    @IsString()
+    readonly photoUrl: string;
 
-    @IsNotEmpty()
-    readonly id: number
+    @IsObject()
+    readonly address: Address;
+
+    @IsObject()
+    readonly preferences: Preferences;
+
+    @IsObject()
+    readonly shelter: Shelter;
 }

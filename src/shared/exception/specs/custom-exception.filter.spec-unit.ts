@@ -1,8 +1,8 @@
-import '../../initEnv';
+import '../../../initEnv';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../app.module';
+import { AppModule } from '../../../app.module';
 import { CustomExceptionFilter } from '../custom-exception.filter';
-import { DiscordService } from '../discord.service';
+import { DiscordService } from '../../discord/discord.service';
 
 describe('CustomExceptionFilter', () => {
     let filter: CustomExceptionFilter;
