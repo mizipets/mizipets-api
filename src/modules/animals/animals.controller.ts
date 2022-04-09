@@ -49,11 +49,11 @@ export class AnimalsController {
         return this.animalsService.getAdoption(req.user);
     }
 
-    @Get('adoption/:userId')
+    @Get('adoption/byOwner')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
-    async getAdoptionsByOwner(@Req() req, @Param('userId') userId: string) {
-        return this.animalsService.getAdoptionsByOwner(parseInt(userId));
+    async getAdoptionsByOwner(@Req() req) {
+        return this.animalsService.getAdoptionsByOwner(parseInt(req.user.id));
     }
 
     @Put('adoption/:id/like')
