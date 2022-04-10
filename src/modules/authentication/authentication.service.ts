@@ -38,7 +38,7 @@ export class AuthenticationService {
         const user: User = await this.userService.create(registrationData);
         delete user.password;
 
-        await this.mailService.sendWelcome(user);
+        // await this.mailService.sendWelcome(user);
 
         return user;
     }

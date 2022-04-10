@@ -4,7 +4,7 @@
  */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import {Shelter, User} from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -85,8 +85,12 @@ export class UsersService {
         const favorites = await this.favoritesService.createFavoritesForUser();
         const newUser = new User();
         let role: Roles = Roles.STANDARD;
+        let shelter: Shelter = null;
 
-        if (userDto.shelter) role = Roles.PRO;
+        if (userDto.shelter && userDto.shelter.name !== '') {
+            role = Roles.PRO;
+            shelter = userDto.shelter;
+        }
 
         newUser.email = userDto.email;
         newUser.password = userDto.password;
@@ -100,7 +104,7 @@ export class UsersService {
         newUser.animals = [];
         newUser.favorites = favorites;
         newUser.preferences = userDto.preferences;
-        newUser.shelter = userDto.shelter;
+        newUser.shelter = shelter;
 
         this.repository.create(newUser);
         return this.repository.save(newUser);
