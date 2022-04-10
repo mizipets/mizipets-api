@@ -9,10 +9,11 @@ import { Favorites } from '../../favorites/entities/favorites.entity';
 import { Room } from '../../room/entities/room.entity';
 
 export class Address {
-    readonly city: string;
-    readonly country: string;
-    readonly roadName: string;
-    readonly roadNumber: string;
+    street: string;
+    apartment: string;
+    zip: number;
+    city: string;
+    country: string;
 }
 
 export class Preferences {
