@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-25
+ */
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceType } from '../services/enums/service-type.enum';
@@ -8,21 +12,23 @@ import {
     Favorites,
     PetsReferences,
     VetsReferences
-} from './favorites.entity';
+} from './entities/favorites.entity';
 
 @Injectable()
 export class FavoritesService {
     constructor(
         @InjectRepository(Favorites)
-        private repository: Repository<Favorites>
+        private readonly repository: Repository<Favorites>
     ) {}
 
     async getById(id: number): Promise<Favorites> {
-        return this.repository.findOne({
-            where: {
-                id: id
-            }
+        const favorite: Favorites = await this.repository.findOne({
+            where: { id: id }
         });
+
+        if (!favorite)
+            throw new NotFoundException(`Favorite with id: ${id} not found`);
+        return favorite;
     }
 
     async getByUserIdAndType(
@@ -30,9 +36,7 @@ export class FavoritesService {
         type: ServiceType
     ): Promise<Favorites> {
         return this.repository.findOneOrFail({
-            user: {
-                id: userId
-            },
+            user: { id: userId },
             type: type
         });
     }
@@ -60,21 +64,18 @@ export class FavoritesService {
             }
         ];
 
-        return await this.repository.save(favorites);
+        return this.repository.save(favorites);
     }
 
     async update(id: number, update: Favorites): Promise<Favorites> {
         const updateDB = await this.getById(id);
         updateDB.reference = update.reference ?? updateDB.reference;
-        return await this.repository.save(updateDB);
+
+        return this.repository.save(updateDB);
     }
 
     async getFavoritesOfUser(userId: number): Promise<Favorites[]> {
-        return this.repository.find({
-            user: {
-                id: userId
-            }
-        });
+        return this.repository.find({ user: { id: userId } });
     }
 
     async removeFavorite(
@@ -83,14 +84,7 @@ export class FavoritesService {
         referenceId: number
     ): Promise<Favorites> {
         const favorite = await this.getByUserIdAndType(userId, type);
-        console.log(favorite.reference);
-        console.log(referenceId);
-
-        console.log(favorite.reference instanceof AdoptionReferences);
-
         if (favorite.reference instanceof AdoptionReferences) {
-            console.log('here');
-
             favorite.reference.disliked = favorite.reference.disliked.filter(
                 (id) => id !== referenceId
             );

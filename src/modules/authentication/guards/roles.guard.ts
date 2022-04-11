@@ -1,3 +1,7 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-05
+ */
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 

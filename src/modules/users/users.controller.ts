@@ -1,70 +1,82 @@
+/**
+ * @author Julien DA CORTE & Latif SAGNA
+ * @create 2022-03-11
+ */
 import {
     Body,
     Controller,
+    ForbiddenException,
     Get,
     HttpCode,
     HttpStatus,
-    NotFoundException,
     Param,
-    Post,
     Put,
     Query,
-    Res
+    Request
 } from '@nestjs/common';
-import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.API, Roles.STANDARD)
     @Get()
-    async getAll() {
-        return await this.userService.getAll();
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.ADMIN)
+    async getAll(
+        @Query('favorites') favorites: string,
+        @Query('animals') animals: string
+    ): Promise<User[]> {
+        return this.userService.getAll({
+            favorites: favorites === 'true',
+            animals: animals === 'true'
+        });
     }
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getById(
         @Param('id') id: number,
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
-    ) {
-        const user = await this.userService.getById(id, {
+    ): Promise<User> {
+        return this.userService.getById(id, {
             favorites: favorites === 'true',
             animals: animals === 'true'
         });
-        if (!user) throw new NotFoundException(`User with id: ${id} not found`);
-        return user;
     }
 
-    @Get(':email/user')
-    async getUserByEmail(@Param('email') email, @Res() res) {
-        const token = await this.userService.getByEmail(email);
-        return res.status(HttpStatus.OK).json(token);
-    }
-
-    @Post('create')
-    async createUser(@Body() userData: User, @Res() res): Promise<any> {
-        const token = await this.userService.create(userData);
-        return res.status(HttpStatus.OK).json(token);
+    @Get('email/:email')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.ADMIN)
+    async getByEmail(@Param('email') email: string): Promise<User> {
+        return this.userService.getByEmail(email);
     }
 
     @Put(':id/update')
-    async update(@Param('id') id, @Body() userData: User): Promise<any> {
-        userData.id = id;
-        return this.userService.update(userData);
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async update(
+        @Request() req,
+        @Param('id') id: number,
+        @Body() userDto: UpdateUserDto
+    ): Promise<User> {
+        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't update this user");
+        return this.userService.update(id, userDto);
     }
 
     @Put(':id/close')
-    async close(@Param('id') id, @Body() userData: User): Promise<any> {
-        userData.id = id;
-        userData.closeDate = Date.prototype;
-        return this.userService.update(userData);
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async close(@Request() req, @Param('id') id: number): Promise<void> {
+        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't close this user account");
+        return this.userService.close(id);
     }
 }

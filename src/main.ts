@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
+ * @create 2022-02-14
+ */
 import './initEnv';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -6,12 +10,12 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import * as morgan from 'morgan';
-import { CustomExceptionFilter } from './shared/custom-exception.filter';
-import { DiscordService } from './shared/discord.service';
+import { CustomExceptionFilter } from './shared/exception/custom-exception.filter';
+import { DiscordService } from './shared/discord/discord.service';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const origins = ['http://localhost'];
+    const origins = ['http://localhost:4200'];
 
     app.enableCors({ origin: origins });
     app.use(compression());

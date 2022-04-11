@@ -1,12 +1,16 @@
+/**
+ * @author Julien DA CORTE
+ * @create 2022-03-08
+ */
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { User } from '../../modules/users/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 @Injectable()
 export class MailService {
-    constructor(private mailerService: MailerService) {}
+    constructor(private readonly mailerService: MailerService) {}
 
-    public async sendWelcome(user: User) {
+    async sendWelcome(user: User) {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Welcome to Mizipiets !',
@@ -17,7 +21,7 @@ export class MailService {
         });
     }
 
-    public async sendResetCode(user: User, code: string) {
+    async sendResetCode(user: User, code: string) {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - Reset Password',
@@ -29,7 +33,7 @@ export class MailService {
         });
     }
 
-    public async sendChangedPassword(user: User) {
+    async sendChangedPassword(user: User) {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - Reset Password',

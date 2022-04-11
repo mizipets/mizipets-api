@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-16
+ */
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 

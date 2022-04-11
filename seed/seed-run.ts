@@ -26,24 +26,36 @@ const jsonServices: any = JSON.parse(
 const getRaces = (): Race[] => {
     let counter = 0;
     const races: Race[] = [];
-    Object.entries(jsonRaces).forEach((speciesRace: [string, string[]]) => {
-        races.push(
-            {
-                id: counter++,
-                name: 'Unknown',
-                species: getSpecie(parseInt(speciesRace[0])),
-                animals: []
-            },
-            ...speciesRace[1].map((race) => {
-                return {
+
+    const species = getSpecies();
+    const jsonRacesUpdated = jsonRaces;
+
+    for (const specie of species) {
+        if (!(specie.id in jsonRacesUpdated)) {
+            jsonRacesUpdated[specie.id] = [];
+        }
+    }
+
+    Object.entries(jsonRacesUpdated).forEach(
+        (speciesRace: [string, string[]]) => {
+            races.push(
+                {
                     id: counter++,
-                    name: race,
+                    name: 'Unknown',
                     species: getSpecie(parseInt(speciesRace[0])),
                     animals: []
-                };
-            })
-        );
-    });
+                },
+                ...speciesRace[1].map((race) => {
+                    return {
+                        id: counter++,
+                        name: race,
+                        species: getSpecie(parseInt(speciesRace[0])),
+                        animals: []
+                    };
+                })
+            );
+        }
+    );
     return races;
 };
 
