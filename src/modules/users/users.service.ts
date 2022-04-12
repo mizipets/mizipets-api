@@ -4,18 +4,13 @@
  */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {Shelter, User} from './entities/user.entity';
+import { Shelter, User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
-
-export interface FindUserOptions {
-    favorites?: boolean;
-    animals?: boolean;
-}
 
 @Injectable()
 export class UsersService {
@@ -24,23 +19,13 @@ export class UsersService {
         private readonly favoritesService: FavoritesService
     ) {}
 
-    async getAll(options: FindUserOptions = {}): Promise<User[]> {
-        const relations = [];
-
-        if (options.favorites) relations.push('favorites');
-        if (options.animals) relations.push('animals');
-
+    async getAll(relations: string[] = []): Promise<User[]> {
         return this.repository.find({
             relations: relations
         });
     }
 
-    async getById(id: number, options: FindUserOptions = {}): Promise<User> {
-        const relations = [];
-
-        if (options.favorites) relations.push('favorites');
-        if (options.animals) relations.push('animals');
-
+    async getById(id: number, relations: string[] = []): Promise<User> {
         const user: User = await this.repository.findOne({
             where: { id: id },
             relations: relations
@@ -130,7 +115,7 @@ export class UsersService {
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {
-        const user = await this.getById(owner.id, { animals: true });
+        const user = await this.getById(owner.id, ['animals']);
         user.animals.push(animal);
         return this.repository.save(user);
     }
