@@ -2,6 +2,7 @@ name: Deploy staging
 
 on: 
   workflow_dispatch:
+    branches: [staging]
 
 jobs:
   deploy:
@@ -20,5 +21,5 @@ jobs:
           git pull
           rm -rf envs
           mkdir envs
-          echo ${{secrets.STAGING_ENV}} > envs/.env.staging
+          cp ~/.env.staging ./envs/.env.staging
           docker-compose up -d --build
