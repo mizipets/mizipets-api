@@ -16,6 +16,6 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
+EXPOSE 3001
 
 CMD [ "npm", "run", "start:staging" ]
-RUN npm run seed:run:staging
