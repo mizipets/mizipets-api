@@ -18,4 +18,8 @@ jobs:
         username: ubuntu
         key: ${{ secrets.STAGING_KEY }}
         port: 22
-        script: ls -la
+        script: |
+          cd mizipets-api
+          docker-compose down
+          git pull
+          docker-compose up -d --build
