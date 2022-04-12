@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 CMD [ "npm", "run", "start:staging" ]
-RUN npm seed:run
+RUN npm run seed:run
