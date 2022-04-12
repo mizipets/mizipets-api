@@ -9,8 +9,6 @@ COPY package*.json ./
 
 RUN echo ${API_PREFIX}
 
-RUN npm ci
-
 RUN npm install -g @nestjs/cli
 
 RUN npm install
