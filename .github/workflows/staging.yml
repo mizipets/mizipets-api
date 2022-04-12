@@ -22,4 +22,3 @@ jobs:
           mkdir envs
           echo ${{secrets.STAGING_ENV}} > envs/.env.staging
           docker-compose up -d --build
-          npm run seed:run

@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 CMD [ "npm", "run", "start:staging" ]
-# docker-compose up --env-file .env.staging^C-build
+RUN npm seed:run
