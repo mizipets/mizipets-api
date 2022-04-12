@@ -22,6 +22,7 @@
         "test:e2e": "jest --config ./jest-e2e.json",
         "test:unit": "jest --config ./jest-unit.json",
         "seed:run": "npm run seed:revert && ts-node ./seed/seed-run.ts",
+        "seed:run:staging": "ENV=staging npm run seed:revert && ts-node ./seed/seed-run.ts",
         "seed:revert": "ts-node ./seed/seed-revert.ts"
     },
     "dependencies": {
