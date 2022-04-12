@@ -7,10 +7,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out repo        
-      uses: actions/checkout@v2
-    - run: echo "Print"
-    - run:  echo ${{ secrets.STAGING_HOST }}
     - name: ssh commands
       uses: appleboy/ssh-action@master
       with:
