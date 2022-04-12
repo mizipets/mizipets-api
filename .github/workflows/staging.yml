@@ -22,4 +22,7 @@ jobs:
           cd mizipets-api
           docker-compose down
           git pull
+          rm -rf envs
+          mkdir envs
+          echo ${{secrets.STAGING_ENV}} > envs/.env.staging
           docker-compose up -d --build
