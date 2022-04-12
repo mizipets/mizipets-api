@@ -7,12 +7,12 @@ services:
     ports:
       - "3000:3000"
       - "3001:3001"
-    env_file:
-     - /home/maxime/Desktop/envs/.env.staging
   postgres:
     image: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - /database:/var/lib/postgresql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
