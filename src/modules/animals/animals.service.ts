@@ -2,7 +2,11 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-23
  */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Not, Repository } from 'typeorm';
 import {
@@ -91,9 +95,7 @@ export class AnimalsService {
     }
 
     async getAdoption(user: User): Promise<Animal[]> {
-        const userDB = await this.usersService.getById(user.id, {
-            favorites: true
-        });
+        const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
@@ -105,6 +107,9 @@ export class AnimalsService {
             .from(Animal, 'animal')
             .where('animal.isAdoption = :isAdoption', {
                 isAdoption: true
+            })
+            .andWhere('animal.ownerId != :userId', {
+                userId: userDB.id
             })
             .andWhere({ id: Not(In(reference.disliked)) })
             .andWhere({ id: Not(In(reference.liked)) })
@@ -146,15 +151,21 @@ export class AnimalsService {
     }
 
     async like(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
-        const user: User = await this.usersService.getById(token.id, {
-            favorites: true
-        });
+        const user: User = await this.usersService.getById(token.id, [
+            'favorites',
+            'favorites.user'
+        ]);
         const favorite = user.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
         const reference = favorite.reference as AdoptionReferences;
 
         const animal = await this.getById(new_id);
+
+        if (animal.owner.id === token.id) {
+            throw new ForbiddenException("Can't like your own adoption");
+        }
+
         await this.roomService.create(user, animal);
 
         if (!reference.liked.includes(new_id)) {
@@ -170,13 +181,20 @@ export class AnimalsService {
     }
 
     async dislike(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
-        const user: User = await this.usersService.getById(token.id, {
-            favorites: true
-        });
+        const user: User = await this.usersService.getById(token.id, [
+            'favorites',
+            'favorites.user'
+        ]);
         const favorite = user.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         );
         const reference = favorite.reference as AdoptionReferences;
+
+        const animal = await this.getById(new_id);
+
+        if (animal.owner.id === token.id) {
+            throw new ForbiddenException("Can't dislike your own adoption");
+        }
 
         if (!reference.disliked.includes(new_id)) {
             reference.disliked.push(new_id);

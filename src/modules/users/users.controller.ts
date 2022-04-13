@@ -31,10 +31,10 @@ export class UsersController {
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
     ): Promise<User[]> {
-        return this.userService.getAll({
-            favorites: favorites === 'true',
-            animals: animals === 'true'
-        });
+        const relations = [];
+        if (favorites === 'true') relations.push('favorites');
+        if (animals === 'true') relations.push('animals');
+        return this.userService.getAll(relations);
     }
 
     @Get(':id')
@@ -45,10 +45,10 @@ export class UsersController {
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
     ): Promise<User> {
-        return this.userService.getById(id, {
-            favorites: favorites === 'true',
-            animals: animals === 'true'
-        });
+        const relations = [];
+        if (favorites === 'true') relations.push('favorites');
+        if (animals === 'true') relations.push('animals');
+        return this.userService.getById(id, relations);
     }
 
     @Get('email/:email')
