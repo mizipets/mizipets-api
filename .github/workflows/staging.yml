@@ -2,16 +2,24 @@ name: Deploy staging
 
 on: 
   workflow_dispatch:
+    branches: [staging]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using ssh key
+    - name: ssh commands
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.STAGING_HOST }}
         username: ubuntu
         key: ${{ secrets.STAGING_KEY }}
         port: 22
-        script: whoami
+        script: |
+          cd mizipets-api
+          docker-compose down
+          git pull
+          rm -rf envs
+          mkdir envs
+          cp ~/.env.staging ./envs/.env.staging
+          docker-compose up -d --build
