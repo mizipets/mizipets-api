@@ -28,6 +28,7 @@ export class ServicesController {
 
     @Get('active')
     @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     public async getAllActive(): Promise<Service[]> {
         return this.servicesService.getAllActive();
     }

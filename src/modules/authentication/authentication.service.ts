@@ -3,7 +3,7 @@
  * @create 2022-03-05
  */
 import {
-    ConflictException,
+    ConflictException, ForbiddenException,
     Injectable,
     NotFoundException,
     UnauthorizedException
@@ -38,7 +38,7 @@ export class AuthenticationService {
         const user: User = await this.userService.create(registrationData);
         delete user.password;
 
-        // await this.mailService.sendWelcome(user);
+        await this.mailService.sendWelcome(user);
 
         return user;
     }
@@ -60,41 +60,36 @@ export class AuthenticationService {
         return this.getJwtPayload(user);
     }
 
-    async refreshToken(currentUser: User): Promise<JwtResponseDto> {
-        const user: User = await this.userService.getById(currentUser.id);
+    async refreshToken(id: number): Promise<JwtResponseDto> {
+        const user: User = await this.userService.getById(id);
         return this.getJwtPayload(user);
     }
 
-    // async sendCode(email: string): Promise<void> {
-    //   const code = this.generateCode();
-    //   const account: Account = await this.accountsService.getAccountByEmail(email);
-    //
-    //   if(!account)
-    //     throw new NotFoundException('User does not exist!');
-    //
-    //   await this.accountsService.updateCode(account.email, code.toString());
-    //   await this.mailService.sendResetCode(account, code.toString());
-    // }
+    async sendCode(email: string): Promise<void> {
+      const code = this.generateCode();
+      const user: User = await this.userService.getByEmail(email);
 
-    // public async checkCode(data: any): Promise<boolean> {
-    //   const account: Account = await this.accountsService.getAccountByEmail(data.email);
-    //
-    //   if (!account)
-    //     throw new NotFoundException('User does not exist!');
-    //
-    //   return account.code === data.code;
-    // }
+      await this.userService.updateCode(user.id, code);
+      await this.mailService.sendResetCode(user, code.toString());
+    }
 
-    async resetPassword(login: LoginDto, code: string): Promise<User> {
+    public async checkCode(data: any): Promise<boolean> {
+      const account: User = await this.userService.getByEmail(data.email);
+
+      if (!account)
+        throw new NotFoundException('User does not exist!');
+
+      return account.code === data.code;
+    }
+
+    async resetPassword(login: LoginDto, code: number): Promise<User> {
         const user: User = await this.userService.getByEmail(login.email);
 
-        if (!user) throw new NotFoundException('User does not exist!');
-
-        // if(user.code !== code) throw new ForbiddenException('Invalid code!');
+        if(user.code !== code) throw new ForbiddenException('Invalid code!');
 
         user.password = await hash(login.password, 10);
 
-        // await this.userService.updatePassword(user);
+        await this.userService.updatePassword(user.id, user.password);
 
         user.password = undefined;
 
@@ -102,9 +97,9 @@ export class AuthenticationService {
         return user;
     }
 
-    // private generateCode(): number {
-    //     return Math.floor(100000 + Math.random() * 900000);
-    // }
+    private generateCode(): number {
+        return Math.floor(100000 + Math.random() * 900000);
+    }
 
     private getJwtPayload(user: User): JwtResponseDto {
         const jwtPayload: JwtPayloadDto = {

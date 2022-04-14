@@ -83,6 +83,7 @@ export class UsersService {
         newUser.lastname = userDto.lastname;
         newUser.address = userDto.address;
         newUser.photoUrl = null;
+        newUser.code = null;
         newUser.role = role;
         newUser.createDate = new Date();
         newUser.closeDate = null;
@@ -106,6 +107,22 @@ export class UsersService {
         user.shelter = userDto.shelter ?? user.shelter;
 
         return this.repository.save(user);
+    }
+
+    async updatePassword(id: number, password: string): Promise<void> {
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ password: password})
+            .where("id = :id", { id: id })
+            .execute();
+    }
+
+    async updateCode(id: number, code: number): Promise<void> {
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ code: code })
+            .where("id = :id", { id: id })
+            .execute();
     }
 
     async close(id: number): Promise<void> {

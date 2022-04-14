@@ -7,7 +7,7 @@ import {
     Controller,
     Get,
     HttpCode,
-    HttpStatus,
+    HttpStatus, Param,
     Post,
     Query,
     Request
@@ -36,19 +36,24 @@ export class AuthenticationController {
         return this.authService.login(login);
     }
 
-    @Get('token/refresh')
+    @Get('token/:id/refresh')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async refreshToken(@Request() req): Promise<JwtResponseDto> {
-        return this.authService.refreshToken(req.user);
+    async refreshToken(@Param('id') id: number): Promise<JwtResponseDto> {
+        return this.authService.refreshToken(id);
     }
 
     @Post('reset/password')
     @HttpCode(HttpStatus.OK)
     async resetPassword(
-        @Query('code') code: string,
+        @Query('code') code: number,
         @Body() login: LoginDto
     ): Promise<User> {
         return this.authService.resetPassword(login, code);
+    }
+
+    @Post('code/send')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async sendCode(@Body() body: {email: string}): Promise<void> {
+        return this.authService.sendCode(body.email)
     }
 }
