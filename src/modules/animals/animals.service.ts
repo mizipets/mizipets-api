@@ -90,7 +90,7 @@ export class AnimalsService {
         }
     }
 
-    async getAdoption(user: User): Promise<Animal[]> {
+    async getAdoption(user: User, params: Animal): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, {
             favorites: true
         });
@@ -99,16 +99,20 @@ export class AnimalsService {
             (favorite) => favorite.type === ServiceType.ADOPTION
         ).reference as AdoptionReferences;
 
-        return await this.repository
-            .createQueryBuilder()
-            .select('animal')
-            .from(Animal, 'animal')
-            .where('animal.isAdoption = :isAdoption', {
-                isAdoption: true
-            })
-            .andWhere({ id: Not(In(reference.disliked)) })
-            .andWhere({ id: Not(In(reference.liked)) })
-            .getMany();
+        const avoidIds = [...reference.disliked, ...reference.liked];
+
+        const query: any = {
+            id: Not(In(avoidIds)),
+            isAdoption: true
+        };
+        if (params.sex) query.sex = params.sex;
+        if (params.race) query.race = params.race;
+
+        return await this.repository.find({
+            where: query,
+            relations: ['race', 'race.species'],
+            take: 10
+        });
     }
 
     async getAdoptionsByOwner(userId: number): Promise<Animal[]> {
