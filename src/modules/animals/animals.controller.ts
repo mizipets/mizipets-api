@@ -13,6 +13,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
     Req
 } from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
@@ -22,10 +23,15 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Favorites } from '../favorites/entities/favorites.entity';
+import { Sex } from './enum/sex.enum';
+import { RacesService } from './races.service';
 
 @Controller('animals')
 export class AnimalsController {
-    constructor(private readonly animalsService: AnimalsService) {}
+    constructor(
+        private readonly animalsService: AnimalsService,
+        private readonly raceService: RacesService
+    ) {}
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -51,8 +57,17 @@ export class AnimalsController {
     @Get('adoption')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getFavorites(@Req() req): Promise<Animal[]> {
-        return this.animalsService.getAdoption(req.user);
+    async getFavorites(
+        @Req() req,
+        @Query('sex') sex: Sex,
+        @Query('raceId') raceId: string
+    ): Promise<Animal[]> {
+        const params: Animal = new Animal();
+        if (sex) params.sex = sex;
+        if (raceId)
+            params.race = await this.raceService.getById(parseInt(raceId));
+
+        return this.animalsService.getAdoption(req.user, params);
     }
 
     @Get('adoption/byOwner')
