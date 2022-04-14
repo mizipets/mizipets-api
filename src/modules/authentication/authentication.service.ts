@@ -73,28 +73,21 @@ export class AuthenticationService {
       await this.mailService.sendResetCode(user, code.toString());
     }
 
-    public async checkCode(data: any): Promise<boolean> {
-      const account: User = await this.userService.getByEmail(data.email);
-
-      if (!account)
-        throw new NotFoundException('User does not exist!');
-
-      return account.code === data.code;
+    private checkCode(userCode: number, code: number): boolean {
+      return userCode === code;
     }
 
-    async resetPassword(login: LoginDto, code: number): Promise<User> {
+    async resetPassword(login: LoginDto, code: number): Promise<void> {
         const user: User = await this.userService.getByEmail(login.email);
+        const isCodeValid: boolean = this.checkCode(user.code, code);
 
-        if(user.code !== code) throw new ForbiddenException('Invalid code!');
+        if(!isCodeValid)
+            throw new ForbiddenException('Invalid code!');
 
         user.password = await hash(login.password, 10);
-
         await this.userService.updatePassword(user.id, user.password);
-
         user.password = undefined;
-
         await this.mailService.sendChangedPassword(user);
-        return user;
     }
 
     private generateCode(): number {
