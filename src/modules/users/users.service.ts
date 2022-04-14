@@ -126,9 +126,11 @@ export class UsersService {
     }
 
     async close(id: number): Promise<void> {
-        const user: User = await this.getById(id);
-        user.closeDate = new Date();
-        await this.repository.save(user);
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ closeDate: new Date() })
+            .where("id = :id", { id: id })
+            .execute();
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {
