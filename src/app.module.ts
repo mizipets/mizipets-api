@@ -22,7 +22,7 @@ import * as path from 'path';
     imports: [
         ThrottlerModule.forRoot({
             ttl: 60,
-            limit: 10
+            limit: 100
         }),
         TypeOrmModule.forRoot({
             type: 'postgres',
