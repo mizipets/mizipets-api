@@ -51,6 +51,12 @@ export class AuthenticationController {
         return this.authService.resetPassword(login, parseInt(code));
     }
 
+    @Post('code/verify')
+    @HttpCode(HttpStatus.OK)
+    async checkCode(@Body() body: {email: string, code: number}): Promise<boolean> {
+        return this.authService.verifyCode(body.email,  body.code)
+    }
+
     @Post('code/send')
     @HttpCode(HttpStatus.NO_CONTENT)
     async sendCode(@Body() body: {email: string}): Promise<void> {

@@ -5,7 +5,6 @@
 import {
     ConflictException, ForbiddenException,
     Injectable,
-    NotFoundException,
     UnauthorizedException
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -73,8 +72,14 @@ export class AuthenticationService {
       await this.mailService.sendResetCode(user, code.toString());
     }
 
-    private checkCode(userCode: number, code: number): boolean {
-      return userCode === code;
+    async verifyCode(email: string, code: number): Promise<boolean> {
+        const user: User = await this.userService.getByEmail(email);
+        const isCodeValid: boolean = this.checkCode(user.code, code);
+
+        if(!isCodeValid)
+            throw new ForbiddenException('Invalid code!');
+
+        return isCodeValid;
     }
 
     async resetPassword(login: LoginDto, code: number): Promise<void> {
@@ -88,6 +93,10 @@ export class AuthenticationService {
         await this.userService.updatePassword(user.id, user.password);
         user.password = undefined;
         await this.mailService.sendChangedPassword(user);
+    }
+
+    private checkCode(userCode: number, code: number): boolean {
+        return userCode === code;
     }
 
     private generateCode(): number {
