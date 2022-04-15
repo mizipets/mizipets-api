@@ -30,7 +30,7 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle('Mizipets API')
         .setDescription(
-            'Mizipets is a mobile application give services for pets'
+            'Mizipets is a mobile application providing services for pets'
         )
         .setVersion('1.0')
         .build();

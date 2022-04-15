@@ -83,6 +83,7 @@ export class UsersService {
         newUser.lastname = userDto.lastname;
         newUser.address = userDto.address;
         newUser.photoUrl = null;
+        newUser.code = null;
         newUser.role = role;
         newUser.createDate = new Date();
         newUser.closeDate = null;
@@ -108,10 +109,28 @@ export class UsersService {
         return this.repository.save(user);
     }
 
+    async updatePassword(id: number, password: string): Promise<void> {
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ password: password})
+            .where("id = :id", { id: id })
+            .execute();
+    }
+
+    async updateCode(id: number, code: number): Promise<void> {
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ code: code })
+            .where("id = :id", { id: id })
+            .execute();
+    }
+
     async close(id: number): Promise<void> {
-        const user: User = await this.getById(id);
-        user.closeDate = new Date();
-        await this.repository.save(user);
+        await this.repository.createQueryBuilder()
+            .update(User)
+            .set({ closeDate: new Date() })
+            .where("id = :id", { id: id })
+            .execute();
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {

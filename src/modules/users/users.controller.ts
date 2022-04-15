@@ -71,7 +71,7 @@ export class UsersController {
         return this.userService.update(id, userDto);
     }
 
-    @Put(':id/close')
+    @Get(':id/close')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async close(@Request() req, @Param('id') id: number): Promise<void> {

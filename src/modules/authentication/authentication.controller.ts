@@ -7,8 +7,8 @@ import {
     Controller,
     Get,
     HttpCode,
-    HttpStatus,
-    Post,
+    HttpStatus, Param,
+    Post, Put,
     Query,
     Request
 } from '@nestjs/common';
@@ -36,19 +36,30 @@ export class AuthenticationController {
         return this.authService.login(login);
     }
 
-    @Get('token/refresh')
+    @Get('token/:id/refresh')
     @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async refreshToken(@Request() req): Promise<JwtResponseDto> {
-        return this.authService.refreshToken(req.user);
+    async refreshToken(@Param('id') id: number): Promise<JwtResponseDto> {
+        return this.authService.refreshToken(id);
     }
 
-    @Post('reset/password')
-    @HttpCode(HttpStatus.OK)
+    @Put('reset/password')
+    @HttpCode(HttpStatus.NO_CONTENT)
     async resetPassword(
         @Query('code') code: string,
         @Body() login: LoginDto
-    ): Promise<User> {
-        return this.authService.resetPassword(login, code);
+    ): Promise<void> {
+        return this.authService.resetPassword(login, parseInt(code));
+    }
+
+    @Post('code/verify')
+    @HttpCode(HttpStatus.OK)
+    async checkCode(@Body() body: {email: string, code: number}): Promise<boolean> {
+        return this.authService.verifyCode(body.email,  body.code)
+    }
+
+    @Post('code/send')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async sendCode(@Body() body: {email: string}): Promise<void> {
+        return this.authService.sendCode(body.email)
     }
 }

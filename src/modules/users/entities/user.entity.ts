@@ -47,6 +47,9 @@ export class User {
     @Column({ nullable: true })
     photoUrl: string;
 
+    @Column({nullable: true})
+    code: number;
+
     @Column('json')
     address: Address;
 
