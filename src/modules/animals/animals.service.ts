@@ -24,6 +24,7 @@ import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
+import { Search } from './animals.controller';
 
 @Injectable()
 export class AnimalsService {
@@ -94,7 +95,7 @@ export class AnimalsService {
         }
     }
 
-    async getAdoption(user: User, params): Promise<Animal[]> {
+    async getAdoption(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
@@ -112,11 +113,12 @@ export class AnimalsService {
         };
         if (params.sex) query.sex = params.sex;
         if (params.race) query.race = params.race;
+        if (params.species) query.race = { species: { id: params.species.id } };
 
         return await this.repository.find({
             where: query,
             relations: ['race', 'race.species', 'owner'],
-            take: 10
+            take: 5
         });
     }
 

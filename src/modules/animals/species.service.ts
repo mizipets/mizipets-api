@@ -17,9 +17,9 @@ export class SpeciesService {
         return await this.repository.find({ relations: [] });
     }
 
-    async getById(id: number): Promise<Species> {
+    async getById(id: number, populate = false): Promise<Species> {
         const db = await this.repository.findOne(id, {
-            relations: ['races']
+            relations: populate ? ['races'] : []
         });
         if (!db) {
             throw new NotFoundException(`No specie with id: ${id}`);
