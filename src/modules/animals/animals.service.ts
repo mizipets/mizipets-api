@@ -105,14 +105,17 @@ export class AnimalsService {
 
         const query: any = {
             id: Not(In(avoidIds)),
-            isAdoption: true
+            isAdoption: true,
+            owner: {
+                id: Not(user.id)
+            }
         };
         if (params.sex) query.sex = params.sex;
         if (params.race) query.race = params.race;
 
         return await this.repository.find({
             where: query,
-            relations: ['race', 'race.species'],
+            relations: ['race', 'race.species', 'owner'],
             take: 10
         });
     }
@@ -124,7 +127,7 @@ export class AnimalsService {
                     id: userId
                 }
             },
-            relations: ['race', 'race.species']
+            relations: ['race', 'race.species', 'owner']
         });
     }
 
