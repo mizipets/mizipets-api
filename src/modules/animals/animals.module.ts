@@ -21,8 +21,7 @@ import { SpeciesService } from './species.service';
     imports: [
         TypeOrmModule.forFeature([Animal, Species, Race]),
         UsersModule,
-        FavoritesModule,
-        RoomModule
+        FavoritesModule
     ],
     controllers: [AnimalsController, SpeciesController, RacesController],
     providers: [AnimalsService, SpeciesService, RacesService],

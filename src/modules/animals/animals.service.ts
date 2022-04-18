@@ -36,8 +36,7 @@ export class AnimalsService {
         @InjectRepository(Species)
         private readonly speciesRepository: Repository<Species>,
         private readonly usersService: UsersService,
-        private readonly favoritesService: FavoritesService,
-        private readonly roomService: RoomService
+        private readonly favoritesService: FavoritesService
     ) {}
 
     async create(
