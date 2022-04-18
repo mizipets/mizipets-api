@@ -172,8 +172,6 @@ export class AnimalsService {
             throw new ForbiddenException("Can't like your own adoption");
         }
 
-        await this.roomService.create(user, animal);
-
         if (!reference.liked.includes(new_id)) {
             reference.liked.push(new_id);
             reference.disliked = reference.disliked.filter(

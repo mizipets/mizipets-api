@@ -16,14 +16,14 @@ export class RoomService {
         @InjectRepository(Room) private readonly repository: Repository<Room>
     ) {}
 
-    async create(user: User, animal: Animal): Promise<void> {
+    async create(user: User, animal: Animal): Promise<Room> {
         const room = new Room();
         room.adoptant = user;
         room.messages = [];
         room.animal = animal;
         room.code = room.getCode();
 
-        await this.repository.save(room);
+        return await this.repository.save(room);
     }
 
     async getById(id: number): Promise<Room> {
