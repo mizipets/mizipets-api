@@ -5,7 +5,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FavoritesModule } from '../favorites/favorites.module';
-import { RoomModule } from '../room/room.module';
 import { UsersModule } from '../users/users.module';
 import { AnimalsController } from './animals.controller';
 import { AnimalsService } from './animals.service';

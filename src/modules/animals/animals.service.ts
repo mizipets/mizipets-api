@@ -14,7 +14,6 @@ import {
     Favorites
 } from '../favorites/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
-import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';

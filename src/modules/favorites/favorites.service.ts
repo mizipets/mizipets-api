@@ -87,7 +87,7 @@ export class FavoritesService {
         const favorite = await this.getByUserIdAndType(userId, type);
         let reference: Reference;
 
-        switch(favorite.type) {
+        switch (favorite.type) {
             case ServiceType.ADOPTION:
                 reference = favorite.reference as AdoptionReferences;
                 reference.disliked = reference.disliked.filter(

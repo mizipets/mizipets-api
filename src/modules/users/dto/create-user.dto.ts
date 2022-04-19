@@ -4,7 +4,6 @@
  */
 import { IsNotEmpty, IsEmail, IsString, IsObject } from 'class-validator';
 import { Address, Preferences, Shelter } from '../entities/user.entity';
-import {IsNull} from "typeorm";
 
 export class CreateUserDto {
     @IsEmail()

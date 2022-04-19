@@ -7,16 +7,15 @@ import {
     Controller,
     Get,
     HttpCode,
-    HttpStatus, Param,
-    Post, Put,
+    HttpStatus,
+    Param,
+    Post,
+    Put,
     Query,
-    Request
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { OnlyRoles } from './guards/role.decorator';
-import { Roles } from './enum/roles.emum';
 import { User } from '../users/entities/user.entity';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 
@@ -53,13 +52,15 @@ export class AuthenticationController {
 
     @Post('code/verify')
     @HttpCode(HttpStatus.OK)
-    async checkCode(@Body() body: {email: string, code: number}): Promise<boolean> {
-        return this.authService.verifyCode(body.email,  body.code)
+    async checkCode(
+        @Body() body: { email: string; code: number }
+    ): Promise<boolean> {
+        return this.authService.verifyCode(body.email, body.code);
     }
 
     @Post('code/send')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async sendCode(@Body() body: {email: string}): Promise<void> {
-        return this.authService.sendCode(body.email)
+    async sendCode(@Body() body: { email: string }): Promise<void> {
+        return this.authService.sendCode(body.email);
     }
 }

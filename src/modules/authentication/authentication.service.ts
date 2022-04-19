@@ -3,7 +3,8 @@
  * @create 2022-03-05
  */
 import {
-    ConflictException, ForbiddenException,
+    ConflictException,
+    ForbiddenException,
     Injectable,
     UnauthorizedException
 } from '@nestjs/common';
@@ -65,19 +66,18 @@ export class AuthenticationService {
     }
 
     async sendCode(email: string): Promise<void> {
-      const code = this.generateCode();
-      const user: User = await this.userService.getByEmail(email);
+        const code = this.generateCode();
+        const user: User = await this.userService.getByEmail(email);
 
-      await this.userService.updateCode(user.id, code);
-      await this.mailService.sendResetCode(user, code.toString());
+        await this.userService.updateCode(user.id, code);
+        await this.mailService.sendResetCode(user, code.toString());
     }
 
     async verifyCode(email: string, code: number): Promise<boolean> {
         const user: User = await this.userService.getByEmail(email);
         const isCodeValid: boolean = this.checkCode(user.code, code);
 
-        if(!isCodeValid)
-            throw new ForbiddenException('Invalid code!');
+        if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
         return isCodeValid;
     }
@@ -86,8 +86,7 @@ export class AuthenticationService {
         const user: User = await this.userService.getByEmail(login.email);
         const isCodeValid: boolean = this.checkCode(user.code, code);
 
-        if(!isCodeValid)
-            throw new ForbiddenException('Invalid code!');
+        if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
         user.password = await hash(login.password, 10);
         await this.userService.updatePassword(user.id, user.password);
