@@ -11,6 +11,7 @@ import {
     AdviceReferences,
     Favorites,
     PetsReferences,
+    Reference,
     VetsReferences
 } from './entities/favorites.entity';
 
@@ -84,20 +85,33 @@ export class FavoritesService {
         referenceId: number
     ): Promise<Favorites> {
         const favorite = await this.getByUserIdAndType(userId, type);
-        if (favorite.reference instanceof AdoptionReferences) {
-            favorite.reference.disliked = favorite.reference.disliked.filter(
-                (id) => id !== referenceId
-            );
-            favorite.reference.liked = favorite.reference.liked.filter(
-                (id) => id !== referenceId
-            );
-        } else if (favorite.reference instanceof PetsReferences) {
-            favorite.reference.id = null;
-        } else if (favorite.reference instanceof AdviceReferences) {
-            favorite.reference.id = null;
-        } else if (favorite.reference instanceof VetsReferences) {
-            favorite.reference.id = null;
+        let reference: Reference;
+
+        switch(favorite.type) {
+            case ServiceType.ADOPTION:
+                reference = favorite.reference as AdoptionReferences;
+                reference.disliked = reference.disliked.filter(
+                    (id) => id !== referenceId
+                );
+                reference.liked = reference.liked.filter(
+                    (id) => id !== referenceId
+                );
+                break;
+            case ServiceType.ADVICE:
+                reference = favorite.reference as AdviceReferences;
+                reference.id = null;
+                break;
+            case ServiceType.VETS:
+                reference = favorite.reference as VetsReferences;
+                reference.id = null;
+                break;
+            case ServiceType.PETS:
+                reference = favorite.reference as PetsReferences;
+                reference.id = null;
+                break;
         }
+
+        favorite.reference = reference;
 
         return await this.repository.save(favorite);
     }
