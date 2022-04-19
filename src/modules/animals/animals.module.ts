@@ -2,7 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-23
  */
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { UsersModule } from '../users/users.module';
@@ -19,8 +19,8 @@ import { SpeciesService } from './species.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Animal, Species, Race]),
-        UsersModule,
-        FavoritesModule
+        forwardRef(() => UsersModule),
+        forwardRef(() => FavoritesModule)
     ],
     controllers: [AnimalsController, SpeciesController, RacesController],
     providers: [AnimalsService, SpeciesService, RacesService],

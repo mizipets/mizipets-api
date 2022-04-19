@@ -2,7 +2,12 @@
  * @author Julien DA CORTE & Latif SAGNA
  * @create 2022-03-11
  */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    forwardRef,
+    Inject,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shelter, User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -16,6 +21,7 @@ import { FavoritesService } from '../favorites/favorites.service';
 export class UsersService {
     constructor(
         @InjectRepository(User) private readonly repository: Repository<User>,
+        @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService
     ) {}
 

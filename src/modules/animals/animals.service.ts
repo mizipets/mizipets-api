@@ -4,6 +4,8 @@
  */
 import {
     ForbiddenException,
+    forwardRef,
+    Inject,
     Injectable,
     NotFoundException
 } from '@nestjs/common';
@@ -34,8 +36,10 @@ export class AnimalsService {
         private readonly raceRepository: Repository<Race>,
         @InjectRepository(Species)
         private readonly speciesRepository: Repository<Species>,
-        private readonly usersService: UsersService,
-        private readonly favoritesService: FavoritesService
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
+        @Inject(forwardRef(() => FavoritesService))
+        private favoritesService: FavoritesService
     ) {}
 
     async create(
@@ -91,6 +95,16 @@ export class AnimalsService {
         } else {
             return animalDB;
         }
+    }
+
+    async getByIds(
+        ids: number[],
+        relations = ['race', 'race.species', 'owner']
+    ): Promise<Animal[]> {
+        return await this.repository.find({
+            where: { id: In(ids) },
+            relations
+        });
     }
 
     async getAdoption(user: User, params: Search): Promise<Animal[]> {

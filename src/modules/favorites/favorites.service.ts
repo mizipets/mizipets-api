@@ -2,9 +2,15 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-25
  */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    forwardRef,
+    Inject,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AnimalsService } from '../animals/animals.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import {
     AdoptionReferences,
@@ -14,12 +20,18 @@ import {
     Reference,
     VetsReferences
 } from './entities/favorites.entity';
+import {
+    AdoptionReferencesPopulated,
+    FavoritesPopulated
+} from './entities/favorites.populated';
 
 @Injectable()
 export class FavoritesService {
     constructor(
         @InjectRepository(Favorites)
-        private readonly repository: Repository<Favorites>
+        private readonly repository: Repository<Favorites>,
+        @Inject(forwardRef(() => AnimalsService))
+        private animalsService: AnimalsService
     ) {}
 
     async getById(id: number): Promise<Favorites> {
@@ -76,7 +88,45 @@ export class FavoritesService {
     }
 
     async getFavoritesOfUser(userId: number): Promise<Favorites[]> {
-        return this.repository.find({ user: { id: userId } });
+        return await this.repository.find({ user: { id: userId } });
+    }
+
+    async getPopulatedFavoritesOfUser(userId: number) {
+        const favorites = await this.repository.find({ user: { id: userId } });
+        const promises = Promise.all(
+            favorites.map(async (favorite) => {
+                const populate = new FavoritesPopulated();
+                populate.id = favorite.id;
+                populate.type = favorite.type;
+                switch (favorite.type) {
+                    case ServiceType.ADOPTION:
+                        const reference =
+                            favorite.reference as AdoptionReferences;
+                        const referencePopulated =
+                            favorite.reference as AdoptionReferencesPopulated;
+                        referencePopulated.disliked =
+                            await this.animalsService.getByIds(
+                                reference.disliked,
+                                ['race', 'race.species']
+                            );
+                        referencePopulated.liked =
+                            await this.animalsService.getByIds(
+                                reference.liked,
+                                ['race', 'race.species']
+                            );
+                        populate.reference = referencePopulated;
+                        break;
+                    case ServiceType.ADVICE:
+                        break;
+                    case ServiceType.VETS:
+                        break;
+                    case ServiceType.PETS:
+                        break;
+                }
+                return populate;
+            })
+        );
+        return await promises;
     }
 
     async removeFavorite(
@@ -90,10 +140,10 @@ export class FavoritesService {
         switch (favorite.type) {
             case ServiceType.ADOPTION:
                 reference = favorite.reference as AdoptionReferences;
-                reference.disliked = reference.disliked.filter(
+                reference.disliked = (reference.disliked as number[]).filter(
                     (id) => id !== referenceId
-                );
-                reference.liked = reference.liked.filter(
+                ) as number[];
+                reference.liked = (reference.liked as number[]).filter(
                     (id) => id !== referenceId
                 );
                 break;
