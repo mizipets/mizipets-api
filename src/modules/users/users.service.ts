@@ -85,7 +85,6 @@ export class UsersService {
         newUser.photoUrl = null;
         newUser.code = null;
         newUser.role = role;
-        newUser.createDate = new Date();
         newUser.closeDate = null;
         newUser.animals = [];
         newUser.favorites = favorites;
