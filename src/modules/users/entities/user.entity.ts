@@ -2,7 +2,13 @@
  * @author Julien DA CORTE & Latif SAGNA & Maxime D'HARBOULLE
  * @create 2022-03-11
  */
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
 import { Roles } from '../../authentication/enum/roles.emum';
 import { Favorites } from '../../favorites/entities/favorites.entity';
@@ -20,7 +26,7 @@ export class Preferences {
     lang: string;
     darkMode: boolean;
     notifications: boolean;
-    update: boolean;
+    updates: boolean;
 }
 
 export class Shelter {
@@ -62,7 +68,7 @@ export class User {
     @Column()
     role: Roles;
 
-    @Column()
+    @CreateDateColumn()
     createDate: Date;
 
     @Column({ nullable: true })

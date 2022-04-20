@@ -1,9 +1,6 @@
 /**
- * @author Maxime d'Harboullé
- * @email maxime.dharboulle@gmail.com
- * @create date 2022-03-20 21:26:09
- * @modify date 2022-03-20 21:26:09
- * @desc [description]
+ * @author Maxime D'HARBOULLE
+ * @create date 2022-03-20
  */
 import * as typeorm from 'typeorm';
 import { Race } from '../src/modules/animals/entities/race.entity';
