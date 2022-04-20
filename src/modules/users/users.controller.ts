@@ -58,7 +58,7 @@ export class UsersController {
         return this.userService.getByEmail(email);
     }
 
-    @Put(':id/update')
+    @Put(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async update(

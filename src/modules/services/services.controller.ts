@@ -16,6 +16,8 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServicesService } from './services.service';
 import { Service } from './entities/service.entity';
 import {CreateServiceDto} from "./dto/create-service.dto";
+import {UpdateUserDto} from "../users/dto/update-user.dto";
+import {UpdateServiceDto} from "./dto/update-service.dto";
 
 @Controller('services')
 export class ServicesController {
@@ -47,6 +49,13 @@ export class ServicesController {
     @OnlyRoles(Roles.ADMIN)
     public async getById(@Param('id') id: number): Promise<Service> {
         return this.servicesService.getById(id);
+    }
+
+    @Put(':id')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.ADMIN)
+    public async update(@Param('id') id: number, @Body() serviceDto: UpdateServiceDto): Promise<Service> {
+        return this.servicesService.update(id, serviceDto);
     }
 
     @Put(':id/activate')
