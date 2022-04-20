@@ -4,6 +4,8 @@
  */
 import {
     ForbiddenException,
+    forwardRef,
+    Inject,
     Injectable,
     NotFoundException
 } from '@nestjs/common';
@@ -14,7 +16,6 @@ import {
     Favorites
 } from '../favorites/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
-import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -24,6 +25,7 @@ import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
+import { Search } from './animals.controller';
 
 @Injectable()
 export class AnimalsService {
@@ -34,9 +36,10 @@ export class AnimalsService {
         private readonly raceRepository: Repository<Race>,
         @InjectRepository(Species)
         private readonly speciesRepository: Repository<Species>,
-        private readonly usersService: UsersService,
-        private readonly favoritesService: FavoritesService,
-        private readonly roomService: RoomService
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
+        @Inject(forwardRef(() => FavoritesService))
+        private favoritesService: FavoritesService
     ) {}
 
     async create(
@@ -94,7 +97,17 @@ export class AnimalsService {
         }
     }
 
-    async getAdoption(user: User, params): Promise<Animal[]> {
+    async getByIds(
+        ids: number[],
+        relations = ['race', 'race.species', 'owner']
+    ): Promise<Animal[]> {
+        return await this.repository.find({
+            where: { id: In(ids) },
+            relations
+        });
+    }
+
+    async getAdoption(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
@@ -105,15 +118,19 @@ export class AnimalsService {
 
         const query: any = {
             id: Not(In(avoidIds)),
-            isAdoption: true
+            isAdoption: true,
+            owner: {
+                id: Not(user.id)
+            }
         };
         if (params.sex) query.sex = params.sex;
         if (params.race) query.race = params.race;
+        if (params.species) query.race = { species: { id: params.species.id } };
 
         return await this.repository.find({
             where: query,
-            relations: ['race', 'race.species'],
-            take: 10
+            relations: ['race', 'race.species', 'owner'],
+            take: 5
         });
     }
 
@@ -124,7 +141,7 @@ export class AnimalsService {
                     id: userId
                 }
             },
-            relations: ['race', 'race.species']
+            relations: ['race', 'race.species', 'owner']
         });
     }
 
@@ -166,8 +183,6 @@ export class AnimalsService {
         if (animal.owner.id === token.id) {
             throw new ForbiddenException("Can't like your own adoption");
         }
-
-        await this.roomService.create(user, animal);
 
         if (!reference.liked.includes(new_id)) {
             reference.liked.push(new_id);

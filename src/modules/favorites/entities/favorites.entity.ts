@@ -12,11 +12,7 @@ export class Favorites {
     id: number;
 
     @Column('json')
-    reference:
-        | AdoptionReferences
-        | AdviceReferences
-        | PetsReferences
-        | VetsReferences;
+    reference: Reference;
 
     @Column()
     type: ServiceType;
@@ -24,6 +20,11 @@ export class Favorites {
     @ManyToOne(() => User, (user) => user.favorites)
     user: User;
 }
+export type Reference =
+    | AdoptionReferences
+    | AdviceReferences
+    | PetsReferences
+    | VetsReferences;
 
 export class AdoptionReferences {
     disliked: number[];

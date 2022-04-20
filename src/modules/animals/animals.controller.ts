@@ -25,12 +25,16 @@ import { Animal } from './entities/animal.entity';
 import { Favorites } from '../favorites/entities/favorites.entity';
 import { Sex } from './enum/sex.enum';
 import { RacesService } from './races.service';
+import { SpeciesService } from './species.service';
+import { Race } from './entities/race.entity';
+import { Species } from './entities/species.entity';
 
 @Controller('animals')
 export class AnimalsController {
     constructor(
         private readonly animalsService: AnimalsService,
-        private readonly raceService: RacesService
+        private readonly raceService: RacesService,
+        private readonly speciesService: SpeciesService
     ) {}
 
     @Post()
@@ -60,12 +64,17 @@ export class AnimalsController {
     async getFavorites(
         @Req() req,
         @Query('sex') sex: Sex,
-        @Query('raceId') raceId: string
+        @Query('raceId') raceId: string,
+        @Query('specieId') specieId: string
     ): Promise<Animal[]> {
-        const params: Animal = new Animal();
+        const params: Search = new Search();
         if (sex) params.sex = sex;
         if (raceId)
             params.race = await this.raceService.getById(parseInt(raceId));
+        if (specieId)
+            params.species = await this.speciesService.getById(
+                parseInt(specieId)
+            );
 
         return this.animalsService.getAdoption(req.user, params);
     }
@@ -127,4 +136,10 @@ export class AnimalsController {
         }
         await this.animalsService.delete(id);
     }
+}
+
+export class Search {
+    sex: Sex;
+    race: Race;
+    species: Species;
 }

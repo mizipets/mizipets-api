@@ -29,6 +29,15 @@ export class FavoritesController {
         return this.favoritesService.getFavoritesOfUser(parseInt(userId));
     }
 
+    @Get(':userId/populated')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async getPopulatedFavoritesOfUser(@Param('userId') userId: string) {
+        return await this.favoritesService.getPopulatedFavoritesOfUser(
+            parseInt(userId)
+        );
+    }
+
     @Delete(':userId/:type/:referenceID')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)

@@ -12,13 +12,10 @@ import {
     Post,
     Put,
     Query,
-    Request
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { OnlyRoles } from './guards/role.decorator';
-import { Roles } from './enum/roles.emum';
 import { User } from '../users/entities/user.entity';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 
