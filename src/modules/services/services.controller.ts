@@ -1,5 +1,5 @@
 /**
- * @author Maxime D'HARBOULLE
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
  * @create 2022-03-16
  */
 import {
@@ -8,16 +8,14 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    Param, Post,
+    Param,
     Put
 } from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServicesService } from './services.service';
 import { Service } from './entities/service.entity';
-import {CreateServiceDto} from "./dto/create-service.dto";
-import {UpdateUserDto} from "../users/dto/update-user.dto";
-import {UpdateServiceDto} from "./dto/update-service.dto";
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Controller('services')
 export class ServicesController {
@@ -37,13 +35,6 @@ export class ServicesController {
         return this.servicesService.getAllActive();
     }
 
-    @Post()
-    @HttpCode(HttpStatus.CREATED)
-    @OnlyRoles(Roles.ADMIN)
-    public async create(@Body() serviceDto: CreateServiceDto): Promise<Service> {
-        return this.servicesService.create(serviceDto);
-    }
-
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
@@ -54,7 +45,10 @@ export class ServicesController {
     @Put(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
-    public async update(@Param('id') id: number, @Body() serviceDto: UpdateServiceDto): Promise<Service> {
+    public async update(
+        @Param('id') id: number,
+        @Body() serviceDto: UpdateServiceDto
+    ): Promise<Service> {
         return this.servicesService.update(id, serviceDto);
     }
 

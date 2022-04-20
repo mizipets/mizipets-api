@@ -6,9 +6,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Service } from './entities/service.entity';
-import {CreateServiceDto} from "./dto/create-service.dto";
-import {UpdateServiceDto} from "./dto/update-service.dto";
-
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -23,19 +21,6 @@ export class ServicesService {
 
     async getAllActive(): Promise<Service[]> {
         return this.repository.find({ where: { isActive: true } });
-    }
-
-    async create(serviceDto: CreateServiceDto): Promise<Service> {
-        const newService = new Service();
-
-        newService.name = serviceDto.name;
-        newService.description = serviceDto.description ?? null;
-        newService.serviceType = serviceDto.serviceType;
-        newService.imagePath = serviceDto.imagePath;
-        newService.isActive = serviceDto.isActive;
-
-        this.repository.create(newService);
-        return this.repository.save(newService);
     }
 
     async update(id: number, serviceDto: UpdateServiceDto): Promise<Service> {

@@ -109,26 +109,29 @@ export class UsersService {
     }
 
     async updatePassword(id: number, password: string): Promise<void> {
-        await this.repository.createQueryBuilder()
+        await this.repository
+            .createQueryBuilder()
             .update(User)
-            .set({ password: password})
-            .where("id = :id", { id: id })
+            .set({ password: password })
+            .where('id = :id', { id: id })
             .execute();
     }
 
     async updateCode(id: number, code: number): Promise<void> {
-        await this.repository.createQueryBuilder()
+        await this.repository
+            .createQueryBuilder()
             .update(User)
             .set({ code: code })
-            .where("id = :id", { id: id })
+            .where('id = :id', { id: id })
             .execute();
     }
 
     async close(id: number): Promise<void> {
-        await this.repository.createQueryBuilder()
+        await this.repository
+            .createQueryBuilder()
             .update(User)
             .set({ closeDate: new Date() })
-            .where("id = :id", { id: id })
+            .where('id = :id', { id: id })
             .execute();
     }
 

@@ -7,8 +7,10 @@ import {
     Controller,
     Get,
     HttpCode,
-    HttpStatus, Param,
-    Post, Put,
+    HttpStatus,
+    Param,
+    Post,
+    Put,
     Query,
     Request
 } from '@nestjs/common';
@@ -53,13 +55,15 @@ export class AuthenticationController {
 
     @Post('code/verify')
     @HttpCode(HttpStatus.OK)
-    async checkCode(@Body() body: {email: string, code: number}): Promise<boolean> {
-        return this.authService.verifyCode(body.email,  body.code)
+    async checkCode(
+        @Body() body: { email: string; code: number }
+    ): Promise<boolean> {
+        return this.authService.verifyCode(body.email, body.code);
     }
 
     @Post('code/send')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async sendCode(@Body() body: {email: string}): Promise<void> {
-        return this.authService.sendCode(body.email)
+    async sendCode(@Body() body: { email: string }): Promise<void> {
+        return this.authService.sendCode(body.email);
     }
 }
