@@ -5,10 +5,12 @@
 import {
     Controller,
     Delete,
+    ForbiddenException,
     Get,
     HttpCode,
     HttpStatus,
-    Param
+    Param,
+    Req
 } from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
@@ -24,8 +26,12 @@ export class FavoritesController {
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async getFavoritesOfUser(
+        @Req() req,
         @Param('userId') userId: string
     ): Promise<Favorites[]> {
+        if (req.user.role !== Roles.ADMIN || req.user.id !== parseInt(userId)) {
+            throw new ForbiddenException("Can't access others favorites");
+        }
         return this.favoritesService.getFavoritesOfUser(parseInt(userId));
     }
 
