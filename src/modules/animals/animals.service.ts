@@ -120,7 +120,7 @@ export class AnimalsService {
             id: Not(In(avoidIds)),
             isAdoption: true,
             owner: {
-                id: Not(user.id)
+                id: params.getMine ? user.id : Not(user.id)
             }
         };
         if (params.sex) query.sex = params.sex;

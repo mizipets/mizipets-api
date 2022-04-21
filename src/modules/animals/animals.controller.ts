@@ -65,7 +65,8 @@ export class AnimalsController {
         @Req() req,
         @Query('sex') sex: Sex,
         @Query('raceId') raceId: string,
-        @Query('specieId') specieId: string
+        @Query('specieId') specieId: string,
+        @Query('getMine') getMine: string
     ): Promise<Animal[]> {
         const params: Search = new Search();
         if (sex) params.sex = sex;
@@ -75,6 +76,7 @@ export class AnimalsController {
             params.species = await this.speciesService.getById(
                 parseInt(specieId)
             );
+        params.getMine = getMine && getMine === 'true';
 
         return this.animalsService.getAdoption(req.user, params);
     }
@@ -142,4 +144,5 @@ export class Search {
     sex: Sex;
     race: Race;
     species: Species;
+    getMine: boolean;
 }
