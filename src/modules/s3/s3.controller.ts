@@ -1,4 +1,18 @@
-import {Controller, HttpCode, HttpStatus, Post, Req, UploadedFile, UseInterceptors} from '@nestjs/common';
+/**
+ * @author Julien DA CORTE
+ * @create 2022-04-22
+ */
+
+import {
+    Controller,
+    ForbiddenException,
+    HttpCode,
+    HttpStatus, Param,
+    Post, Query,
+    Request,
+    UploadedFile,
+    UseInterceptors
+} from '@nestjs/common';
 import { S3Service } from './s3.service';
 import {FileInterceptor} from "@nestjs/platform-express";
 import {OnlyRoles} from "../authentication/guards/role.decorator";
@@ -10,11 +24,17 @@ export class S3Controller {
 
     constructor(private readonly s3Service: S3Service) {}
 
-    @Post()
+    @Post(':id')
     @UseInterceptors(FileInterceptor('file'))
-    @HttpCode(HttpStatus.CREATED)
+    @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async uploadFile(@Req() req, @UploadedFile() file: any) {
-        return this.s3Service.uploadFile(req.user.id, file);
+    async uploadFile(
+        @Request() req,
+        @Param('id') id: number,
+        @Query('type') type: string,
+        @UploadedFile() file: any): Promise<any> {
+        if (type !== 'avatar' && type !== 'animal')
+            throw new ForbiddenException("Can't upload this file");
+        return this.s3Service.uploadFile(req.user.id, id, type, file);
     }
 }

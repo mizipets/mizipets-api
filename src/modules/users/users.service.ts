@@ -123,6 +123,15 @@ export class UsersService {
             .execute();
     }
 
+    async updateAvatar(id: number, photoUrl: string): Promise<void> {
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ photoUrl: photoUrl })
+            .where('id = :id', { id: id })
+            .execute();
+    }
+
     async updateCode(id: number, code: number): Promise<void> {
         await this.repository
             .createQueryBuilder()
