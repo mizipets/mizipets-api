@@ -26,8 +26,7 @@ export class S3Service {
         let animalOrUser: Animal | User;
         let photoUrl;
 
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/))
-            throw new ForbiddenException('Only images are allowed');
+        if (!this.checkMimetype(file.mimetype)) throw new ForbiddenException('Only images are allowed');
 
         if(type === 'animal') {
             animalOrUser = await this.animalService.getById(id);
@@ -52,5 +51,10 @@ export class S3Service {
             Body: file.buffer,
             Key: `${type}_${id}_${newUuid}`
         }).promise();
+    }
+
+    private checkMimetype(imageType: string): boolean {
+        const authorizedTypes = ['image/bmp', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/tiff']
+        return authorizedTypes.includes(imageType);
     }
 }
