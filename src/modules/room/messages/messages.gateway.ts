@@ -48,14 +48,23 @@ export class MessagesGateway
         if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
             // TODO: Send notif to other user
         }
-        this.server.to(body.roomCode).emit('receiveMsgToRoom', body.msg);
-        await this.roomService.writeMessage(body.roomId, body.msg, body.userId);
+        const message = await this.roomService.writeMessage(
+            body.roomId,
+            body.msg,
+            parseInt(body.userId)
+        );
+        this.server.to(body.roomCode).emit('receiveMsgToRoom', message);
     }
 
     @SubscribeMessage('join')
     async handleJoinRoom(client: Socket, room: string): Promise<void> {
         await client.join(room);
         client.emit('joined', room);
+    }
+
+    @SubscribeMessage('message')
+    async handleMsg(client: Socket, room: string) {
+        client.emit('message', room);
     }
 
     @SubscribeMessage('leave')
@@ -68,6 +77,6 @@ export class MessagesGateway
 export type MsgToRoom = {
     roomCode: string;
     roomId: number;
-    userId: number;
+    userId: string;
     msg: string;
 };

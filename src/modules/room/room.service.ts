@@ -26,10 +26,26 @@ export class RoomService {
         return await this.repository.save(room);
     }
 
-    async getById(id: number): Promise<Room> {
-        const room: Room = await this.repository.findOne(id);
-        if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
+    async findByUserAndAnimal(user: User, animal: Animal): Promise<Room> {
+        return await this.repository.findOne({
+            where: {
+                animal: {
+                    id: animal.id
+                },
+                adoptant: {
+                    id: user.id
+                }
+            },
+            relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
+        });
+    }
 
+    async getById(id: number): Promise<Room> {
+        const room: Room = await this.repository.findOne({
+            where: { id },
+            relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
+        });
+        if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
         return room;
     }
 
@@ -37,15 +53,36 @@ export class RoomService {
         id: number,
         text: string,
         userId: number
-    ): Promise<Room> {
+    ): Promise<Message> {
         const message = new Message();
         message.created = new Date();
         message.text = text;
         message.writer = userId;
 
         const room = await this.getById(id);
-
         room.messages.push(message);
-        return this.repository.save(room);
+
+        await this.repository.save(room);
+        return message;
+    }
+
+    async findByUserId(id: number): Promise<Room[]> {
+        return this.repository.find({
+            where: [
+                {
+                    animal: {
+                        owner: {
+                            id: id
+                        }
+                    }
+                },
+                {
+                    adoptant: {
+                        id: id
+                    }
+                }
+            ],
+            relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
+        });
     }
 }
