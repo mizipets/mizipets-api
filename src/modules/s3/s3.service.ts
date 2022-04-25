@@ -26,6 +26,9 @@ export class S3Service {
         let animalOrUser: Animal | User;
         let photoUrl;
 
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/))
+            throw new ForbiddenException('Only images are allowed');
+
         if(type === 'animal') {
             animalOrUser = await this.animalService.getById(id);
             if (animalOrUser.owner.id !== userId) throw new ForbiddenException("Can't upload this file");
