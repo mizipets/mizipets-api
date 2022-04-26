@@ -1,9 +1,12 @@
 import {
     Controller,
+    Get,
     HttpCode,
     HttpStatus,
+    NotFoundException,
     Param,
     Post,
+    Query,
     Req
 } from '@nestjs/common';
 import { AnimalsService } from '../animals/animals.service';
@@ -30,6 +33,79 @@ export class RoomController {
     ): Promise<Room> {
         const user = await this.usersService.getById(req.user.id);
         const animal = await this.animalsService.getById(parseInt(animalId));
+        if (!user) {
+            throw new NotFoundException('Missing user');
+        }
+        if (!animal) {
+            throw new NotFoundException('Missing animal');
+        }
         return await this.roomService.create(user, animal);
+    }
+
+    @Get(':animalId')
+    @HttpCode(HttpStatus.CREATED)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async getRoom(
+        @Req() req,
+        @Param('animalId') animalId: string
+    ): Promise<Room> {
+        const user = await this.usersService.getById(req.user.id);
+        const animal = await this.animalsService.getById(parseInt(animalId));
+        if (!user) {
+            throw new NotFoundException('Missing user');
+        }
+        if (!animal) {
+            throw new NotFoundException('Missing animal');
+        }
+        const room = await this.roomService.findByUserAndAnimal(user, animal);
+        if (!room) {
+            throw new NotFoundException(
+                "Room with you and this animal doesn't exist"
+            );
+        }
+        return room;
+    }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async getRooms(
+        @Req() req,
+        @Query('userId') userId: string
+    ): Promise<Room[]> {
+        return await this.roomService.findByUserId(parseInt(userId));
+    }
+
+    @Get(':roomId/:animalId/orCreate')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async getOrCreateRoom(
+        @Req() req,
+        @Param('roomId') roomId: string,
+        @Param('animalId') animalId: string
+    ): Promise<Room> {
+        const roomDB =
+            roomId === 'null'
+                ? null
+                : await this.roomService.getById(parseInt(roomId));
+        if (roomDB) {
+            return roomDB;
+        } else {
+            const user = await this.usersService.getById(req.user.id);
+            const animal = await this.animalsService.getById(
+                parseInt(animalId)
+            );
+            if (!user) {
+                throw new NotFoundException('Missing user');
+            }
+            if (!animal) {
+                throw new NotFoundException('Missing animal');
+            }
+            let room = await this.roomService.findByUserAndAnimal(user, animal);
+            if (!room) {
+                room = await this.roomService.create(user, animal);
+            }
+            return room;
+        }
     }
 }
