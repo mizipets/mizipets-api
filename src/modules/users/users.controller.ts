@@ -63,12 +63,12 @@ export class UsersController {
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async update(
         @Request() req,
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Body() userDto: UpdateUserDto
     ): Promise<User> {
-        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
-        return this.userService.update(id, userDto);
+        return this.userService.update(parseInt(id), userDto);
     }
 
     @Get(':id/close')
