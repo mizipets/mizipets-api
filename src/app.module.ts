@@ -17,6 +17,7 @@ import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
+import {S3Module} from "./modules/s3/s3.module";
 
 @Module({
     imports: [
@@ -49,6 +50,7 @@ import * as path from 'path';
         MailModule,
         AnimalsModule,
         ServicesModule,
+        S3Module,
         RoomModule,
         MessagesModule
     ],

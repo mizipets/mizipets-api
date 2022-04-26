@@ -159,9 +159,14 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
-        updated.images = dto.images ?? updated.images;
-
         return await this.repository.save(updated);
+    }
+
+    async updateImages(id: number, image: string): Promise<void> {
+        const updated = await this.getById(id);
+
+        updated.images.push(image);
+        await this.repository.save(updated);
     }
 
     async delete(id: number): Promise<DeleteResult> {
