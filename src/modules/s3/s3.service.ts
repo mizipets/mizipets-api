@@ -30,14 +30,14 @@ export class S3Service {
 
         if(type === 'animal') {
             animalOrUser = await this.animalService.getById(id);
-            if (animalOrUser.owner.id !== userId) throw new ForbiddenException("Can't upload this file");
+            if (animalOrUser.owner.id !== userId) throw new ForbiddenException("Wrong access");
 
             photoUrl = await this.uploadToS3(type, id, file);
             await this.animalService.updateImages(id, photoUrl.Location);
 
         } else {
             animalOrUser = await this.userService.getById(id);
-            if (animalOrUser.id !== userId) throw new ForbiddenException("Can't upload this file");
+            if (animalOrUser.id !== userId) throw new ForbiddenException("Wrong access");
 
             photoUrl  = await this.uploadToS3(type, id, file);
             await this.userService.updateAvatar(id, photoUrl.Location);
