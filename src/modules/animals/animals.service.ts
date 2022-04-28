@@ -130,7 +130,7 @@ export class AnimalsService {
         return await this.repository.find({
             where: query,
             relations: ['race', 'race.species', 'owner'],
-            take: 5
+            take: params.limit ? 5 : null
         });
     }
 
