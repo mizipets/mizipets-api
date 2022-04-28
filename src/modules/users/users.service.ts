@@ -96,6 +96,7 @@ export class UsersService {
         newUser.favorites = favorites;
         newUser.preferences = userDto.preferences;
         newUser.shelter = shelter;
+        newUser.notifications = [];
 
         this.repository.create(newUser);
         return this.repository.save(newUser);

@@ -82,4 +82,7 @@ export class User {
 
     @OneToMany(() => Room, (animal) => animal.adoptant)
     rooms: Room[];
+
+    @Column({ type: 'json' })
+    notifications: Notification[];
 }

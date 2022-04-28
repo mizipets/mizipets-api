@@ -17,6 +17,7 @@ import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
+import { NotificationsService } from './shared/notifications.service';
 
 @Module({
     imports: [
@@ -58,7 +59,8 @@ import * as path from 'path';
             provide: APP_GUARD,
             useClass: ThrottlerGuard
         },
-        DiscordService
+        DiscordService,
+        NotificationsService
     ]
 })
 export class AppModule {}
