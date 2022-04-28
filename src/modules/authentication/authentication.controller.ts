@@ -11,7 +11,7 @@ import {
     Param,
     Post,
     Put,
-    Query,
+    Query
 } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';

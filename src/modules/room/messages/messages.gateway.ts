@@ -31,7 +31,7 @@ export class MessagesGateway
 
     private logger: Logger = new Logger('MessagesGateway');
 
-    afterInit(server: Server): void {
+    afterInit(): void {
         this.logger.log('Initialized!');
     }
 
@@ -39,7 +39,7 @@ export class MessagesGateway
         this.logger.log('client disconnected! ' + client.id);
     }
 
-    handleConnection(client: Socket, ...args: any[]): void {
+    handleConnection(client: Socket): void {
         this.logger.log('client connected! ' + client.id);
     }
 
