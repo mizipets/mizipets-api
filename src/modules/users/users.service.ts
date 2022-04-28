@@ -88,7 +88,7 @@ export class UsersService {
         newUser.firstname = userDto.firstname;
         newUser.lastname = userDto.lastname;
         newUser.address = userDto.address;
-        newUser.photoUrl = null;
+        newUser.photoUrl = userDto.photoUrl;
         newUser.code = null;
         newUser.role = role;
         newUser.closeDate = null;

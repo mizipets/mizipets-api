@@ -22,6 +22,10 @@ export class CreateUserDto {
     @IsNotEmpty()
     readonly lastname: string;
 
+    @IsString()
+    @IsNotEmpty()
+    photoUrl: string;
+
     @IsObject()
     readonly address: Address;
 

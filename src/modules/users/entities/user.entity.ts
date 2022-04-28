@@ -50,7 +50,7 @@ export class User {
     @Column('text')
     lastname: string;
 
-    @Column({ nullable: true })
+    @Column()
     photoUrl: string;
 
     @Column({ nullable: true })
