@@ -54,19 +54,13 @@ export class AnimalsController {
     @Get()
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getAll(): Promise<Animal[]> {
-        return this.animalsService.getAll();
-    }
-
-    @Get('adoption')
-    @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getFavorites(
         @Req() req,
         @Query('sex') sex: Sex,
         @Query('raceId') raceId: string,
         @Query('specieId') specieId: string,
-        @Query('getMine') getMine: string,
+        @Query('ownerId') ownerId: string,
+        @Query('isAdoption') isAdoption: string,
         @Query('limit') limit: string
     ): Promise<Animal[]> {
         const params: Search = new Search();
@@ -77,17 +71,17 @@ export class AnimalsController {
             params.species = await this.speciesService.getById(
                 parseInt(specieId)
             );
-        params.getMine = getMine && getMine === 'true';
+        if (ownerId != undefined) {
+            params.ownerId = parseInt(ownerId);
+        }
+
         params.limit = limit && limit === 'true';
 
-        return this.animalsService.getAdoption(req.user, params);
-    }
+        if (isAdoption != undefined) {
+            params.isAdoption = isAdoption === 'true';
+        }
 
-    @Get('adoption/byOwner')
-    @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getAdoptionsByOwner(@Req() req): Promise<Animal[]> {
-        return this.animalsService.getAdoptionsByOwner(parseInt(req.user.id));
+        return this.animalsService.getAdoption(req.user, params);
     }
 
     @Put('adoption/:id/like')
@@ -146,6 +140,7 @@ export class Search {
     sex: Sex;
     race: Race;
     species: Species;
-    getMine: boolean;
+    ownerId: number;
     limit: boolean;
+    isAdoption: boolean;
 }

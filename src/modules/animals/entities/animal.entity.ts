@@ -49,6 +49,9 @@ export class Animal {
     @ManyToOne(() => User, (user) => user.animals)
     owner: User;
 
+    @ManyToOne(() => User, (user) => user.pastAnimals)
+    lastOwner: User;
+
     @OneToMany(() => Room, (room) => room.animal)
     rooms: Room[];
 }

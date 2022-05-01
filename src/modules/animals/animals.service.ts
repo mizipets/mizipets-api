@@ -26,6 +26,7 @@ import { Race } from './entities/race.entity';
 import { Species } from './entities/species.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
+import { Roles } from '../authentication/enum/roles.emum';
 
 @Injectable()
 export class AnimalsService {
@@ -116,13 +117,26 @@ export class AnimalsService {
 
         const avoidIds = [...reference.disliked, ...reference.liked];
 
-        const query: any = {
-            id: Not(In(avoidIds)),
-            isAdoption: true,
-            owner: {
-                id: params.getMine ? user.id : Not(user.id)
+        const query: any = [
+            {
+                id: Not(In(avoidIds)),
+                isAdoption: params.isAdoption,
+                owner: {
+                    id: params.ownerId ? params.ownerId : Not(user.id)
+                }
             }
-        };
+        ];
+
+        if (user.role === Roles.PRO) {
+            query.push({
+                id: Not(In(avoidIds)),
+                isAdoption: params.isAdoption,
+                pastOwner: {
+                    id: params.ownerId ? params.ownerId : Not(user.id)
+                }
+            });
+        }
+
         if (params.sex) query.sex = params.sex;
         if (params.race) query.race = params.race;
         if (params.species) query.race = { species: { id: params.species.id } };

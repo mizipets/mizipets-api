@@ -77,6 +77,9 @@ export class User {
     @OneToMany(() => Animal, (animal) => animal.owner)
     animals: Animal[];
 
+    @OneToMany(() => Animal, (animal) => animal.lastOwner)
+    pastAnimals: Animal[];
+
     @OneToMany(() => Favorites, (favorite) => favorite.user)
     favorites: Favorites[];
 
