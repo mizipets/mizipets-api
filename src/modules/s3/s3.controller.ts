@@ -25,7 +25,6 @@ export class S3Controller {
 
     @Post(':id')
     @UseInterceptors(FileInterceptor('file'))
-
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async uploadFile(
