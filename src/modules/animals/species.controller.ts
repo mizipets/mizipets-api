@@ -22,7 +22,7 @@ export class SpeciesController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getById(@Param('id') id: number): Promise<Species> {
-        return this.speciesService.getById(id, true);
+    async getById(@Param('id') id: string): Promise<Species> {
+        return this.speciesService.getById(parseInt(id), true);
     }
 }

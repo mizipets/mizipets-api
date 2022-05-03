@@ -81,12 +81,6 @@ export class AnimalsService {
         return animalDB;
     }
 
-    async getAll(): Promise<Animal[]> {
-        return await this.repository.find({
-            relations: ['race', 'race.species', 'owner']
-        });
-    }
-
     async getById(id: number): Promise<Animal> {
         const animalDB = await this.repository.findOne(id, {
             relations: ['race', 'race.species', 'owner']

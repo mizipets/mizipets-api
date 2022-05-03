@@ -101,8 +101,8 @@ export class AnimalsController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getById(@Param('id') id: number): Promise<Animal> {
-        return this.animalsService.getById(id);
+    async getById(@Param('id') id: string): Promise<Animal> {
+        return this.animalsService.getById(parseInt(id));
     }
 
     @Put(':id')
@@ -110,29 +110,29 @@ export class AnimalsController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async update(
         @Req() req,
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Body() dto: UpdateAnimalDTO
     ): Promise<Animal> {
-        const animal = await this.animalsService.getById(id);
+        const animal = await this.animalsService.getById(parseInt(id));
         if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't update the animal of someone else!"
             );
         }
-        return this.animalsService.update(id, dto);
+        return this.animalsService.update(parseInt(id), dto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async delete(@Req() req, @Param('id') id: number): Promise<void> {
-        const animal = await this.animalsService.getById(id);
+    async delete(@Req() req, @Param('id') id: string): Promise<void> {
+        const animal = await this.animalsService.getById(parseInt(id));
         if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't delete the animal of someone else!"
             );
         }
-        await this.animalsService.delete(id);
+        await this.animalsService.delete(parseInt(id));
     }
 }
 
