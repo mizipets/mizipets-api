@@ -41,14 +41,14 @@ export class UsersController {
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getById(
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
     ): Promise<User> {
         const relations = [];
         if (favorites === 'true') relations.push('favorites');
         if (animals === 'true') relations.push('animals');
-        return this.userService.getById(id, relations);
+        return this.userService.getById(parseInt(id), relations);
     }
 
     @Get('email/:email')

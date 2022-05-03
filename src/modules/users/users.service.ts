@@ -16,13 +16,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
+import {MailService} from "../../shared/mail/mail.service";
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User) private readonly repository: Repository<User>,
         @Inject(forwardRef(() => FavoritesService))
-        private readonly favoritesService: FavoritesService
+        private readonly favoritesService: FavoritesService,
+        private readonly emailService: MailService
     ) {}
 
     async getAll(relations: string[] = []): Promise<User[]> {
@@ -145,12 +147,16 @@ export class UsersService {
     }
 
     async close(id: number): Promise<void> {
+        const user: User = await this.getById(id);
+
         await this.repository
             .createQueryBuilder()
             .update(User)
             .set({ closeDate: new Date() })
             .where('id = :id', { id: id })
             .execute();
+
+        await this.emailService.sendCloseAccount(user)
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {

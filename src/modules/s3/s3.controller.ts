@@ -2,7 +2,6 @@
  * @author Julien DA CORTE
  * @create 2022-04-22
  */
-
 import {
     Controller,
     ForbiddenException,
@@ -26,16 +25,17 @@ export class S3Controller {
 
     @Post(':id')
     @UseInterceptors(FileInterceptor('file'))
+
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async uploadFile(
         @Request() req,
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Query('type') type: string,
         @UploadedFile() file: any
     ): Promise<any> {
         if (type !== 'avatar' && type !== 'animal')
             throw new ForbiddenException("Can't upload this file");
-        return this.s3Service.uploadFile(req.user.id, id, type, file);
+        return this.s3Service.uploadFile(req.user.id, parseInt(id), type, file);
     }
 }
