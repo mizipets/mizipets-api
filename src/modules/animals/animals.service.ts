@@ -117,32 +117,36 @@ export class AnimalsService {
 
         const avoidIds = [...reference.disliked, ...reference.liked];
 
-        const query: any = [
-            {
-                id: Not(In(avoidIds)),
-                isAdoption: params.isAdoption,
-                owner: {
-                    id: params.ownerId ? params.ownerId : Not(user.id)
-                }
-            }
-        ];
+        const originalQuery: any = {
+            id: Not(In(avoidIds))
+        };
+        if (params.sex) originalQuery.sex = params.sex;
+        if (params.race) originalQuery.race = params.race;
+        if (params.species)
+            originalQuery.race = { species: { id: params.species.id } };
 
-        if (user.role === Roles.PRO) {
-            query.push({
-                id: Not(In(avoidIds)),
-                isAdoption: params.isAdoption,
-                pastOwner: {
-                    id: params.ownerId ? params.ownerId : Not(user.id)
-                }
-            });
+        if (params.isAdoption !== undefined) {
+            originalQuery.isAdoption = params.isAdoption;
         }
 
-        if (params.sex) query.sex = params.sex;
-        if (params.race) query.race = params.race;
-        if (params.species) query.race = { species: { id: params.species.id } };
+        const currentOwnerQuery = Object.assign({}, originalQuery);
+        currentOwnerQuery.owner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const lastOwnerQuery = Object.assign({}, originalQuery);
+        lastOwnerQuery.lastOwner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const queries: any[] = [currentOwnerQuery];
+
+        if (user.role === Roles.PRO) {
+            queries.push(lastOwnerQuery);
+        }
 
         return await this.repository.find({
-            where: query,
+            where: queries,
             relations: ['race', 'race.species', 'owner'],
             take: params.limit ? 5 : null
         });
