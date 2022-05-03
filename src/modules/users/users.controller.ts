@@ -71,12 +71,12 @@ export class UsersController {
         return this.userService.update(parseInt(id), userDto);
     }
 
-    @Get(':id/close')
+    @Put(':id/close')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async close(@Request() req, @Param('id') id: number): Promise<void> {
-        if (req.user.id !== id && req.user.role !== Roles.ADMIN)
+    async close(@Request() req, @Param('id') id: string): Promise<void> {
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't close this user account");
-        return this.userService.close(id);
+        return this.userService.close(parseInt(id));
     }
 }
