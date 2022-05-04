@@ -107,12 +107,12 @@ export class FavoritesService {
                         referencePopulated.disliked =
                             await this.animalsService.getByIds(
                                 reference.disliked,
-                                ['race', 'race.species']
+                                ['race', 'race.specie']
                             );
                         referencePopulated.liked =
                             await this.animalsService.getByIds(
                                 reference.liked,
-                                ['race', 'race.species']
+                                ['race', 'race.specie']
                             );
                         populate.reference = referencePopulated;
                         break;

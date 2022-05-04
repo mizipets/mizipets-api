@@ -10,7 +10,7 @@ import {
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from './animal.entity';
-import { Species } from './species.entity';
+import { Specie } from './specie.entity';
 
 @Entity('races')
 export class Race {
@@ -20,8 +20,8 @@ export class Race {
     @Column('text')
     name: string;
 
-    @ManyToOne(() => Species, (specie) => specie.races)
-    species: Species;
+    @ManyToOne(() => Specie, (specie) => specie.races)
+    specie: Specie;
 
     @OneToMany(() => Animal, (animal) => animal.race)
     animals: Animal[];

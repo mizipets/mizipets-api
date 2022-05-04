@@ -10,7 +10,7 @@ import { AnimalsController } from './animals.controller';
 import { AnimalsService } from './animals.service';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 import { RacesController } from './races.controller';
 import { RacesService } from './races.service';
 import { SpeciesController } from './species.controller';
@@ -18,7 +18,7 @@ import { SpeciesService } from './species.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Animal, Species, Race]),
+        TypeOrmModule.forFeature([Animal, Specie, Race]),
         forwardRef(() => UsersModule),
         forwardRef(() => FavoritesModule)
     ],

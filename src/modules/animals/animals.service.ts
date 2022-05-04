@@ -23,7 +23,7 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
 import { Roles } from '../authentication/enum/roles.emum';
@@ -35,8 +35,8 @@ export class AnimalsService {
         private readonly repository: Repository<Animal>,
         @InjectRepository(Race)
         private readonly raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private readonly speciesRepository: Repository<Species>,
+        @InjectRepository(Specie)
+        private readonly speciesRepository: Repository<Specie>,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
         @Inject(forwardRef(() => FavoritesService))
@@ -51,7 +51,7 @@ export class AnimalsService {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
-            relations: ['species']
+            relations: ['specie']
         });
         if (!race) {
             throw new NotFoundException(
@@ -59,10 +59,10 @@ export class AnimalsService {
             );
         }
 
-        const specie = await this.speciesRepository.findOne(race.species.id);
+        const specie = await this.speciesRepository.findOne(race.specie.id);
         if (!specie) {
             throw new NotFoundException(
-                `specie with id '${race.species.id}' does not exist`
+                `specie with id '${race.specie.id}' does not exist`
             );
         }
 
@@ -83,7 +83,7 @@ export class AnimalsService {
 
     async getById(id: number): Promise<Animal> {
         const animalDB = await this.repository.findOne(id, {
-            relations: ['race', 'race.species', 'owner']
+            relations: ['race', 'race.specie', 'owner']
         });
         if (!animalDB) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -94,7 +94,7 @@ export class AnimalsService {
 
     async getByIds(
         ids: number[],
-        relations = ['race', 'race.species', 'owner']
+        relations = ['race', 'race.specie', 'owner']
     ): Promise<Animal[]> {
         return await this.repository.find({
             where: { id: In(ids) },
@@ -116,8 +116,8 @@ export class AnimalsService {
         };
         if (params.sex) originalQuery.sex = params.sex;
         if (params.race) originalQuery.race = params.race;
-        if (params.species)
-            originalQuery.race = { species: { id: params.species.id } };
+        if (params.specie)
+            originalQuery.race = { specie: { id: params.specie.id } };
 
         if (params.isAdoption !== undefined) {
             originalQuery.isAdoption = params.isAdoption;
@@ -141,7 +141,7 @@ export class AnimalsService {
 
         return await this.repository.find({
             where: queries,
-            relations: ['race', 'race.species', 'owner'],
+            relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
     }
@@ -152,7 +152,7 @@ export class AnimalsService {
         let race: Race;
         if (dto.raceId) {
             race = await this.raceRepository.findOne(dto.raceId, {
-                relations: ['species']
+                relations: ['specie']
             });
         }
         updated.race = race ?? updated.race;

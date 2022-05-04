@@ -27,7 +27,7 @@ import { Sex } from './enum/sex.enum';
 import { RacesService } from './races.service';
 import { SpeciesService } from './species.service';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 
 @Controller('animals')
 export class AnimalsController {
@@ -68,7 +68,7 @@ export class AnimalsController {
         if (raceId)
             params.race = await this.raceService.getById(parseInt(raceId));
         if (specieId)
-            params.species = await this.speciesService.getById(
+            params.specie = await this.speciesService.getById(
                 parseInt(specieId)
             );
         if (ownerId != undefined) {
@@ -139,7 +139,7 @@ export class AnimalsController {
 export class Search {
     sex: Sex;
     race: Race;
-    species: Species;
+    specie: Specie;
     ownerId: number;
     limit: boolean;
     isAdoption: boolean;
