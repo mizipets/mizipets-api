@@ -163,6 +163,10 @@ export class AnimalsService {
         return await this.repository.save(updated);
     }
 
+    async save(animal: Animal): Promise<Animal> {
+        return await this.repository.save(animal);
+    }
+
     async updateImages(id: number, image: string): Promise<void> {
         const updated = await this.getById(id);
 

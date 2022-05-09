@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,6 +7,7 @@ import {
     NotFoundException,
     Param,
     Post,
+    Put,
     Query,
     Req
 } from '@nestjs/common';
@@ -107,5 +109,45 @@ export class RoomController {
             }
             return room;
         }
+    }
+
+    @Put(':roomId/requestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async requestGive(
+        @Req() req,
+        @Param('roomId') roomId: string
+    ): Promise<void> {
+        await this.roomService.requestGive(parseInt(roomId));
+    }
+
+    @Put(':roomId/acceptRequestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async acceptRequestGive(
+        @Req() req,
+        @Param('roomId') roomId: string,
+        @Body() body: { messageId: string }
+    ): Promise<void> {
+        await this.roomService.acceptRequestGive(
+            parseInt(roomId),
+            body.messageId,
+            req.user
+        );
+    }
+
+    @Put(':roomId/refuseRequestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async refuseRequestGive(
+        @Req() req,
+        @Param('roomId') roomId: string,
+        @Body() body: { messageId: string }
+    ): Promise<void> {
+        await this.roomService.refuseRequestGive(
+            parseInt(roomId),
+            body.messageId,
+            req.user
+        );
     }
 }
