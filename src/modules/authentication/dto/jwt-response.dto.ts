@@ -9,4 +9,9 @@ export class JwtResponseDto {
     @IsNotEmpty()
     @IsDefined()
     token: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    refreshKey: string;
 }
