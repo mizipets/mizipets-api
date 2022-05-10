@@ -63,15 +63,16 @@ export class AuthenticationService {
 
     async refreshToken(id: number, refreshKey: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getById(id);
-        console.log(user);
         if(!user.refreshToken)
             throw new ConflictException(`No refresh key for user id: ${id}`);
 
         if(refreshKey !== user.refreshToken.refreshKey)
             throw new ForbiddenException('Invalid refresh token');
 
-        if(!user.refreshToken && user.refreshToken.expireAt < new Date().getTime())
+        if(user.refreshToken.expireAt < new Date().getTime())
             throw  new ForbiddenException('Refresh token was expired. Please sign in');
+
+        console.log(user.refreshToken.expireAt, new Date().getTime());
 
         return this.getJwtPayload(user, user.refreshToken.refreshKey);
     }
