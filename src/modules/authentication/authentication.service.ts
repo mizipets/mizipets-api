@@ -72,8 +72,6 @@ export class AuthenticationService {
         if(user.refreshToken.expireAt < new Date().getTime())
             throw  new ForbiddenException('Refresh token was expired. Please sign in');
 
-        console.log(user.refreshToken.expireAt, new Date().getTime());
-
         return this.getJwtPayload(user, user.refreshToken.refreshKey);
     }
 
