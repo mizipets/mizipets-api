@@ -11,15 +11,17 @@ import { UsersModule } from '../users/users.module';
 import { AnimalsModule } from '../animals/animals.module';
 import { RoomGateway } from './room.gateway';
 import { FavoritesModule } from '../favorites/favorites.module';
+import { Message } from './entities/message.entity';
+import { MessageService } from './message.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Room]),
+        TypeOrmModule.forFeature([Room, Message]),
         UsersModule,
         AnimalsModule,
         FavoritesModule
     ],
-    providers: [RoomService, RoomGateway],
+    providers: [RoomService, RoomGateway, MessageService],
     exports: [RoomService],
     controllers: [RoomController]
 })

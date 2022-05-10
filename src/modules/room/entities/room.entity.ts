@@ -7,11 +7,12 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
 import { User } from '../../users/entities/user.entity';
-import { Message } from './message';
+import { Message } from './message.entity';
 
 @Entity('rooms')
 export class Room {
@@ -30,11 +31,11 @@ export class Room {
     @CreateDateColumn()
     created: Date;
 
-    @Column('json')
-    messages: Message[];
-
     @ManyToOne(() => Animal, (animal) => animal.rooms)
     animal: Animal;
+
+    @OneToMany(() => Message, (message) => message.room)
+    messages: Message[];
 
     @ManyToOne(() => User, (user) => user.rooms)
     adoptant: User;

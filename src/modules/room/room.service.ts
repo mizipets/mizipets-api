@@ -12,13 +12,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { User } from '../users/entities/user.entity';
-import { Message, MessageType } from './entities/message';
+import { Message, MessageType } from './entities/message.entity';
 import { Room } from './entities/room.entity';
 import { MsgToRoom, RoomGateway } from './room.gateway';
-import { v4 as uuid } from 'uuid';
 import { AnimalsService } from '../animals/animals.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ServiceType } from '../services/enums/service-type.enum';
+import { MessageService } from './message.service';
 
 @Injectable()
 export class RoomService {
@@ -26,6 +26,7 @@ export class RoomService {
         @Inject(forwardRef(() => RoomGateway))
         private messageGateway: RoomGateway,
         private animalsService: AnimalsService,
+        private messageService: MessageService,
         private favoritesService: FavoritesService,
         @InjectRepository(Room) private readonly repository: Repository<Room>
     ) {}
@@ -66,7 +67,7 @@ export class RoomService {
     }
 
     async writeMessage(
-        id: number,
+        roomId: number,
         text: string,
         userId: number,
         type: MessageType = MessageType.text
@@ -76,13 +77,10 @@ export class RoomService {
         message.text = text;
         message.writer = userId;
         message.type = type;
-        message.id = uuid();
+        message.room = new Room();
+        message.room.id = roomId;
 
-        const room = await this.getById(id);
-        room.messages.push(message);
-
-        await this.repository.save(room);
-        return message;
+        return await this.messageService.create(message);
     }
 
     async findByUserId(id: number): Promise<Room[]> {
@@ -121,10 +119,10 @@ export class RoomService {
         await this.messageGateway.sendMessage(null, msgRoom);
     }
 
-    async acceptRequestGive(roomId: number, messageId: string, user: User) {
+    async acceptRequestGive(roomId: number, messageId: number, user: User) {
+        await this.messageService.delete(messageId);
         const roomDB = await this.getById(roomId);
 
-        roomDB.messages = roomDB.messages.filter((msg) => msg.id != messageId);
         roomDB.requestGive = false;
 
         const animal = roomDB.animal;
@@ -165,10 +163,10 @@ export class RoomService {
         // TODO: notifs
     }
 
-    async refuseRequestGive(roomId: number, messageId: string, user: User) {
+    async refuseRequestGive(roomId: number, messageId: number, user: User) {
+        await this.messageService.delete(messageId);
         const roomDB = await this.getById(roomId);
 
-        roomDB.messages = roomDB.messages.filter((msg) => msg.id != messageId);
         roomDB.requestGive = false;
 
         await this.repository.save(roomDB);

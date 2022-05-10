@@ -12,7 +12,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { MessageType } from './entities/message';
+import { MessageType } from './entities/message.entity';
 import { RoomService } from './room.service';
 
 const { MESSAGE_PORT } = process.env;
