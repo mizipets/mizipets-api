@@ -9,7 +9,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Shelter, User } from './entities/user.entity';
+import {RefreshToken, Shelter, User} from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,6 +17,9 @@ import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { MailService } from '../../shared/mail/mail.service';
+import { v4 as uuidv4 } from 'uuid';
+
+const { JWT_REFRESH_EXPIRATION } = process.env;
 
 @Injectable()
 export class UsersService {
@@ -117,6 +120,25 @@ export class UsersService {
         user.shelter = userDto.shelter ?? user.shelter;
 
         return this.repository.save(user);
+    }
+
+    async updateRefreshToken(id: number): Promise<RefreshToken> {
+        let expiredAt = new Date();
+        expiredAt.setSeconds(expiredAt.getSeconds() + parseInt(JWT_REFRESH_EXPIRATION));
+        const refreshTokenUUID = uuidv4();
+        const refreshToken: RefreshToken = {
+            refreshKey: refreshTokenUUID.toString(),
+            expireAt: expiredAt.getTime()
+        }
+
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ refreshToken: refreshToken })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return refreshToken;
     }
 
     async updatePassword(id: number, password: string): Promise<void> {

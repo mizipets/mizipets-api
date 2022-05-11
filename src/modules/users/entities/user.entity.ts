@@ -33,6 +33,11 @@ export class Shelter {
     name: string;
 }
 
+export class RefreshToken {
+    refreshKey: string;
+    expireAt: number;
+}
+
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
@@ -54,7 +59,10 @@ export class User {
     photoUrl: string;
 
     @Column({ nullable: true })
-    code: number;
+    code?: number;
+
+    @Column('json', { nullable: true })
+    refreshToken?: RefreshToken;
 
     @Column('json')
     address: Address;
@@ -72,7 +80,7 @@ export class User {
     createDate: Date;
 
     @Column({ nullable: true })
-    closeDate: Date;
+    closeDate?: Date;
 
     @OneToMany(() => Animal, (animal) => animal.owner)
     animals: Animal[];

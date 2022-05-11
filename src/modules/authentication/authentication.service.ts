@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/entities/user.entity';
+import {RefreshToken, User} from '../users/entities/user.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';
@@ -57,16 +57,26 @@ export class AuthenticationService {
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
 
-        return this.getJwtPayload(user);
+        const tokenInfo: RefreshToken = await this.userService.updateRefreshToken(user.id);
+        return this.getJwtPayload(user, tokenInfo.refreshKey);
     }
 
-    async refreshToken(id: number): Promise<JwtResponseDto> {
+    async refreshToken(id: number, refreshKey: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getById(id);
-        return this.getJwtPayload(user);
+        if(!user.refreshToken)
+            throw new ConflictException(`No refresh key for user id: ${id}`);
+
+        if(refreshKey !== user.refreshToken.refreshKey)
+            throw new ForbiddenException('Invalid refresh token');
+
+        if(user.refreshToken.expireAt < new Date().getTime())
+            throw  new ForbiddenException('Refresh token was expired. Please sign in');
+
+        return this.getJwtPayload(user, user.refreshToken.refreshKey);
     }
 
     async sendCode(email: string): Promise<void> {
-        const code = this.generateCode();
+        const code = AuthenticationService.generateCode();
         const user: User = await this.userService.getByEmail(email);
 
         await this.userService.updateCode(user.id, code);
@@ -75,7 +85,7 @@ export class AuthenticationService {
 
     async verifyCode(email: string, code: number): Promise<boolean> {
         const user: User = await this.userService.getByEmail(email);
-        const isCodeValid: boolean = this.checkCode(user.code, code);
+        const isCodeValid: boolean = AuthenticationService.checkCode(user.code, code);
 
         if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
@@ -84,7 +94,7 @@ export class AuthenticationService {
 
     async resetPassword(login: LoginDto, code: number): Promise<void> {
         const user: User = await this.userService.getByEmail(login.email);
-        const isCodeValid: boolean = this.checkCode(user.code, code);
+        const isCodeValid: boolean = AuthenticationService.checkCode(user.code, code);
 
         if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
@@ -94,15 +104,15 @@ export class AuthenticationService {
         await this.mailService.sendChangedPassword(user);
     }
 
-    private checkCode(userCode: number, code: number): boolean {
+    private static checkCode(userCode: number, code: number): boolean {
         return userCode === code;
     }
 
-    private generateCode(): number {
+    private static generateCode(): number {
         return Math.floor(100000 + Math.random() * 900000);
     }
 
-    private getJwtPayload(user: User): JwtResponseDto {
+    private getJwtPayload(user: User, refreshToken: string): JwtResponseDto {
         const jwtPayload: JwtPayloadDto = {
             id: user.id,
             email: user.email,
@@ -112,7 +122,8 @@ export class AuthenticationService {
         };
 
         return {
-            token: this.jwtService.sign(jwtPayload)
+            token: this.jwtService.sign(jwtPayload),
+            refreshKey: refreshToken,
         };
     }
 }
