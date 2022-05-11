@@ -24,4 +24,5 @@ jobs:
           rm -rf envs
           mkdir envs
           cp ~/.env.staging ./envs/.env.staging
+          cp ~/.env.local ./envs/.env.local
           docker-compose up -d --build

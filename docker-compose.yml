@@ -9,12 +9,14 @@ services:
       - "3001:3001"
     networks:
       - mizipetsnetwork
+    restart: always
   postgres_db:
     image: postgres
     ports:
       - "5432:5432"
     volumes:
       - /private/var/lib/postgresql:/var/lib/postgresql
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
