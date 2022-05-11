@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
 import { User } from '../../users/entities/user.entity';
-import { Message } from '../messages/message';
+import { Message } from './message';
 
 @Entity('rooms')
 export class Room {
@@ -20,6 +20,12 @@ export class Room {
 
     @Column()
     code: string;
+
+    @Column({ default: false })
+    closed: boolean;
+
+    @Column({ default: false })
+    requestGive: boolean;
 
     @CreateDateColumn()
     created: Date;

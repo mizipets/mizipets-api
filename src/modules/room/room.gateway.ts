@@ -2,7 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-02-25
  */
-import { Logger } from '@nestjs/common';
+import { forwardRef, Inject, Logger } from '@nestjs/common';
 import {
     OnGatewayConnection,
     OnGatewayDisconnect,
@@ -12,7 +12,8 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { RoomService } from '../room.service';
+import { MessageType } from './entities/message';
+import { RoomService } from './room.service';
 
 const { MESSAGE_PORT } = process.env;
 
@@ -21,15 +22,18 @@ const { MESSAGE_PORT } = process.env;
         origin: '*'
     }
 })
-export class MessagesGateway
+export class RoomGateway
     implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor(private readonly roomService: RoomService) {}
+    constructor(
+        @Inject(forwardRef(() => RoomService))
+        private readonly roomService: RoomService
+    ) {}
 
     @WebSocketServer()
     server: Server;
 
-    private logger: Logger = new Logger('MessagesGateway');
+    private logger: Logger = new Logger('RoomGateway');
 
     afterInit(): void {
         this.logger.log('Initialized!');
@@ -44,14 +48,15 @@ export class MessagesGateway
     }
 
     @SubscribeMessage('sendMsgToRoom')
-    async handleMessage(client: Socket, body: MsgToRoom): Promise<void> {
+    async sendMessage(client: Socket, body: MsgToRoom): Promise<void> {
         if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
             // TODO: Send notif to other user
         }
         const message = await this.roomService.writeMessage(
             body.roomId,
             body.msg,
-            parseInt(body.userId)
+            parseInt(body.userId),
+            body.type
         );
         this.server.to(body.roomCode).emit('receiveMsgToRoom', message);
     }
@@ -79,4 +84,5 @@ export type MsgToRoom = {
     roomId: number;
     userId: string;
     msg: string;
+    type: MessageType;
 };

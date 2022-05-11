@@ -12,7 +12,6 @@ import { DiscordService } from './shared/discord/discord.service';
 import { AnimalsModule } from './modules/animals/animals.module';
 import { MailModule } from './shared/mail/mail.module';
 import { ServicesModule } from './modules/services/services.module';
-import { MessagesModule } from './modules/room/messages/messages.module';
 import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -51,8 +50,7 @@ import { S3Module } from './modules/s3/s3.module';
         AnimalsModule,
         ServicesModule,
         S3Module,
-        RoomModule,
-        MessagesModule
+        RoomModule
     ],
     controllers: [],
     providers: [
