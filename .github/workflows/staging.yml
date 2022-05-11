@@ -12,7 +12,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.STAGING_HOST }}
-        username: ubuntu
+        username: ${{ secrets.STAGING_USER }}
         key: ${{ secrets.STAGING_KEY }}
         port: 22
         script: |
