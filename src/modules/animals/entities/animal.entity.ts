@@ -38,6 +38,9 @@ export class Animal {
     isLost: boolean;
 
     @Column({ nullable: true })
+    deletedDate: Date;
+
+    @Column({ nullable: true })
     birthDate: Date;
 
     @Column()

@@ -10,6 +10,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    InternalServerErrorException,
     Param,
     Post,
     Put,
@@ -81,7 +82,7 @@ export class AnimalsController {
             params.isAdoption = isAdoption === 'true';
         }
 
-        return this.animalsService.getAdoption(req.user, params);
+        return this.animalsService.getAnimal(req.user, params);
     }
 
     @Put('adoption/:id/like')
@@ -132,7 +133,11 @@ export class AnimalsController {
                 "Can't delete the animal of someone else!"
             );
         }
-        await this.animalsService.delete(parseInt(id));
+        const result = await this.animalsService.delete(parseInt(id));
+        if (!result) {
+            throw new InternalServerErrorException("Cant't delete animal");
+        }
+        return;
     }
 }
 

@@ -123,13 +123,15 @@ export class UsersService {
     }
 
     async updateRefreshToken(id: number): Promise<RefreshToken> {
-        let expiredAt = new Date();
-        expiredAt.setSeconds(expiredAt.getSeconds() + parseInt(JWT_REFRESH_EXPIRATION));
+        const expiredAt = new Date();
+        expiredAt.setSeconds(
+            expiredAt.getSeconds() + parseInt(JWT_REFRESH_EXPIRATION)
+        );
         const refreshTokenUUID = uuidv4();
         const refreshToken: RefreshToken = {
             refreshKey: refreshTokenUUID.toString(),
             expireAt: expiredAt.getTime()
-        }
+        };
 
         await this.repository
             .createQueryBuilder()

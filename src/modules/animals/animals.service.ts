@@ -10,7 +10,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, In, Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import {
     AdoptionReferences,
     Favorites
@@ -83,6 +83,9 @@ export class AnimalsService {
 
     async getById(id: number): Promise<Animal> {
         const animalDB = await this.repository.findOne(id, {
+            where: {
+                deletedDate: null
+            },
             relations: ['race', 'race.specie', 'owner']
         });
         if (!animalDB) {
@@ -97,12 +100,12 @@ export class AnimalsService {
         relations = ['race', 'race.specie', 'owner']
     ): Promise<Animal[]> {
         return await this.repository.find({
-            where: { id: In(ids) },
+            where: { id: In(ids), deletedDate: null },
             relations
         });
     }
 
-    async getAdoption(user: User, params: Search): Promise<Animal[]> {
+    async getAnimal(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
@@ -112,7 +115,8 @@ export class AnimalsService {
         const avoidIds = [...reference.disliked, ...reference.liked];
 
         const originalQuery: any = {
-            id: Not(In(avoidIds))
+            id: Not(In(avoidIds)),
+            deletedDate: null
         };
         if (params.sex) originalQuery.sex = params.sex;
         if (params.race) originalQuery.race = params.race;
@@ -174,8 +178,15 @@ export class AnimalsService {
         await this.repository.save(updated);
     }
 
-    async delete(id: number): Promise<DeleteResult> {
-        return this.repository.delete(id);
+    async delete(id: number): Promise<boolean> {
+        const result = await this.repository
+            .createQueryBuilder()
+            .update(Animal)
+            .set({ deletedDate: new Date() })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return result.affected == 1;
     }
 
     async like(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
