@@ -36,15 +36,26 @@ export class RoomService {
         room.closed = false;
         room.requestGive = false;
         room.adoptant = user;
-        room.messages = [];
         room.animal = animal;
+        room.messages = [];
         room.code = room.getCode();
 
-        return await this.repository.save(room);
+        const roomDB = await this.repository.save(room);
+
+        const message = new Message();
+        message.type = MessageType.init;
+        message.room = roomDB;
+        message.created = new Date();
+        message.writer = user.id;
+        message.text = 'Conversation start';
+
+        await this.messageService.create(message);
+
+        return await this.getById(roomDB.id);
     }
 
     async findByUserAndAnimal(user: User, animal: Animal): Promise<Room> {
-        return await this.repository.findOne({
+        const room = await this.repository.findOne({
             where: {
                 animal: {
                     id: animal.id
@@ -55,6 +66,10 @@ export class RoomService {
             },
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
+        if (room) {
+            room.messages = await this.messageService.get(room.id);
+        }
+        return room;
     }
 
     async getById(id: number): Promise<Room> {
@@ -63,6 +78,7 @@ export class RoomService {
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
         if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
+        room.messages = await this.messageService.get(room.id);
         return room;
     }
 

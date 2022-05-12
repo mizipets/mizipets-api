@@ -159,8 +159,9 @@ export class RoomController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async messages(
         @Req() req,
-        @Param('roomId') roomId: number
+        @Param('roomId') roomId: number,
+        @Query('offset') offset: number
     ): Promise<Message[]> {
-        return await this.messageService.get(roomId);
+        return await this.messageService.get(roomId, offset);
     }
 }

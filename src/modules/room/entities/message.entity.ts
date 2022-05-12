@@ -29,6 +29,7 @@ export class Message {
 
 export enum MessageType {
     text = 'text',
+    init = 'init',
     give = 'give',
     accepted = 'accepted',
     refused = 'refused',
