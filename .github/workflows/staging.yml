@@ -16,14 +16,13 @@ jobs:
         key: ${{ secrets.STAGING_KEY }}
         port: 22
         script: |
-          ls -la
-          # cd mizipets-api
-          # docker-compose down
-          # docker rm -f $(docker ps -qa)
-          # docker rmi -f $(docker images -aq)
-          # git pull
-          # rm -rf envs
-          # mkdir envs
-          # cp ~/.env.staging ./envs/.env.staging
-          # cp ~/.env.local ./envs/.env.local
-          # docker-compose up -d --build
+          cd mizipets-api
+          docker-compose down
+          docker rm -f $(docker ps -qa)
+          docker rmi -f $(docker images -aq)
+          git pull
+          rm -rf envs
+          mkdir envs
+          cp ~/.env.staging ./envs/.env.staging
+          cp ~/.env.local ./envs/.env.local
+          docker-compose up -d --build
