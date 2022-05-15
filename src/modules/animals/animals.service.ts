@@ -27,6 +27,7 @@ import { Specie } from './entities/specie.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
 import { Roles } from '../authentication/enum/roles.emum';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class AnimalsService {
@@ -40,7 +41,9 @@ export class AnimalsService {
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
         @Inject(forwardRef(() => FavoritesService))
-        private favoritesService: FavoritesService
+        private favoritesService: FavoritesService,
+        @Inject(forwardRef(() => S3Service))
+        private s3Service: S3Service
     ) {}
 
     async create(
@@ -91,7 +94,7 @@ export class AnimalsService {
         if (!animalDB) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return animalDB;
+            return await this.getAnimalImages(animalDB);
         }
     }
 
@@ -99,10 +102,12 @@ export class AnimalsService {
         ids: number[],
         relations = ['race', 'race.specie', 'owner']
     ): Promise<Animal[]> {
-        return await this.repository.find({
+        const animals = await this.repository.find({
             where: { id: In(ids), deletedDate: null },
             relations
         });
+
+        return await this.getAnimalsImages(animals);
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -143,11 +148,13 @@ export class AnimalsService {
             queries.push(lastOwnerQuery);
         }
 
-        return await this.repository.find({
+        const animals = await this.repository.find({
             where: queries,
             relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
+
+        return await this.getAnimalsImages(animals);
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -164,7 +171,7 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
-        return await this.repository.save(updated);
+        return this.getAnimalImages(await this.repository.save(updated));
     }
 
     async save(animal: Animal): Promise<Animal> {
@@ -241,5 +248,25 @@ export class AnimalsService {
         } else {
             return favorite;
         }
+    }
+
+    private async getAnimalImages(animal: Animal): Promise<Animal> {
+        animal.images = await Promise.all(
+            animal.images.map((image) => this.s3Service.getPresignedUrl(image))
+        );
+        return animal;
+    }
+
+    private async getAnimalsImages(animals: Animal[]): Promise<Animal[]> {
+        return await Promise.all(
+            animals.map(async (animal) => {
+                animal.images = await Promise.all(
+                    animal.images.map((image) =>
+                        this.s3Service.getPresignedUrl(image)
+                    )
+                );
+                return animal;
+            })
+        );
     }
 }

@@ -9,7 +9,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {RefreshToken, Shelter, User} from './entities/user.entity';
+import { RefreshToken, Shelter, User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,6 +18,7 @@ import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { MailService } from '../../shared/mail/mail.service';
 import { v4 as uuidv4 } from 'uuid';
+import { S3Service } from '../s3/s3.service';
 
 const { JWT_REFRESH_EXPIRATION } = process.env;
 
@@ -27,16 +28,26 @@ export class UsersService {
         @InjectRepository(User) private readonly repository: Repository<User>,
         @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService,
-        private readonly emailService: MailService
+        private readonly emailService: MailService,
+        private readonly s3Service: S3Service
     ) {}
 
-    async getAll(relations: string[] = []): Promise<User[]> {
-        return this.repository.find({
-            relations: relations
+    async getAll(relations: string[] = []) {
+        return (
+            await this.repository.find({
+                relations: relations
+            })
+        ).map(async (user) => {
+            user.photo = await this.s3Service.getPresignedUrl(user.photo);
+            return user;
         });
     }
 
-    async getById(id: number, relations: string[] = []): Promise<User> {
+    async getById(
+        id: number,
+        relations: string[] = [],
+        skipUrl = false
+    ): Promise<User> {
         const user: User = await this.repository.findOne({
             where: { id: id },
             relations: relations
@@ -44,6 +55,9 @@ export class UsersService {
 
         if (!user) throw new NotFoundException(`User with id: ${id} not found`);
         user.password = undefined;
+        if (!skipUrl) {
+            user.photo = await this.s3Service.getPresignedUrl(user.photo);
+        }
         return user;
     }
 
@@ -93,7 +107,7 @@ export class UsersService {
         newUser.firstname = userDto.firstname;
         newUser.lastname = userDto.lastname;
         newUser.address = userDto.address;
-        newUser.photoUrl = userDto.photoUrl;
+        newUser.photo = userDto.photo;
         newUser.code = null;
         newUser.role = role;
         newUser.closeDate = null;
@@ -152,11 +166,11 @@ export class UsersService {
             .execute();
     }
 
-    async updateAvatar(id: number, photoUrl: string): Promise<void> {
+    async updateAvatar(id: number, photo: string): Promise<void> {
         await this.repository
             .createQueryBuilder()
             .update(User)
-            .set({ photoUrl: photoUrl })
+            .set({ photo: photo })
             .where('id = :id', { id: id })
             .execute();
     }

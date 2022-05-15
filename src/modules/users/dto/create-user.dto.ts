@@ -24,7 +24,7 @@ export class CreateUserDto {
 
     @IsString()
     @IsNotEmpty()
-    photoUrl: string;
+    photo: string;
 
     @IsObject()
     readonly address: Address;

@@ -30,11 +30,11 @@ export class UsersController {
     async getAll(
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
-    ): Promise<User[]> {
+    ) {
         const relations = [];
         if (favorites === 'true') relations.push('favorites');
         if (animals === 'true') relations.push('animals');
-        return this.userService.getAll(relations);
+        return await this.userService.getAll(relations);
     }
 
     @Get(':id')
@@ -48,7 +48,7 @@ export class UsersController {
         const relations = [];
         if (favorites === 'true') relations.push('favorites');
         if (animals === 'true') relations.push('animals');
-        return this.userService.getById(parseInt(id), relations);
+        return await this.userService.getById(parseInt(id), relations);
     }
 
     @Get('email/:email')

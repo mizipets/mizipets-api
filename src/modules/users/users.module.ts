@@ -2,16 +2,24 @@
  * @author Julien DA CORTE
  * @create 2022-03-11
  */
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { MailModule } from '../../shared/mail/mail.module';
+import { AnimalsModule } from '../animals/animals.module';
+import { S3Module } from '../s3/s3.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]), FavoritesModule, MailModule],
+    imports: [
+        TypeOrmModule.forFeature([User]),
+        FavoritesModule,
+        MailModule,
+        forwardRef(() => AnimalsModule),
+        forwardRef(() => S3Module)
+    ],
     controllers: [UsersController],
     providers: [UsersService],
     exports: [UsersService]

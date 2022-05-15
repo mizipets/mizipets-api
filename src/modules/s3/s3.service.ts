@@ -3,54 +3,88 @@
  * @create 2022-04-22
  */
 
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+    ForbiddenException,
+    forwardRef,
+    Inject,
+    Injectable
+} from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { AnimalsService } from '../animals/animals.service';
-import { Animal } from '../animals/entities/animal.entity';
-import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 
-const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
+const {
+    AWS_S3_BUCKET_URL,
+    AWS_S3_BUCKET_NAME,
+    API_URL,
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY,
+    PORT
+} = process.env;
+
 const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    endpoint: AWS_S3_BUCKET_URL,
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    s3ForcePathStyle: true,
+    signatureVersion: 'v4'
 });
 
 @Injectable()
 export class S3Service {
     constructor(
+        @Inject(forwardRef(() => AnimalsService))
         private animalService: AnimalsService,
+        @Inject(forwardRef(() => UsersService))
         private userService: UsersService
     ) {}
 
     async uploadFile(
         userId: number,
         id: number,
-        type: string,
+        type: 'animal' | 'avatar',
         file: any
-    ): Promise<void> {
-        let animalOrUser: Animal | User;
-        let photoUrl;
-
+    ): Promise<string> {
         if (!this.checkMimetype(file.mimetype))
             throw new ForbiddenException('Only images are allowed');
 
+        const photo = await this.uploadToS3(type, id, file);
+        // const apiImageUrl = this.keyToUrl(photo.key);
+
         if (type === 'animal') {
-            animalOrUser = await this.animalService.getById(id);
-            if (animalOrUser.owner.id !== userId)
+            const animal = await this.animalService.getById(id);
+            if (animal.owner.id !== userId)
                 throw new ForbiddenException('Wrong access');
 
-            photoUrl = await this.uploadToS3(type, id, file);
-            await this.animalService.updateImages(id, photoUrl.Location);
-        } else {
-            animalOrUser = await this.userService.getById(id);
-            if (animalOrUser.id !== userId)
-                throw new ForbiddenException('Wrong access');
-
-            photoUrl = await this.uploadToS3(type, id, file);
-            await this.userService.updateAvatar(id, photoUrl.Location);
+            await this.animalService.updateImages(id, photo.key);
         }
+
+        if (type === 'avatar') {
+            const user = await this.userService.getById(id);
+            if (user.id !== userId)
+                throw new ForbiddenException('Wrong access');
+
+            await this.userService.updateAvatar(id, photo.key);
+        }
+        return photo.key;
+    }
+
+    private keyToUrl(key: string) {
+        return `${API_URL}:${PORT}/upload/${key}/presignedUrl`;
+    }
+
+    public async getPresignedUrl(key: string): Promise<string> {
+        if (!key) {
+            return '';
+        }
+        const url = s3.getSignedUrl('getObject', {
+            Expires: 60 * 60 * 24,
+            Bucket: AWS_S3_BUCKET_NAME,
+            Key: key
+        });
+
+        return url.split('?').at(0);
     }
 
     private async uploadToS3(

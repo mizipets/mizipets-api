@@ -55,8 +55,8 @@ export class User {
     @Column('text')
     lastname: string;
 
-    @Column()
-    photoUrl: string;
+    @Column('text', { nullable: true })
+    photo: string;
 
     @Column({ nullable: true })
     code?: number;
