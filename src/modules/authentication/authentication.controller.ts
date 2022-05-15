@@ -37,7 +37,10 @@ export class AuthenticationController {
 
     @Get('token/:id/refresh')
     @HttpCode(HttpStatus.OK)
-    async refreshToken(@Param('id') id: string, @Query('key') key: string): Promise<JwtResponseDto> {
+    async refreshToken(
+        @Param('id') id: string,
+        @Query('key') key: string
+    ): Promise<JwtResponseDto> {
         return this.authService.refreshToken(parseInt(id), key);
     }
 

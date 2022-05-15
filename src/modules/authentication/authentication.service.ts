@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import {RefreshToken, User} from '../users/entities/user.entity';
+import { RefreshToken, User } from '../users/entities/user.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtResponseDto } from './dto/jwt-response.dto';
 import { LoginDto } from './dto/login.dto';
@@ -57,11 +57,15 @@ export class AuthenticationService {
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
 
-        const tokenInfo: RefreshToken = await this.userService.updateRefreshToken(user.id);
+        const tokenInfo: RefreshToken =
+            await this.userService.updateRefreshToken(user.id);
         return this.getJwtPayload(user, tokenInfo.refreshKey);
     }
 
-    async refreshToken(id: number, refreshKey: string): Promise<JwtResponseDto> {
+    async refreshToken(
+        id: number,
+        refreshKey: string
+    ): Promise<JwtResponseDto> {
         const user: User = await this.userService.getById(id, [], true);
         if (!user.refreshToken)
             throw new ConflictException(`No refresh key for user id: ${id}`);
@@ -87,7 +91,10 @@ export class AuthenticationService {
 
     async verifyCode(email: string, code: number): Promise<boolean> {
         const user: User = await this.userService.getByEmail(email);
-        const isCodeValid: boolean = AuthenticationService.checkCode(user.code, code);
+        const isCodeValid: boolean = AuthenticationService.checkCode(
+            user.code,
+            code
+        );
 
         if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
@@ -96,7 +103,10 @@ export class AuthenticationService {
 
     async resetPassword(login: LoginDto, code: number): Promise<void> {
         const user: User = await this.userService.getByEmail(login.email);
-        const isCodeValid: boolean = AuthenticationService.checkCode(user.code, code);
+        const isCodeValid: boolean = AuthenticationService.checkCode(
+            user.code,
+            code
+        );
 
         if (!isCodeValid) throw new ForbiddenException('Invalid code!');
 
@@ -125,7 +135,7 @@ export class AuthenticationService {
 
         return {
             token: this.jwtService.sign(jwtPayload),
-            refreshKey: refreshToken,
+            refreshKey: refreshToken
         };
     }
 }
