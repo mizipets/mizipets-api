@@ -17,6 +17,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
 import { S3Module } from './modules/s3/s3.module';
+import { MonitoringModule } from './modules/monitoring/monitoring.module';
 
 @Module({
     imports: [
@@ -50,7 +51,8 @@ import { S3Module } from './modules/s3/s3.module';
         AnimalsModule,
         ServicesModule,
         S3Module,
-        RoomModule
+        RoomModule,
+        MonitoringModule
     ],
     controllers: [],
     providers: [
