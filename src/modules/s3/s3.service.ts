@@ -57,7 +57,7 @@ export class S3Service {
             if (animal.owner.id !== userId)
                 throw new ForbiddenException('Wrong access');
 
-            await this.animalService.updateImages(id, photo.key);
+            await this.animalService.updateImages(id, this.keyToUrl(photo.key));
         }
 
         if (type === 'avatar') {
@@ -65,13 +65,13 @@ export class S3Service {
             if (user.id !== userId)
                 throw new ForbiddenException('Wrong access');
 
-            await this.userService.updateAvatar(id, photo.key);
+            await this.userService.updateAvatar(id, this.keyToUrl(photo.key));
         }
         return photo.key;
     }
 
     private keyToUrl(key: string) {
-        return `${API_URL}:${PORT}/upload/${key}/presignedUrl`;
+        return `${AWS_S3_BUCKET_URL}/mizipets/${key}`;
     }
 
     public async getPresignedUrl(key: string): Promise<string> {

@@ -66,7 +66,7 @@ export class AuthenticationService {
         id: number,
         refreshKey: string
     ): Promise<JwtResponseDto> {
-        const user: User = await this.userService.getById(id, [], true);
+        const user: User = await this.userService.getById(id, []);
         if (!user.refreshToken)
             throw new ConflictException(`No refresh key for user id: ${id}`);
 

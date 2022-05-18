@@ -33,21 +33,12 @@ export class UsersService {
     ) {}
 
     async getAll(relations: string[] = []) {
-        return (
-            await this.repository.find({
-                relations: relations
-            })
-        ).map(async (user) => {
-            user.photo = await this.s3Service.getPresignedUrl(user.photo);
-            return user;
+        return await this.repository.find({
+            relations: relations
         });
     }
 
-    async getById(
-        id: number,
-        relations: string[] = [],
-        skipUrl = false
-    ): Promise<User> {
+    async getById(id: number, relations: string[] = []): Promise<User> {
         const user: User = await this.repository.findOne({
             where: { id: id },
             relations: relations
@@ -55,9 +46,6 @@ export class UsersService {
 
         if (!user) throw new NotFoundException(`User with id: ${id} not found`);
         user.password = undefined;
-        if (!skipUrl) {
-            user.photo = await this.s3Service.getPresignedUrl(user.photo);
-        }
         return user;
     }
 

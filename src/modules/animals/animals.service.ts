@@ -94,7 +94,7 @@ export class AnimalsService {
         if (!animalDB) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return await this.getAnimalImages(animalDB);
+            return animalDB;
         }
     }
 
@@ -107,7 +107,7 @@ export class AnimalsService {
             relations
         });
 
-        return await this.getAnimalsImages(animals);
+        return animals;
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -153,8 +153,7 @@ export class AnimalsService {
             relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
-
-        return await this.getAnimalsImages(animals);
+        return animals;
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -171,7 +170,7 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
-        return this.getAnimalImages(await this.repository.save(updated));
+        return await this.repository.save(updated);
     }
 
     async save(animal: Animal): Promise<Animal> {
@@ -248,25 +247,5 @@ export class AnimalsService {
         } else {
             return favorite;
         }
-    }
-
-    private async getAnimalImages(animal: Animal): Promise<Animal> {
-        animal.images = await Promise.all(
-            animal.images.map((image) => this.s3Service.getPresignedUrl(image))
-        );
-        return animal;
-    }
-
-    private async getAnimalsImages(animals: Animal[]): Promise<Animal[]> {
-        return await Promise.all(
-            animals.map(async (animal) => {
-                animal.images = await Promise.all(
-                    animal.images.map((image) =>
-                        this.s3Service.getPresignedUrl(image)
-                    )
-                );
-                return animal;
-            })
-        );
     }
 }
