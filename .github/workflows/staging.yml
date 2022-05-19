@@ -18,8 +18,8 @@ jobs:
         script: |
           cd mizipets-api
           docker-compose down
-          docker rm -f $(docker ps -qa)
-          docker rmi -f $(docker images -aq)
+          docker rm -f mizipets-api_api
+          docker rmi -f mizipets-api_api
           git pull
           rm -rf envs
           mkdir envs
