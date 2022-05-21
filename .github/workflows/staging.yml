@@ -17,8 +17,7 @@ jobs:
         port: 22
         script: |
           cd mizipets-api
-          docker-compose down
-          docker rm -f mizipets-api_api
+          docker-compose stop
           docker rmi -f mizipets-api_api
           git pull
           rm -rf envs

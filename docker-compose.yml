@@ -31,7 +31,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /private/var/lib/postgresql:/var/lib/postgresql
+      - postgres-mizipets:/var/lib/postgresql
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -108,6 +108,7 @@ services:
     ports:
       - '3030:3000'
 volumes:
+  postgres-mizipets:
   data1-1:
   data1-2:
   data2-1:
