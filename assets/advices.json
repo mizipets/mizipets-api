@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Cats in the urban lifestyle",
+        "content": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label"
+    },
+    {
+        "id": 2,
+        "title": "Dogs in the urban lifestyle",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label"
+    }
+]

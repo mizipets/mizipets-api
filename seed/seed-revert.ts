@@ -28,6 +28,11 @@ const main = (): void => {
             await runner.query('DELETE FROM public.services WHERE TRUE;');
             console.log('Cleared services');
 
+            //advice
+            await runner.query('ALTER SEQUENCE advices_id_seq RESTART WITH 1');
+            await runner.query('DELETE FROM public.advices WHERE TRUE;');
+            console.log('Cleared advices');
+
             connection.close();
             console.log('Connection closed');
         })
