@@ -6,7 +6,8 @@
         "type": "TEXT",
         "imageUrl": "image url",
         "url": "url",
-        "urlLabel": "url label"
+        "urlLabel": "url label",
+        "specieId": 3
     },
     {
         "id": 2,
@@ -15,6 +16,7 @@
         "type": "TEXT",
         "imageUrl": "image url",
         "url": "url",
-        "urlLabel": "url label"
+        "urlLabel": "url label",
+        "specieId": 2
     }
 ]

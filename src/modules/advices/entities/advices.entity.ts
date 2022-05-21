@@ -2,8 +2,10 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn
+    CreateDateColumn,
+    ManyToOne
 } from 'typeorm';
+import { Specie } from '../../animals/entities/specie.entity';
 import { AdviceType } from '../enums/advice-type.enum';
 
 @Entity('advices')
@@ -22,6 +24,9 @@ export class Advice {
 
     @Column('text')
     imageUrl: string;
+
+    @ManyToOne(() => Specie, (specie) => specie.advices)
+    specie: Specie;
 
     @Column('text')
     url: string;
