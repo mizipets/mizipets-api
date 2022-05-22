@@ -1,6 +1,5 @@
 [
     {
-        "id": 1,
         "title": "Cats in the urban lifestyle",
         "content": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
         "type": "TEXT",
@@ -10,10 +9,18 @@
         "specieId": 3
     },
     {
-        "id": 2,
         "title": "Dogs in the urban lifestyle",
         "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
         "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "Dogs can smell up to 9000 times better than humans",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TIP",
         "imageUrl": "image url",
         "url": "url",
         "urlLabel": "url label",
