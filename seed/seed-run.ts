@@ -83,8 +83,7 @@ const main = (): void => {
         await runner.manager.save(Service, getServices());
         console.log('Seeding Services complete');
 
-        connection.close();
-
+        await connection.close();
         console.log('Connection closed');
     });
 };

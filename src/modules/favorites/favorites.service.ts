@@ -13,11 +13,10 @@ import { Repository } from 'typeorm';
 import { AnimalsService } from '../animals/animals.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import {
+    Favorites,
+    Reference,
     AdoptionReferences,
     AdviceReferences,
-    Favorites,
-    PetsReferences,
-    Reference,
     VetsReferences
 } from './entities/favorites.entity';
 import {
@@ -62,10 +61,6 @@ export class FavoritesService {
                     disliked: [],
                     liked: []
                 }
-            },
-            {
-                type: ServiceType.PETS,
-                reference: { id: null }
             },
             {
                 type: ServiceType.ADVICE,
@@ -153,10 +148,6 @@ export class FavoritesService {
                 break;
             case ServiceType.VETS:
                 reference = favorite.reference as VetsReferences;
-                reference.id = null;
-                break;
-            case ServiceType.PETS:
-                reference = favorite.reference as PetsReferences;
                 reference.id = null;
                 break;
         }
