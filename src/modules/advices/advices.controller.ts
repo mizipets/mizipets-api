@@ -24,7 +24,8 @@ export class AdvicesController {
         const where: FindConditions<Advice> = {
             specie: {
                 id: id
-            }
+            },
+            type: AdviceType.TEXT
         };
         return await this.advicesService.getBy(where);
     }
@@ -36,6 +37,6 @@ export class AdvicesController {
         const where: FindConditions<Advice> = {
             type: type
         };
-        return await this.advicesService.getBy(where);
+        return await this.advicesService.getOneBy(where);
     }
 }

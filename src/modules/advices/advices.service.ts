@@ -27,4 +27,10 @@ export class AdvicesService {
             where: where
         });
     }
+
+    async getOneBy(where: FindConditions<Advice>): Promise<Advice> {
+        return await this.repository.findOne({
+            where: where
+        });
+    }
 }
