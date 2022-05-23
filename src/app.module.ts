@@ -18,6 +18,7 @@ import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
 import { S3Module } from './modules/s3/s3.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { AdvicesModule } from './modules/advices/advices.module';
 
 @Module({
     imports: [
@@ -52,7 +53,8 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
         ServicesModule,
         S3Module,
         RoomModule,
-        MonitoringModule
+        MonitoringModule,
+        AdvicesModule
     ],
     controllers: [],
     providers: [
