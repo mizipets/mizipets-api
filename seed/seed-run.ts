@@ -99,7 +99,6 @@ const main = (): void => {
         console.log('Seeding Advices complete');
 
         connection.close();
-
         console.log('Connection closed');
     });
 };

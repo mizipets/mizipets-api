@@ -33,7 +33,7 @@ const main = (): void => {
             await runner.query('DELETE FROM public.services WHERE TRUE;');
             console.log('Cleared services');
 
-            connection.close();
+            await connection.close();
             console.log('Connection closed');
         })
         .catch((e) => {
