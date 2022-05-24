@@ -107,7 +107,7 @@ export class FavoritesService {
                         referencePopulated.liked =
                             await this.animalsService.getByIds(
                                 reference.liked,
-                                ['race', 'race.specie']
+                                ['race', 'race.specie', 'owner']
                             );
                         populate.reference = referencePopulated;
                         break;
