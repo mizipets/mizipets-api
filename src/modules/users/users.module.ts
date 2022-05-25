@@ -11,12 +11,14 @@ import { FavoritesModule } from '../favorites/favorites.module';
 import { MailModule } from '../../shared/mail/mail.module';
 import { AnimalsModule } from '../animals/animals.module';
 import { S3Module } from '../s3/s3.module';
+import { DeviceModule } from '../device/device.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
         FavoritesModule,
         MailModule,
+        DeviceModule,
         forwardRef(() => AnimalsModule),
         forwardRef(() => S3Module)
     ],

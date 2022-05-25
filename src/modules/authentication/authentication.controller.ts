@@ -18,6 +18,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { User } from '../users/entities/user.entity';
 import { JwtResponseDto } from './dto/jwt-response.dto';
+import { CreateDeviceDto } from '../device/dto/create-device.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -31,8 +32,8 @@ export class AuthenticationController {
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    async login(@Body() login: LoginDto): Promise<JwtResponseDto> {
-        return this.authService.login(login);
+    async login(@Body() login: LoginDto, @Body() device: CreateDeviceDto): Promise<JwtResponseDto> {
+        return this.authService.login(login, device);
     }
 
     @Get('token/:id/refresh')

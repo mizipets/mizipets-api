@@ -54,4 +54,15 @@ export class MailService {
             }
         });
     }
+
+    async sendNewConnection(user: User) {
+        await this.mailerService.sendMail({
+            to: user.email,
+            subject: 'Mizipiets - New connection',
+            template: 'new-connection',
+            context: {
+                firstname: user.firstname
+            }
+        });
+    }
 }
