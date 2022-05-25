@@ -13,6 +13,11 @@ const main = (): void => {
 
             const runner = connection.createQueryRunner();
 
+            //advice
+            await runner.query('ALTER SEQUENCE advices_id_seq RESTART WITH 1');
+            await runner.query('DELETE FROM public.advices WHERE TRUE;');
+            console.log('Cleared advices');
+
             //races
             await runner.query('ALTER SEQUENCE races_id_seq RESTART WITH 1');
             await runner.query('DELETE FROM public.races WHERE TRUE;');
@@ -28,7 +33,7 @@ const main = (): void => {
             await runner.query('DELETE FROM public.services WHERE TRUE;');
             console.log('Cleared services');
 
-            connection.close();
+            await connection.close();
             console.log('Connection closed');
         })
         .catch((e) => {

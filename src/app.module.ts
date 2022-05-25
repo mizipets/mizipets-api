@@ -19,6 +19,7 @@ import * as path from 'path';
 import { S3Module } from './modules/s3/s3.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { DeviceModule } from './modules/device/device.module';
+import { AdvicesModule } from './modules/advices/advices.module';
 
 @Module({
     imports: [
@@ -54,7 +55,8 @@ import { DeviceModule } from './modules/device/device.module';
         S3Module,
         RoomModule,
         MonitoringModule,
-        DeviceModule
+        DeviceModule,
+        AdvicesModule
     ],
     controllers: [],
     providers: [
