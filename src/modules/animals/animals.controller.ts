@@ -25,8 +25,8 @@ import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Favorites } from '../favorites/entities/favorites.entity';
 import { Sex } from './enum/sex.enum';
-import { RacesService } from './races.service';
-import { SpeciesService } from './species.service';
+import { RacesService } from './race/races.service';
+import { SpeciesService } from './specie/species.service';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
 

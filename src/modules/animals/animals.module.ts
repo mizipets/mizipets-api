@@ -12,10 +12,10 @@ import { AnimalsService } from './animals.service';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
-import { RacesController } from './races.controller';
-import { RacesService } from './races.service';
-import { SpeciesController } from './species.controller';
-import { SpeciesService } from './species.service';
+import { RacesController } from './race/races.controller';
+import { RacesService } from './race/races.service';
+import { SpeciesController } from './specie/species.controller';
+import { SpeciesService } from './specie/species.service';
 
 @Module({
     imports: [

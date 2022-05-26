@@ -12,6 +12,7 @@ import {
 import { Room } from '../../room/entities/room.entity';
 import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
+import { HealthBook } from './health-book';
 import { Race } from './race.entity';
 
 @Entity('animals')
@@ -48,6 +49,9 @@ export class Animal {
 
     @Column('json')
     images: string[];
+
+    @Column('json', { nullable: true })
+    healthBook: HealthBook;
 
     @ManyToOne(() => User, (user) => user.animals)
     owner: User;
