@@ -29,7 +29,7 @@ export class UsersService {
         @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService,
         private readonly emailService: MailService,
-        private readonly s3Service: S3Service
+        private readonly s3Service: S3Service,
     ) {}
 
     async getAll(relations: string[] = []) {
@@ -103,6 +103,8 @@ export class UsersService {
         newUser.favorites = favorites;
         newUser.preferences = userDto.preferences;
         newUser.shelter = shelter;
+        newUser.devices = [];
+
 
         this.repository.create(newUser);
         return this.repository.save(newUser);
