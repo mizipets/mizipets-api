@@ -22,7 +22,7 @@ export class RacesController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getById(@Param('id') id: number): Promise<Race> {
-        return this.racesService.getById(id);
+    async getById(@Param('id') id: string): Promise<Race> {
+        return this.racesService.getById(parseInt(id));
     }
 }

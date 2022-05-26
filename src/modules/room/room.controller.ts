@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,6 +7,7 @@ import {
     NotFoundException,
     Param,
     Post,
+    Put,
     Query,
     Req
 } from '@nestjs/common';
@@ -13,13 +15,16 @@ import { AnimalsService } from '../animals/animals.service';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { UsersService } from '../users/users.service';
+import { Message } from './entities/message.entity';
 import { Room } from './entities/room.entity';
+import { MessageService } from './message.service';
 import { RoomService } from './room.service';
 
 @Controller('room')
 export class RoomController {
     constructor(
         private roomService: RoomService,
+        private messageService: MessageService,
         private usersService: UsersService,
         private animalsService: AnimalsService
     ) {}
@@ -107,5 +112,56 @@ export class RoomController {
             }
             return room;
         }
+    }
+
+    @Put(':roomId/requestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async requestGive(
+        @Req() req,
+        @Param('roomId') roomId: string
+    ): Promise<void> {
+        await this.roomService.requestGive(parseInt(roomId));
+    }
+
+    @Put(':roomId/acceptRequestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async acceptRequestGive(
+        @Req() req,
+        @Param('roomId') roomId: string,
+        @Body() body: { messageId: number }
+    ): Promise<void> {
+        await this.roomService.acceptRequestGive(
+            parseInt(roomId),
+            body.messageId,
+            req.user
+        );
+    }
+
+    @Put(':roomId/refuseRequestGive')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async refuseRequestGive(
+        @Req() req,
+        @Param('roomId') roomId: string,
+        @Body() body: { messageId: number }
+    ): Promise<void> {
+        await this.roomService.refuseRequestGive(
+            parseInt(roomId),
+            body.messageId,
+            req.user
+        );
+    }
+
+    @Get(':roomId/messages')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async messages(
+        @Req() req,
+        @Param('roomId') roomId: number,
+        @Query('offset') offset: number
+    ): Promise<Message[]> {
+        return await this.messageService.get(roomId, offset);
     }
 }

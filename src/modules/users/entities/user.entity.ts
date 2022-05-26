@@ -7,12 +7,14 @@ import {
     CreateDateColumn,
     Entity,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
 import { Roles } from '../../authentication/enum/roles.emum';
 import { Favorites } from '../../favorites/entities/favorites.entity';
 import { Room } from '../../room/entities/room.entity';
+import { Device } from '../../device/entities/device.entity';
 
 export class Address {
     street: string;
@@ -33,6 +35,11 @@ export class Shelter {
     name: string;
 }
 
+export class RefreshToken {
+    refreshKey: string;
+    expireAt: number;
+}
+
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
@@ -50,11 +57,14 @@ export class User {
     @Column('text')
     lastname: string;
 
-    @Column({ nullable: true })
-    photoUrl: string;
+    @Column('text', { nullable: true })
+    photo: string;
 
     @Column({ nullable: true })
-    code: number;
+    code?: number;
+
+    @Column('json', { nullable: true })
+    refreshToken?: RefreshToken;
 
     @Column('json')
     address: Address;
@@ -72,10 +82,13 @@ export class User {
     createDate: Date;
 
     @Column({ nullable: true })
-    closeDate: Date;
+    closeDate?: Date;
 
     @OneToMany(() => Animal, (animal) => animal.owner)
     animals: Animal[];
+
+    @OneToMany(() => Animal, (animal) => animal.lastOwner)
+    pastAnimals: Animal[];
 
     @OneToMany(() => Favorites, (favorite) => favorite.user)
     favorites: Favorites[];
@@ -85,4 +98,7 @@ export class User {
 
     @Column({ type: 'json' })
     notifications: Notification[];
+    
+    @OneToMany(() => Device, (device) => device.user)
+    devices: Device[];
 }

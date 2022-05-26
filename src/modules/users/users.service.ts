@@ -9,24 +9,31 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Shelter, User } from './entities/user.entity';
+import { RefreshToken, Shelter, User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../authentication/enum/roles.emum';
 import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
+import { MailService } from '../../shared/mail/mail.service';
+import { v4 as uuidv4 } from 'uuid';
+import { S3Service } from '../s3/s3.service';
+
+const { JWT_REFRESH_EXPIRATION } = process.env;
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User) private readonly repository: Repository<User>,
         @Inject(forwardRef(() => FavoritesService))
-        private readonly favoritesService: FavoritesService
+        private readonly favoritesService: FavoritesService,
+        private readonly emailService: MailService,
+        private readonly s3Service: S3Service,
     ) {}
 
-    async getAll(relations: string[] = []): Promise<User[]> {
-        return this.repository.find({
+    async getAll(relations: string[] = []) {
+        return await this.repository.find({
             relations: relations
         });
     }
@@ -88,7 +95,7 @@ export class UsersService {
         newUser.firstname = userDto.firstname;
         newUser.lastname = userDto.lastname;
         newUser.address = userDto.address;
-        newUser.photoUrl = null;
+        newUser.photo = userDto.photo;
         newUser.code = null;
         newUser.role = role;
         newUser.closeDate = null;
@@ -97,6 +104,7 @@ export class UsersService {
         newUser.preferences = userDto.preferences;
         newUser.shelter = shelter;
         newUser.notifications = [];
+        newUser.devices = [];
 
         this.repository.create(newUser);
         return this.repository.save(newUser);
@@ -104,10 +112,13 @@ export class UsersService {
 
     async update(id: number, userDto: UpdateUserDto): Promise<User> {
         const user: User = await this.getById(id);
+        const isEmail = new RegExp(
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
 
         user.firstname = userDto.firstname ?? user.firstname;
         user.lastname = userDto.lastname ?? user.lastname;
-        user.email = userDto.email ?? user.email;
+        user.email = userDto.email.match(isEmail) ? userDto.email : user.email;
         user.address = userDto.address ?? user.address;
         user.preferences = userDto.preferences ?? user.preferences;
         user.shelter = userDto.shelter ?? user.shelter;
@@ -115,11 +126,41 @@ export class UsersService {
         return this.repository.save(user);
     }
 
+    async updateRefreshToken(id: number): Promise<RefreshToken> {
+        const expiredAt = new Date();
+        expiredAt.setSeconds(
+            expiredAt.getSeconds() + parseInt(JWT_REFRESH_EXPIRATION)
+        );
+        const refreshTokenUUID = uuidv4();
+        const refreshToken: RefreshToken = {
+            refreshKey: refreshTokenUUID.toString(),
+            expireAt: expiredAt.getTime()
+        };
+
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ refreshToken: refreshToken })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return refreshToken;
+    }
+
     async updatePassword(id: number, password: string): Promise<void> {
         await this.repository
             .createQueryBuilder()
             .update(User)
             .set({ password: password })
+            .where('id = :id', { id: id })
+            .execute();
+    }
+
+    async updateAvatar(id: number, photo: string): Promise<void> {
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ photo: photo })
             .where('id = :id', { id: id })
             .execute();
     }
@@ -134,12 +175,16 @@ export class UsersService {
     }
 
     async close(id: number): Promise<void> {
+        const user: User = await this.getById(id);
+
         await this.repository
             .createQueryBuilder()
             .update(User)
             .set({ closeDate: new Date() })
             .where('id = :id', { id: id })
             .execute();
+
+        await this.emailService.sendCloseAccount(user);
     }
 
     async addAnimalToUser(animal: Animal, owner: User): Promise<User> {

@@ -38,6 +38,9 @@ export class Animal {
     isLost: boolean;
 
     @Column({ nullable: true })
+    deletedDate: Date;
+
+    @Column({ nullable: true })
     birthDate: Date;
 
     @Column()
@@ -48,6 +51,9 @@ export class Animal {
 
     @ManyToOne(() => User, (user) => user.animals)
     owner: User;
+
+    @ManyToOne(() => User, (user) => user.pastAnimals)
+    lastOwner: User;
 
     @OneToMany(() => Room, (room) => room.animal)
     rooms: Room[];

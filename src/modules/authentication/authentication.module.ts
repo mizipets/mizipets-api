@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { MailModule } from '../../shared/mail/mail.module';
+import { DeviceModule } from '../device/device.module';
 
 const { JWT_SECRET, JWT_EXPIRATION } = process.env;
 
@@ -23,7 +24,8 @@ const JWT_CONFIG = {
         JwtModule.register(JWT_CONFIG),
         PassportModule,
         UsersModule,
-        MailModule
+        MailModule,
+        DeviceModule
     ],
     providers: [AuthenticationService, JwtStrategy],
     controllers: [AuthenticationController]

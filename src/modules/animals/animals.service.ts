@@ -10,7 +10,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, In, Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import {
     AdoptionReferences,
     Favorites
@@ -23,9 +23,11 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
+import { Roles } from '../authentication/enum/roles.emum';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class AnimalsService {
@@ -34,12 +36,14 @@ export class AnimalsService {
         private readonly repository: Repository<Animal>,
         @InjectRepository(Race)
         private readonly raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private readonly speciesRepository: Repository<Species>,
+        @InjectRepository(Specie)
+        private readonly speciesRepository: Repository<Specie>,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
         @Inject(forwardRef(() => FavoritesService))
-        private favoritesService: FavoritesService
+        private favoritesService: FavoritesService,
+        @Inject(forwardRef(() => S3Service))
+        private s3Service: S3Service
     ) {}
 
     async create(
@@ -50,7 +54,7 @@ export class AnimalsService {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
-            relations: ['species']
+            relations: ['specie']
         });
         if (!race) {
             throw new NotFoundException(
@@ -58,10 +62,10 @@ export class AnimalsService {
             );
         }
 
-        const specie = await this.speciesRepository.findOne(race.species.id);
+        const specie = await this.speciesRepository.findOne(race.specie.id);
         if (!specie) {
             throw new NotFoundException(
-                `specie with id '${race.species.id}' does not exist`
+                `specie with id '${race.specie.id}' does not exist`
             );
         }
 
@@ -80,15 +84,12 @@ export class AnimalsService {
         return animalDB;
     }
 
-    async getAll(): Promise<Animal[]> {
-        return await this.repository.find({
-            relations: ['race', 'race.species', 'owner']
-        });
-    }
-
     async getById(id: number): Promise<Animal> {
         const animalDB = await this.repository.findOne(id, {
-            relations: ['race', 'race.species', 'owner']
+            where: {
+                deletedDate: null
+            },
+            relations: ['race', 'race.specie', 'owner']
         });
         if (!animalDB) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -99,15 +100,17 @@ export class AnimalsService {
 
     async getByIds(
         ids: number[],
-        relations = ['race', 'race.species', 'owner']
+        relations = ['race', 'race.specie', 'owner']
     ): Promise<Animal[]> {
-        return await this.repository.find({
-            where: { id: In(ids) },
+        const animals = await this.repository.find({
+            where: { id: In(ids), deletedDate: null },
             relations
         });
+
+        return animals;
     }
 
-    async getAdoption(user: User, params: Search): Promise<Animal[]> {
+    async getAnimal(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
@@ -116,33 +119,41 @@ export class AnimalsService {
 
         const avoidIds = [...reference.disliked, ...reference.liked];
 
-        const query: any = {
+        const originalQuery: any = {
             id: Not(In(avoidIds)),
-            isAdoption: true,
-            owner: {
-                id: params.getMine ? user.id : Not(user.id)
-            }
+            deletedDate: null
         };
-        if (params.sex) query.sex = params.sex;
-        if (params.race) query.race = params.race;
-        if (params.species) query.race = { species: { id: params.species.id } };
+        if (params.sex) originalQuery.sex = params.sex;
+        if (params.race) originalQuery.race = params.race;
+        if (params.specie)
+            originalQuery.race = { specie: { id: params.specie.id } };
 
-        return await this.repository.find({
-            where: query,
-            relations: ['race', 'race.species', 'owner'],
-            take: 5
-        });
-    }
+        if (params.isAdoption !== undefined) {
+            originalQuery.isAdoption = params.isAdoption;
+        }
 
-    async getAdoptionsByOwner(userId: number): Promise<Animal[]> {
-        return await this.repository.find({
-            where: {
-                owner: {
-                    id: userId
-                }
-            },
-            relations: ['race', 'race.species', 'owner']
+        const currentOwnerQuery = Object.assign({}, originalQuery);
+        currentOwnerQuery.owner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const lastOwnerQuery = Object.assign({}, originalQuery);
+        lastOwnerQuery.lastOwner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const queries: any[] = [currentOwnerQuery];
+
+        if (user.role === Roles.PRO) {
+            queries.push(lastOwnerQuery);
+        }
+
+        const animals = await this.repository.find({
+            where: queries,
+            relations: ['race', 'race.specie', 'owner'],
+            take: params.limit ? 5 : null
         });
+        return animals;
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -151,7 +162,7 @@ export class AnimalsService {
         let race: Race;
         if (dto.raceId) {
             race = await this.raceRepository.findOne(dto.raceId, {
-                relations: ['species']
+                relations: ['specie']
             });
         }
         updated.race = race ?? updated.race;
@@ -159,13 +170,29 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
-        updated.images = dto.images ?? updated.images;
-
         return await this.repository.save(updated);
     }
 
-    async delete(id: number): Promise<DeleteResult> {
-        return this.repository.delete(id);
+    async save(animal: Animal): Promise<Animal> {
+        return await this.repository.save(animal);
+    }
+
+    async updateImages(id: number, image: string): Promise<void> {
+        const updated = await this.getById(id);
+
+        updated.images.push(image);
+        await this.repository.save(updated);
+    }
+
+    async delete(id: number): Promise<boolean> {
+        const result = await this.repository
+            .createQueryBuilder()
+            .update(Animal)
+            .set({ deletedDate: new Date() })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return result.affected == 1;
     }
 
     async like(token: JwtPayloadDto, new_id: number): Promise<Favorites> {

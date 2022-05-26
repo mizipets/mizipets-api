@@ -10,6 +10,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    InternalServerErrorException,
     Param,
     Post,
     Put,
@@ -27,7 +28,7 @@ import { Sex } from './enum/sex.enum';
 import { RacesService } from './races.service';
 import { SpeciesService } from './species.service';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 
 @Controller('animals')
 export class AnimalsController {
@@ -54,38 +55,34 @@ export class AnimalsController {
     @Get()
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getAll(): Promise<Animal[]> {
-        return this.animalsService.getAll();
-    }
-
-    @Get('adoption')
-    @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getFavorites(
         @Req() req,
         @Query('sex') sex: Sex,
         @Query('raceId') raceId: string,
         @Query('specieId') specieId: string,
-        @Query('getMine') getMine: string
+        @Query('ownerId') ownerId: string,
+        @Query('isAdoption') isAdoption: string,
+        @Query('limit') limit: string
     ): Promise<Animal[]> {
         const params: Search = new Search();
         if (sex) params.sex = sex;
         if (raceId)
             params.race = await this.raceService.getById(parseInt(raceId));
         if (specieId)
-            params.species = await this.speciesService.getById(
+            params.specie = await this.speciesService.getById(
                 parseInt(specieId)
             );
-        params.getMine = getMine && getMine === 'true';
+        if (ownerId != undefined) {
+            params.ownerId = parseInt(ownerId);
+        }
 
-        return this.animalsService.getAdoption(req.user, params);
-    }
+        params.limit = limit && limit === 'true';
 
-    @Get('adoption/byOwner')
-    @HttpCode(HttpStatus.OK)
-    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getAdoptionsByOwner(@Req() req): Promise<Animal[]> {
-        return this.animalsService.getAdoptionsByOwner(parseInt(req.user.id));
+        if (isAdoption != undefined) {
+            params.isAdoption = isAdoption === 'true';
+        }
+
+        return this.animalsService.getAnimal(req.user, params);
     }
 
     @Put('adoption/:id/like')
@@ -105,8 +102,8 @@ export class AnimalsController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getById(@Param('id') id: number): Promise<Animal> {
-        return this.animalsService.getById(id);
+    async getById(@Param('id') id: string): Promise<Animal> {
+        return this.animalsService.getById(parseInt(id));
     }
 
     @Put(':id')
@@ -114,35 +111,41 @@ export class AnimalsController {
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async update(
         @Req() req,
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Body() dto: UpdateAnimalDTO
     ): Promise<Animal> {
-        const animal = await this.animalsService.getById(id);
+        const animal = await this.animalsService.getById(parseInt(id));
         if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't update the animal of someone else!"
             );
         }
-        return this.animalsService.update(id, dto);
+        return this.animalsService.update(parseInt(id), dto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async delete(@Req() req, @Param('id') id: number): Promise<void> {
-        const animal = await this.animalsService.getById(id);
+    async delete(@Req() req, @Param('id') id: string): Promise<void> {
+        const animal = await this.animalsService.getById(parseInt(id));
         if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
                 "Can't delete the animal of someone else!"
             );
         }
-        await this.animalsService.delete(id);
+        const result = await this.animalsService.delete(parseInt(id));
+        if (!result) {
+            throw new InternalServerErrorException("Cant't delete animal");
+        }
+        return;
     }
 }
 
 export class Search {
     sex: Sex;
     race: Race;
-    species: Species;
-    getMine: boolean;
+    specie: Specie;
+    ownerId: number;
+    limit: boolean;
+    isAdoption: boolean;
 }

@@ -12,14 +12,17 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.STAGING_HOST }}
-        username: ubuntu
+        username: ${{ secrets.STAGING_USER }}
         key: ${{ secrets.STAGING_KEY }}
         port: 22
         script: |
           cd mizipets-api
-          docker-compose down
+          docker-compose stop
+          docker rm -f mizipets-api_api_1
+          docker rmi -f mizipets-api_api_1
           git pull
           rm -rf envs
           mkdir envs
           cp ~/.env.staging ./envs/.env.staging
+          cp ~/.env.local ./envs/.env.local
           docker-compose up -d --build

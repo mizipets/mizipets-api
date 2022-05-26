@@ -1,0 +1,83 @@
+[
+    {
+        "title": "Cats in the urban lifestyle",
+        "content": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 3
+    },
+    {
+        "title": "Dogs in the urban lifestyle",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "Dogs can smell up to 9000 times better than humans",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TIP",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "Dogs can smell better than a human",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "A deep down analysis on dog bark vs tree bark",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "The smallest and largest dogs",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "The dogs that don't smell!",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "The most loyal dog stories",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 2
+    },
+    {
+        "title": "Horses and humans, a love story",
+        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+        "type": "TEXT",
+        "imageUrl": "image url",
+        "url": "url",
+        "urlLabel": "url label",
+        "specieId": 5
+    }
+]
