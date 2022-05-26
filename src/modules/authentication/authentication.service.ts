@@ -71,10 +71,10 @@ export class AuthenticationService {
             throw new ConflictException(`No refresh key for user id: ${id}`);
 
         if (refreshKey !== user.refreshToken.refreshKey)
-            throw new ForbiddenException('Invalid refresh token');
+            throw new UnauthorizedException('Invalid refresh token');
 
         if (user.refreshToken.expireAt < new Date().getTime())
-            throw new ForbiddenException(
+            throw new UnauthorizedException(
                 'Refresh token was expired. Please sign in'
             );
 
