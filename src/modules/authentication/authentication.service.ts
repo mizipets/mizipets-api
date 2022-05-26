@@ -18,7 +18,6 @@ import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeviceService } from '../device/device.service';
-import { CreateDeviceDto } from '../device/dto/create-device.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -46,11 +45,15 @@ export class AuthenticationService {
         return user;
     }
 
-    async login(login: LoginDto, device: CreateDeviceDto): Promise<JwtResponseDto> {
+    async login(login: LoginDto, role: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email, true);
 
         if (!user || user.closeDate)
             throw new UnauthorizedException('Invalid credentials');
+
+        if(user && role && user.role !== role) {
+            throw new UnauthorizedException('You need to have a pro account to login');
+        }
 
         const isPasswordEquals: boolean = await compare(
             login.password,
@@ -59,24 +62,23 @@ export class AuthenticationService {
 
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
-        
+
         const devices = await this.deviceService.getByUserID(user.id);
+        const deviceId = this.deviceService.getDeviceCheckedID(devices, login);
+
         if (devices.length > 0) {
-            if (this.deviceService.newDeviceCheck(devices, device)) {
+            if (!deviceId) {
                 await this.mailService.sendNewConnection(user);
-                await this.deviceService.create(device, user);
+                await this.deviceService.create(login, user);
+            } else {
+                await this.deviceService.update(deviceId);
             }
-            else
-                await this.deviceService.update(
-                    this.deviceService.getDeviceCheckedID(devices, device));
         }
-        else
-            await this.deviceService.create(device, user);
+        else {
+            await this.deviceService.create(login, user);
+        }
 
-        
-
-        const tokenInfo: RefreshToken =
-            await this.userService.updateRefreshToken(user.id);
+        const tokenInfo: RefreshToken = await this.userService.updateRefreshToken(user.id);
         return this.getJwtPayload(user, tokenInfo.refreshKey);
     }
 
