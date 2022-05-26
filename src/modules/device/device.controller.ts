@@ -14,9 +14,7 @@
 import { DeviceService } from './device.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
-import { CreateDeviceDto } from './dto/create-device.dto';
 import { Device } from './entities/device.entity';
-import { User } from '../users/entities/user.entity';
 
 @Controller('devices')
 export class DeviceController {

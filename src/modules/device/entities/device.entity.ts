@@ -26,10 +26,16 @@ export class Device {
     deviceType: string
 
     @Column('text')
-    device: string
+    os: string
+
+    @Column('text')
+    os_version: string
     
     @Column('text')
     browser?: string
+
+    @Column('text')
+    browser_version?: string
 
     @CreateDateColumn()
     lastConnection: Date

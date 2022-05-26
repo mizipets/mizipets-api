@@ -1,5 +1,5 @@
 /**
- * @author Julien DA CORTE & Latif SAGNA
+ * @author Latif SAGNA
  * @create 2022-03-11
  */
  import { IsNotEmpty, IsDate, IsString } from 'class-validator';
@@ -12,10 +12,17 @@
 
     @IsNotEmpty()
     @IsString()
-    device: string
+    os: string
+
+    @IsNotEmpty()
+    @IsString()
+    os_version: string
 
     @IsString()
     browser?: string
+
+    @IsString()
+    browser_version?: string
 
  
  }

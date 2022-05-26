@@ -1,5 +1,5 @@
 /**
- * @author Julien DA CORTE & Latif SAGNA
+ * @author Latif SAGNA
  * @create 2022-03-11
  */
  import {
@@ -44,8 +44,10 @@ export class DeviceService {
     async create(deviceDto: CreateDeviceDto, owner: User): Promise<Device> {
         const newDevice = new Device();
         newDevice.deviceType = deviceDto.deviceType;
-        newDevice.device = deviceDto.device;
+        newDevice.os = deviceDto.os;
+        newDevice.os_version = deviceDto.os_version;
         newDevice.browser = deviceDto.browser;
+        newDevice.browser_version = deviceDto.browser_version;
 
         newDevice.user = owner;
 
@@ -62,7 +64,7 @@ export class DeviceService {
     newDeviceCheck(devices: Device[], deviceDTO: CreateDeviceDto): Boolean {
         for (var i = 0; i < devices.length; i++) {
             if (deviceDTO.deviceType == devices[i].deviceType &&
-                deviceDTO.device == devices[i].device) {
+                deviceDTO.os == devices[i].os) {
                 return false;
             }
         }
@@ -72,7 +74,7 @@ export class DeviceService {
     getDeviceCheckedID(devices: Device[], deviceDTO: CreateDeviceDto): Device {
         for (var i = 0; i < devices.length; i++) {
             if (deviceDTO.deviceType == devices[i].deviceType &&
-                deviceDTO.device == devices[i].device) {
+                deviceDTO.os == devices[i].os) {
                 return devices[i];
             }
         }
