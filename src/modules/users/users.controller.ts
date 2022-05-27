@@ -10,6 +10,7 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    Post,
     Put,
     Query,
     Request
@@ -19,10 +20,14 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly userService: UsersService) {}
+    constructor(
+        private readonly userService: UsersService,
+        private readonly notificationsService: NotificationsService
+    ) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)
@@ -69,6 +74,29 @@ export class UsersController {
         if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
         return this.userService.update(parseInt(id), userDto);
+    }
+
+    @Put(':id/flutterToken')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
+    async updateFlutterToken(
+        @Request() req,
+        @Param('id') id: string,
+        @Body() tokenDTO: { token: string }
+    ): Promise<string> {
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't update this user");
+        console.log(tokenDTO);
+        return this.userService.updateFlutterToken(
+            tokenDTO.token,
+            parseInt(id)
+        );
+    }
+
+    @Post('notif')
+    @HttpCode(HttpStatus.OK)
+    async sendNotifTo() {
+        return await this.notificationsService.send(123);
     }
 
     @Put(':id/close')

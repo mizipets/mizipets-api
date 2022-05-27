@@ -16,11 +16,11 @@ import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
-import { NotificationsService } from './shared/notifications.service';
 import { S3Module } from './modules/s3/s3.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { DeviceModule } from './modules/device/device.module';
 import { AdvicesModule } from './modules/advices/advices.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
     imports: [
@@ -57,7 +57,8 @@ import { AdvicesModule } from './modules/advices/advices.module';
         RoomModule,
         MonitoringModule,
         DeviceModule,
-        AdvicesModule
+        AdvicesModule,
+        NotificationsModule
     ],
     controllers: [],
     providers: [
@@ -65,8 +66,7 @@ import { AdvicesModule } from './modules/advices/advices.module';
             provide: APP_GUARD,
             useClass: ThrottlerGuard
         },
-        DiscordService,
-        NotificationsService
+        DiscordService
     ]
 })
 export class AppModule {}

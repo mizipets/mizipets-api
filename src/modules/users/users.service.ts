@@ -29,7 +29,7 @@ export class UsersService {
         @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService,
         private readonly emailService: MailService,
-        private readonly s3Service: S3Service,
+        private readonly s3Service: S3Service
     ) {}
 
     async getAll(relations: string[] = []) {
@@ -145,6 +145,17 @@ export class UsersService {
             .execute();
 
         return refreshToken;
+    }
+
+    async updateFlutterToken(token: string, id: number): Promise<string> {
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ flutterToken: token })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return token;
     }
 
     async updatePassword(id: number, password: string): Promise<void> {

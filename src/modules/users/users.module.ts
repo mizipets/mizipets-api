@@ -12,6 +12,7 @@ import { MailModule } from '../../shared/mail/mail.module';
 import { AnimalsModule } from '../animals/animals.module';
 import { S3Module } from '../s3/s3.module';
 import { DeviceModule } from '../device/device.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { DeviceModule } from '../device/device.module';
         FavoritesModule,
         MailModule,
         DeviceModule,
+        NotificationsModule,
         forwardRef(() => AnimalsModule),
         forwardRef(() => S3Module)
     ],

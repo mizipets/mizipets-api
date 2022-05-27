@@ -60,6 +60,9 @@ export class User {
     @Column('text', { nullable: true })
     photo: string;
 
+    @Column('text', { nullable: true })
+    flutterToken: string;
+
     @Column({ nullable: true })
     code?: number;
 
@@ -96,9 +99,9 @@ export class User {
     @OneToMany(() => Room, (animal) => animal.adoptant)
     rooms: Room[];
 
-    @Column({ type: 'json' })
+    @Column({ type: 'json', nullable: true })
     notifications: Notification[];
-    
+
     @OneToMany(() => Device, (device) => device.user)
     devices: Device[];
 }

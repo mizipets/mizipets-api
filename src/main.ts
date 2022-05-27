@@ -10,10 +10,12 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import * as morgan from 'morgan';
+import * as admin from 'firebase-admin';
 import { CustomExceptionFilter } from './shared/exception/custom-exception.filter';
 import { DiscordService } from './shared/discord/discord.service';
 
 async function bootstrap() {
+
     const app = await NestFactory.create(AppModule);
     const origins = ['http://localhost:4200'];
 
