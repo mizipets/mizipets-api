@@ -12,8 +12,6 @@ import {
 } from 'typeorm';
 import { IsString } from 'class-validator';
 
-
-
 @Entity('devices')
 export class Device {
     @PrimaryGeneratedColumn()
@@ -23,20 +21,20 @@ export class Device {
     user: User;
 
     @Column('text')
-    deviceType: string
+    deviceType: string;
 
     @Column('text')
-    os: string
+    os: string;
 
     @Column('text')
-    os_version: string
-    
-    @Column('text')
-    browser?: string
+    os_version: string;
 
     @Column('text')
-    browser_version?: string
+    browser?: string;
+
+    @Column('text')
+    browser_version?: string;
 
     @CreateDateColumn()
-    lastConnection: Date
+    lastConnection: Date;
 }

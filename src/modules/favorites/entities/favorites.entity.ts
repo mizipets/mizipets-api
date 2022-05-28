@@ -21,10 +21,7 @@ export class Favorites {
     user: User;
 }
 
-export type Reference =
-    | AdoptionReferences
-    | AdviceReferences
-    | VetsReferences;
+export type Reference = AdoptionReferences | AdviceReferences | VetsReferences;
 
 export class AdoptionReferences {
     disliked: number[];

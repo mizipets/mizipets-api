@@ -31,8 +31,10 @@ export class AuthenticationController {
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    async login(@Body() login: LoginDto,
-                @Query('onlyRole') role: string): Promise<JwtResponseDto> {
+    async login(
+        @Body() login: LoginDto,
+        @Query('onlyRole') role: string
+    ): Promise<JwtResponseDto> {
         return this.authService.login(login, role);
     }
 

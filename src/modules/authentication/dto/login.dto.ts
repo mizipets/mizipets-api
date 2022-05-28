@@ -5,7 +5,8 @@
 import {
     IsDefined,
     IsEmail,
-    IsNotEmpty, IsOptional,
+    IsNotEmpty,
+    IsOptional,
     IsString,
     MinLength
 } from 'class-validator';
@@ -24,21 +25,21 @@ export class LoginDto {
 
     @IsNotEmpty()
     @IsString()
-    deviceType: string
+    deviceType: string;
 
     @IsNotEmpty()
     @IsString()
-    os: string
+    os: string;
 
     @IsNotEmpty()
     @IsString()
-    os_version: string
+    os_version: string;
 
     @IsString()
     @IsOptional()
-    browser: string
+    browser: string;
 
     @IsString()
     @IsOptional()
-    browser_version: string
+    browser_version: string;
 }

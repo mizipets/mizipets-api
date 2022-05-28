@@ -51,8 +51,10 @@ export class AuthenticationService {
         if (!user || user.closeDate)
             throw new UnauthorizedException('Invalid credentials');
 
-        if(user && role && user.role !== role) {
-            throw new UnauthorizedException('You need to have a pro account to login');
+        if (user && role && user.role !== role) {
+            throw new UnauthorizedException(
+                'You need to have a pro account to login'
+            );
         }
 
         const isPasswordEquals: boolean = await compare(
@@ -73,12 +75,12 @@ export class AuthenticationService {
             } else {
                 await this.deviceService.update(deviceId);
             }
-        }
-        else {
+        } else {
             await this.deviceService.create(login, user);
         }
 
-        const tokenInfo: RefreshToken = await this.userService.updateRefreshToken(user.id);
+        const tokenInfo: RefreshToken =
+            await this.userService.updateRefreshToken(user.id);
         return this.getJwtPayload(user, tokenInfo.refreshKey);
     }
 
