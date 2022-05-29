@@ -10,7 +10,6 @@ import {
     HttpCode,
     HttpStatus,
     Param,
-    Post,
     Put,
     Query,
     Request
@@ -20,14 +19,10 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { NotificationsService } from '../notifications/notifications.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(
-        private readonly userService: UsersService,
-        private readonly notificationsService: NotificationsService
-    ) {}
+    constructor(private readonly userService: UsersService) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)
@@ -91,12 +86,6 @@ export class UsersController {
             tokenDTO.token,
             parseInt(id)
         );
-    }
-
-    @Post('notif')
-    @HttpCode(HttpStatus.OK)
-    async sendNotifTo() {
-        return await this.notificationsService.send(123);
     }
 
     @Put(':id/close')

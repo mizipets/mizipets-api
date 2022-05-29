@@ -1,112 +1,82 @@
-import { getToken } from '@firebase/messaging';
-import * as admin from 'firebase-admin';
+import { InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import axios, { AxiosInstance } from 'axios';
+import { Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
+import { NotificationDTO } from './dto/notification.dto';
+import { Notification } from './entities/notification.entity';
+
+const { FCM_SERVER_KEY, FCM_ENDPOINT_URL } = process.env;
 
 export class NotificationsService {
-    firebaseConfig = {
-        project_info: {
-            project_number: '812368580351',
-            project_id: 'mizipets-a3a31',
-            storage_bucket: 'mizipets-a3a31.appspot.com'
-        },
-        client: [
-            {
-                client_info: {
-                    mobilesdk_app_id:
-                        '1:812368580351:android:56b3b6f70a91a7203586ca',
-                    android_client_info: {
-                        package_name: 'com.mizipets'
-                    }
-                },
-                oauth_client: [
-                    {
-                        client_id:
-                            '812368580351-9vdb6lob01jh8mcmltrdpor7n2c7tl06.apps.googleusercontent.com',
-                        client_type: 3
-                    }
-                ],
-                api_key: [
-                    {
-                        current_key: 'AIzaSyDGa86HZYw8FLeVc9Kj-H3lzxrdD4af2x8'
-                    }
-                ],
-                services: {
-                    appinvite_service: {
-                        other_platform_oauth_client: [
-                            {
-                                client_id:
-                                    '812368580351-9vdb6lob01jh8mcmltrdpor7n2c7tl06.apps.googleusercontent.com',
-                                client_type: 3
-                            }
-                        ]
-                    }
-                }
-            },
-            {
-                client_info: {
-                    mobilesdk_app_id:
-                        '1:812368580351:android:1f0dccf2d47b34b43586ca',
-                    android_client_info: {
-                        package_name: 'com.mizipets'
-                    }
-                },
-                oauth_client: [
-                    {
-                        client_id:
-                            '812368580351-9vdb6lob01jh8mcmltrdpor7n2c7tl06.apps.googleusercontent.com',
-                        client_type: 3
-                    }
-                ],
-                api_key: [
-                    {
-                        current_key: 'AIzaSyDGa86HZYw8FLeVc9Kj-H3lzxrdD4af2x8'
-                    }
-                ],
-                services: {
-                    appinvite_service: {
-                        other_platform_oauth_client: [
-                            {
-                                client_id:
-                                    '812368580351-9vdb6lob01jh8mcmltrdpor7n2c7tl06.apps.googleusercontent.com',
-                                client_type: 3
-                            }
-                        ]
-                    }
-                }
-            }
-        ],
-        configuration_version: '1'
-    };
+    client: AxiosInstance;
 
-    // serverKey =
-    //     'AAAA0ftVDCg:APA91bEABWApmKUjcC6xlXBFfjGbfe-CLN2SnoryFudC1BmJM3JXwsIC32hH8KiprjEubj82RZyXbX-6rbO5XeJFDPoREcEbhkOQ1fpqeozdR2u-OWn8k-YtZuRLn9x6GqkcUcVDwrcY';
-    // app = initializeApp(this.firebaseConfig);
+    constructor(
+        @InjectRepository(Notification)
+        private readonly repository: Repository<Notification>,
+        private usersService: UsersService
+    ) {
+        this.client = axios.create({
+            baseURL: FCM_ENDPOINT_URL
+        });
+    }
 
-    // constructor() {}
-
-    // async sendNotification(title: string, body: string, type: ServiceType) {
-    //     await messaging.sendMulticast({
-    //         tokens: ['token_1', 'token_2'],
-    //         notification: {
-    //             title: 'New message from: Maxime!',
-    //             body: 'A new weather warning has been issued for your location.',
-    //             imageUrl: 'https://my-cdn.com/extreme-weather.png'
-    //         }
-    //     });
-    // }
-
-    async send(userId: number) {
-        console.log('init app');
-        await admin.messaging().sendToDevice(
-            'fX_JmzSaQyq8auPWEPYAdK:APA91bGcYJq6WA4Y0H1lbHHkzk_0ThUIjHwGA1NHoyxfIepmoKERIR5XETbE4VBgdzDiZkfXLAkeDKJFdIkI2PXbZ39PHEavPXzJs-d8Sj2llX6GbYZJJmq45129lR-BvkOcIpmCezUW', // ['token_1', 'token_2', ...]
-            {
-                data: {
-                    msg: 'msg'
-                }
-            },
-            {
-                contentAvailable: true,
-                priority: 'high'
-            }
+    public async send(userIds: number[], notificationDto: NotificationDTO) {
+        const tokens: string[] = await Promise.all(
+            userIds.map(
+                async (id) => (await this.usersService.getById(id)).flutterToken
+            )
         );
+        const notification = {
+            type: notificationDto.type,
+            title: notificationDto.title,
+            body: notificationDto.body,
+            icon: 'firebase-logo.png',
+            click_action: 'http://localhost:8081'
+        } as Notification;
+
+        await this.sendToDevices(notification, tokens);
+
+        userIds.forEach(async (id) => {
+            const userNotification = Object.assign(
+                {
+                    user: {
+                        id: id
+                    }
+                },
+                notification
+            );
+            await this.repository.save(userNotification);
+        });
+    }
+
+    private async sendToDevices(notification, tokens: string[]) {
+        const fcmNotification = {
+            title: notification.title,
+            body: notification.body,
+            icon: notification.icon,
+            click_action: notification.click_action
+        };
+
+        console.log(tokens);
+
+        this.client
+            .post(
+                '/fcm/send',
+                JSON.stringify({
+                    notification: fcmNotification,
+                    to: tokens[0]
+                }),
+                {
+                    headers: {
+                        Authorization: 'key=' + FCM_SERVER_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            .catch((err) => {
+                console.log(err);
+                throw new InternalServerErrorException(err.data);
+            });
     }
 }
