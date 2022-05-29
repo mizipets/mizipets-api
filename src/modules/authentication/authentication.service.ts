@@ -18,7 +18,6 @@ import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeviceService } from '../device/device.service';
-import { CreateDeviceDto } from '../device/dto/create-device.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -46,8 +45,14 @@ export class AuthenticationService {
         return user;
     }
 
-    async login(login: LoginDto, device: CreateDeviceDto): Promise<JwtResponseDto> {
+    async login(login: LoginDto, role: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email, true);
+
+        if (user && role && user.role !== role) {
+            throw new UnauthorizedException(
+                `You need to have a ${role} account to login`
+            );
+        }
 
         if (!user || user.closeDate)
             throw new UnauthorizedException('Invalid credentials');
@@ -59,21 +64,8 @@ export class AuthenticationService {
 
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
-        
-        const devices = await this.deviceService.getByUserID(user.id);
-        if (devices.length > 0) {
-            if (this.deviceService.newDeviceCheck(devices, device)) {
-                await this.mailService.sendNewConnection(user);
-                await this.deviceService.create(device, user);
-            }
-            else
-                await this.deviceService.update(
-                    this.deviceService.getDeviceCheckedID(devices, device));
-        }
-        else
-            await this.deviceService.create(device, user);
 
-        
+        await this.deviceService.createOrUpdateDevice(login, user);
 
         const tokenInfo: RefreshToken =
             await this.userService.updateRefreshToken(user.id);

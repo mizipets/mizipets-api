@@ -63,7 +63,7 @@ export class FavoritesService {
                 }
             },
             {
-                type: ServiceType.ADVICE,
+                type: ServiceType.ADVICES,
                 reference: { id: null }
             },
             {
@@ -111,7 +111,7 @@ export class FavoritesService {
                             );
                         populate.reference = referencePopulated;
                         break;
-                    case ServiceType.ADVICE:
+                    case ServiceType.ADVICES:
                         break;
                     case ServiceType.VETS:
                         break;
@@ -142,7 +142,7 @@ export class FavoritesService {
                     (id) => id !== referenceId
                 );
                 break;
-            case ServiceType.ADVICE:
+            case ServiceType.ADVICES:
                 reference = favorite.reference as AdviceReferences;
                 reference.id = null;
                 break;
