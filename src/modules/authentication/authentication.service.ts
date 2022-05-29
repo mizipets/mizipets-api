@@ -48,14 +48,14 @@ export class AuthenticationService {
     async login(login: LoginDto, role: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email, true);
 
-        if (!user || user.closeDate)
-            throw new UnauthorizedException('Invalid credentials');
-
         if (user && role && user.role !== role) {
             throw new UnauthorizedException(
-                'You need to have a pro account to login'
+                `You need to have a ${role} account to login`
             );
         }
+
+        if (!user || user.closeDate)
+            throw new UnauthorizedException('Invalid credentials');
 
         const isPasswordEquals: boolean = await compare(
             login.password,
@@ -65,19 +65,7 @@ export class AuthenticationService {
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
 
-        const devices = await this.deviceService.getByUserID(user.id);
-        const deviceId = this.deviceService.getDeviceCheckedID(devices, login);
-
-        if (devices.length > 0) {
-            if (!deviceId) {
-                await this.mailService.sendNewConnection(user);
-                await this.deviceService.create(login, user);
-            } else {
-                await this.deviceService.update(deviceId);
-            }
-        } else {
-            await this.deviceService.create(login, user);
-        }
+        await this.deviceService.createOrUpdateDevice(login, user);
 
         const tokenInfo: RefreshToken =
             await this.userService.updateRefreshToken(user.id);
