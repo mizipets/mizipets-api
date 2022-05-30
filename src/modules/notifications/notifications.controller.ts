@@ -13,9 +13,6 @@ export class NotificationsController {
     @Post()
     @HttpCode(HttpStatus.OK)
     async sendNotification(@Body() send: SendNotificationDTO) {
-        return await this.notificationsService.send(
-            send.toUserIds,
-            send.notification
-        );
+        return await this.notificationsService.sendToDevices(null, []);
     }
 }
