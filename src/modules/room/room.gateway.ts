@@ -53,7 +53,11 @@ export class RoomGateway
     @SubscribeMessage('sendMsgToRoom')
     async sendMessage(client: Socket, body: MsgToRoom): Promise<void> {
         const room = await this.roomService.getById(body.roomId);
-        if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
+        const msgMaxLength = 10000;
+        if (
+            true ||
+            (await this.server.to(body.roomCode).allSockets()).size < 2
+        ) {
             this.notificationsService.send(
                 [
                     parseInt(body.userId) === room.animal.owner.id
@@ -67,9 +71,9 @@ export class RoomGateway
                             ? room.animal.owner.firstname
                             : room.adoptant.firstname,
                     body:
-                        body.msg.length <= 15
+                        body.msg.length <= msgMaxLength
                             ? body.msg
-                            : body.msg.substring(0, 14),
+                            : body.msg.substring(0, msgMaxLength),
                     icon: ''
                 }
             );
