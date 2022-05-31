@@ -10,7 +10,7 @@ export class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 
     @Get('user/:id')
-    getByUser(@Param('id') id: number, @Query('offset') offset: number) {
+    async getByUser(@Param('id') id: number, @Query('offset') offset: number) {
         return this.notificationsService.getBy(
             {
                 user: {
