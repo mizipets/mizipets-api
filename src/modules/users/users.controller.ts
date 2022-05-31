@@ -81,7 +81,6 @@ export class UsersController {
     ): Promise<string> {
         if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
-        console.log(tokenDTO);
         return this.userService.updateFlutterToken(
             tokenDTO.token,
             parseInt(id)

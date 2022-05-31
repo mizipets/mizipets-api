@@ -10,9 +10,4 @@ import { NotificationsService } from './notifications.service';
 export class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 
-    @Post()
-    @HttpCode(HttpStatus.OK)
-    async sendNotification(@Body() send: SendNotificationDTO) {
-        return await this.notificationsService.sendToDevices(null, []);
-    }
 }

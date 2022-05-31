@@ -52,21 +52,29 @@ export class RoomGateway
 
     @SubscribeMessage('sendMsgToRoom')
     async sendMessage(client: Socket, body: MsgToRoom): Promise<void> {
-        // if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
-        // }
         const room = await this.roomService.getById(body.roomId);
-        this.notificationsService.send(
-            [room.animal.owner.id, room.adoptant.id],
-            {
-                type: ServiceType.ADOPTION,
-                title: 'New message',
-                body:
-                    body.msg.length <= 15
-                        ? body.msg
-                        : body.msg.substring(0, 14),
-                icon: ''
-            }
-        );
+        if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
+            this.notificationsService.send(
+                [
+                    parseInt(body.userId) === room.animal.owner.id
+                        ? room.adoptant.id
+                        : room.animal.owner.id
+                ],
+                {
+                    type: ServiceType.ADOPTION,
+                    title:
+                        parseInt(body.userId) === room.animal.owner.id
+                            ? room.animal.owner.firstname
+                            : room.adoptant.firstname,
+                    body:
+                        body.msg.length <= 15
+                            ? body.msg
+                            : body.msg.substring(0, 14),
+                    icon: ''
+                }
+            );
+        }
+
         const message = await this.roomService.writeMessage(
             body.roomId,
             body.msg,

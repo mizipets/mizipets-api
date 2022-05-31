@@ -29,9 +29,6 @@ export class Notification {
     @Column('text')
     icon: string;
 
-    @Column('text')
-    click_action: string;
-
     @ManyToOne(() => User, (user) => user.rooms)
     user: User;
 
