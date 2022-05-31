@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosInstance } from 'axios';
-import { Repository } from 'typeorm';
+import { FindConditions, FindManyOptions, Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { NotificationDTO } from './dto/notification.dto';
 import { Notification } from './entities/notification.entity';
@@ -55,7 +55,7 @@ export class NotificationsService {
         });
     }
 
-    async sendToDevices(notification: Notification, token: string) {
+    private async sendToDevices(notification: Notification, token: string) {
         const fcmNotification = {
             title: notification.title,
             priority: 'high',
@@ -83,5 +83,19 @@ export class NotificationsService {
         } catch (e) {
             this.logger.error(`Failed sending notification to: ${token}`);
         }
+    }
+
+    async getBy(
+        where: FindConditions<Notification>,
+        offset = 0
+    ): Promise<Notification[]> {
+        return await this.repository.find({
+            where: where,
+            order: {
+                id: 'DESC'
+            },
+            take: 15,
+            skip: offset
+        });
     }
 }
