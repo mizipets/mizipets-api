@@ -17,13 +17,15 @@ import { LoginDto } from './dto/login.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { DeviceService } from '../device/device.service';
 
 @Injectable()
 export class AuthenticationService {
     constructor(
         private readonly userService: UsersService,
         private readonly mailService: MailService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly deviceService: DeviceService
     ) {}
 
     async register(registrationData: CreateUserDto): Promise<User> {
@@ -43,8 +45,14 @@ export class AuthenticationService {
         return user;
     }
 
-    async login(login: LoginDto): Promise<JwtResponseDto> {
+    async login(login: LoginDto, role: string): Promise<JwtResponseDto> {
         const user: User = await this.userService.getByEmail(login.email, true);
+
+        if (user && role && user.role !== role) {
+            throw new UnauthorizedException(
+                `You need to have a ${role} account to login`
+            );
+        }
 
         if (!user || user.closeDate)
             throw new UnauthorizedException('Invalid credentials');
@@ -56,6 +64,8 @@ export class AuthenticationService {
 
         if (!isPasswordEquals)
             throw new UnauthorizedException('Invalid credentials');
+
+        await this.deviceService.createOrUpdateDevice(login, user);
 
         const tokenInfo: RefreshToken =
             await this.userService.updateRefreshToken(user.id);

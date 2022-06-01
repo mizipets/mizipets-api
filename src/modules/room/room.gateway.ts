@@ -12,6 +12,9 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Roles } from '../authentication/enum/roles.emum';
+import { NotificationsService } from '../notifications/notifications.service';
+import { ServiceType } from '../services/enums/service-type.enum';
 import { MessageType } from './entities/message.entity';
 import { RoomService } from './room.service';
 
@@ -27,7 +30,8 @@ export class RoomGateway
 {
     constructor(
         @Inject(forwardRef(() => RoomService))
-        private readonly roomService: RoomService
+        private readonly roomService: RoomService,
+        private readonly notificationsService: NotificationsService
     ) {}
 
     @WebSocketServer()
@@ -49,9 +53,35 @@ export class RoomGateway
 
     @SubscribeMessage('sendMsgToRoom')
     async sendMessage(client: Socket, body: MsgToRoom): Promise<void> {
-        if ((await this.server.to(body.roomCode).allSockets()).size < 2) {
-            // TODO: Send notif to other user
+        const room = await this.roomService.getById(body.roomId);
+        const msgMaxLength = 10000;
+        if (
+            true ||
+            (await this.server.to(body.roomCode).allSockets()).size < 2
+        ) {
+            this.notificationsService.send(
+                [
+                    parseInt(body.userId) === room.animal.owner.id
+                        ? room.adoptant.id
+                        : room.animal.owner.id
+                ],
+                {
+                    type: ServiceType.ADOPTION,
+                    title:
+                        parseInt(body.userId) === room.animal.owner.id
+                            ? room.animal.owner.role !== Roles.PRO
+                                ? room.animal.owner.firstname
+                                : room.animal.owner.shelter.name
+                            : room.adoptant.firstname,
+                    body:
+                        body.msg.length <= msgMaxLength
+                            ? body.msg
+                            : body.msg.substring(0, msgMaxLength),
+                    icon: ''
+                }
+            );
         }
+
         const message = await this.roomService.writeMessage(
             body.roomId,
             body.msg,

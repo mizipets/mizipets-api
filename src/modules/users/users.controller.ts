@@ -71,6 +71,22 @@ export class UsersController {
         return this.userService.update(parseInt(id), userDto);
     }
 
+    @Put(':id/flutterToken')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
+    async updateFlutterToken(
+        @Request() req,
+        @Param('id') id: string,
+        @Body() tokenDTO: { token: string }
+    ): Promise<string> {
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't update this user");
+        return this.userService.updateFlutterToken(
+            tokenDTO.token,
+            parseInt(id)
+        );
+    }
+
     @Put(':id/close')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)

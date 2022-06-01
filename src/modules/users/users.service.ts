@@ -103,6 +103,8 @@ export class UsersService {
         newUser.favorites = favorites;
         newUser.preferences = userDto.preferences;
         newUser.shelter = shelter;
+        newUser.notifications = [];
+        newUser.devices = [];
 
         this.repository.create(newUser);
         return this.repository.save(newUser);
@@ -143,6 +145,17 @@ export class UsersService {
             .execute();
 
         return refreshToken;
+    }
+
+    async updateFlutterToken(token: string, id: number): Promise<string> {
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
+            .set({ flutterToken: token })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return token;
     }
 
     async updatePassword(id: number, password: string): Promise<void> {
