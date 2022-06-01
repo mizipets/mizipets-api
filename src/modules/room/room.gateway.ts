@@ -12,6 +12,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Roles } from '../authentication/enum/roles.emum';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { MessageType } from './entities/message.entity';
@@ -68,7 +69,9 @@ export class RoomGateway
                     type: ServiceType.ADOPTION,
                     title:
                         parseInt(body.userId) === room.animal.owner.id
-                            ? room.animal.owner.firstname
+                            ? room.animal.owner.role !== Roles.PRO
+                                ? room.animal.owner.firstname
+                                : room.animal.owner.shelter.name
                             : room.adoptant.firstname,
                     body:
                         body.msg.length <= msgMaxLength

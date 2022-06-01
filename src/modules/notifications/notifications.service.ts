@@ -57,7 +57,7 @@ export class NotificationsService {
 
     private async sendToDevices(notification: Notification, token: string) {
         const fcmNotification = {
-            title: notification.title,
+            title: `🐾 - ${notification.title}`,
             priority: 'high',
             body: notification.body,
             icon: notification.icon
