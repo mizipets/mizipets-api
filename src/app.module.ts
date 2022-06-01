@@ -20,6 +20,7 @@ import { S3Module } from './modules/s3/s3.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { DeviceModule } from './modules/device/device.module';
 import { AdvicesModule } from './modules/advices/advices.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
     imports: [
@@ -56,7 +57,8 @@ import { AdvicesModule } from './modules/advices/advices.module';
         RoomModule,
         MonitoringModule,
         DeviceModule,
-        AdvicesModule
+        AdvicesModule,
+        NotificationsModule
     ],
     controllers: [],
     providers: [

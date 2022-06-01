@@ -26,6 +26,7 @@
         "seed:revert": "ts-node ./seed/seed-revert.ts"
     },
     "dependencies": {
+        "@firebase/messaging": "^0.9.12",
         "@nestjs-modules/mailer": "^1.3.17",
         "@nestjs/axios": "^0.0.7",
         "@nestjs/common": "^8.0.0",

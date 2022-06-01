@@ -7,7 +7,6 @@ import {
     CreateDateColumn,
     Entity,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
@@ -15,6 +14,7 @@ import { Roles } from '../../authentication/enum/roles.emum';
 import { Favorites } from '../../favorites/entities/favorites.entity';
 import { Room } from '../../room/entities/room.entity';
 import { Device } from '../../device/entities/device.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
 
 export class Address {
     street: string;
@@ -60,6 +60,9 @@ export class User {
     @Column('text', { nullable: true })
     photo: string;
 
+    @Column('text', { nullable: true })
+    flutterToken: string;
+
     @Column({ nullable: true })
     code?: number;
 
@@ -95,6 +98,9 @@ export class User {
 
     @OneToMany(() => Room, (animal) => animal.adoptant)
     rooms: Room[];
+
+    @OneToMany(() => Notification, (notification) => notification.user)
+    notifications: Notification[];
 
     @OneToMany(() => Device, (device) => device.user)
     devices: Device[];

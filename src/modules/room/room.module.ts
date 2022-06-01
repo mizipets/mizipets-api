@@ -13,13 +13,15 @@ import { RoomGateway } from './room.gateway';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { Message } from './entities/message.entity';
 import { MessageService } from './message.service';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Room, Message]),
         UsersModule,
         AnimalsModule,
-        FavoritesModule
+        FavoritesModule,
+        NotificationsModule
     ],
     providers: [RoomService, RoomGateway, MessageService],
     exports: [RoomService],
