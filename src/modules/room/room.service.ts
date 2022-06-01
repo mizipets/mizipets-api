@@ -100,7 +100,7 @@ export class RoomService {
     }
 
     async findByUserId(id: number): Promise<Room[]> {
-        return this.repository.find({
+        const rooms = await this.repository.find({
             where: [
                 {
                     animal: {
@@ -117,6 +117,12 @@ export class RoomService {
             ],
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
+        return Promise.all(
+            rooms.map(async (room) => {
+                room.messages = await this.messageService.get(room.id);
+                return room;
+            })
+        );
     }
 
     async requestGive(roomId: number) {
