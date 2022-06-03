@@ -17,6 +17,13 @@ export class AdvicesController {
         return await this.advicesService.getAll();
     }
 
+    @Get('random')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async getRandom() {
+        return await this.advicesService.getRandom();
+    }
+
     @Get('specie/:id')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)

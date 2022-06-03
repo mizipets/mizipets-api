@@ -14,6 +14,14 @@ export class AdvicesService {
         return await this.repository.find();
     }
 
+    async getRandom() {
+        return await this.repository
+            .createQueryBuilder()
+            .orderBy('RANDOM()')
+            .limit(20)
+            .getMany();
+    }
+
     async getById(id: number) {
         return await this.repository.findOne({
             where: {
