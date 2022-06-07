@@ -85,16 +85,17 @@ export class AnimalsService {
     }
 
     async getById(id: number): Promise<Animal> {
-        const animalDB = await this.repository.findOne(id, {
+        const animal = await this.repository.findOne(id, {
             where: {
                 deletedDate: null
             },
             relations: ['race', 'race.specie', 'owner']
         });
-        if (!animalDB) {
+        if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return animalDB;
+            animal.owner.removeSensitiveData();
+            return animal;
         }
     }
 
@@ -107,7 +108,11 @@ export class AnimalsService {
             relations
         });
 
-        return animals;
+        return animals.map((animal: Animal) => {
+            if (Object.keys(animal).includes('owner'))
+                animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -153,7 +158,11 @@ export class AnimalsService {
             relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
-        return animals;
+
+        return animals.map((animal: Animal) => {
+            animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {

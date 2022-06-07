@@ -48,14 +48,17 @@ export class AnimalsController {
     @Post('adoption')
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async favorites(@Req() req, @Body() dto: CreateAnimalDTO): Promise<Animal> {
+    async createAdoption(
+        @Req() req,
+        @Body() dto: CreateAnimalDTO
+    ): Promise<Animal> {
         return this.animalsService.create(dto, req.user, true);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
-    async getFavorites(
+    async getAnimals(
         @Req() req,
         @Query('sex') sex: Sex,
         @Query('raceId') raceId: string,

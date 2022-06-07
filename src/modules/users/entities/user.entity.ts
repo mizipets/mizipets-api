@@ -104,4 +104,19 @@ export class User {
 
     @OneToMany(() => Device, (device) => device.user)
     devices: Device[];
+
+    removeSensitiveData(): void {
+        if (this.role === Roles.STANDARD) {
+            delete this.address;
+            delete this.shelter;
+        }
+        delete this.email;
+        delete this.lastname;
+        delete this.preferences;
+        delete this.flutterToken;
+        delete this.refreshToken;
+        delete this.code;
+        delete this.createDate;
+        delete this.closeDate;
+    }
 }

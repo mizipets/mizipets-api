@@ -68,6 +68,8 @@ export class RoomService {
         });
         if (room) {
             room.messages = await this.messageService.get(room.id);
+            room.adoptant.removeSensitiveData();
+            room.animal.owner.removeSensitiveData();
         }
         return room;
     }
@@ -79,6 +81,8 @@ export class RoomService {
         });
         if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
         room.messages = await this.messageService.get(room.id);
+        room.adoptant.removeSensitiveData();
+        room.animal.owner.removeSensitiveData();
         return room;
     }
 
@@ -117,9 +121,12 @@ export class RoomService {
             ],
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
+
         return Promise.all(
             rooms.map(async (room) => {
                 room.messages = await this.messageService.get(room.id);
+                room.adoptant.removeSensitiveData();
+                room.animal.owner.removeSensitiveData();
                 return room;
             })
         );
