@@ -94,7 +94,8 @@ export class AnimalsService {
         if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return this.getOwner(animal);
+            animal.owner.removeSensitiveData();
+            return animal;
         }
     }
 
@@ -107,13 +108,11 @@ export class AnimalsService {
             relations
         });
 
-        const newAnimals: Animal[] = [];
-        for (const animal of animals) {
-            const animalWithOwner = this.getOwner(animal);
-            newAnimals.push(animalWithOwner);
-        }
-
-        return newAnimals;
+        return animals.map((animal: Animal) => {
+            if (Object.keys(animal).includes('owner'))
+                animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -159,14 +158,11 @@ export class AnimalsService {
             relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
-        const newAnimals: Animal[] = [];
 
-        for (const animal of animals) {
-            const animalWithOwner = this.getOwner(animal);
-            newAnimals.push(animalWithOwner);
-        }
-
-        return newAnimals;
+        return animals.map((animal: Animal) => {
+            animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -260,19 +256,5 @@ export class AnimalsService {
         } else {
             return favorite;
         }
-    }
-
-    private getOwner(animal: Animal): Animal {
-        delete animal.owner.email;
-        delete animal.owner.lastname;
-        delete animal.owner.animals;
-        delete animal.owner.preferences;
-        delete animal.owner.flutterToken;
-        delete animal.owner.refreshToken;
-        delete animal.owner.code;
-        delete animal.owner.createDate;
-        delete animal.owner.closeDate;
-
-        return animal;
     }
 }
