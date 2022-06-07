@@ -69,7 +69,7 @@ export class RoomService {
         if (room) {
             room.messages = await this.messageService.get(room.id);
         }
-        return room;
+        return this.getRoomWithOwner(room);
     }
 
     async getById(id: number): Promise<Room> {
@@ -79,7 +79,7 @@ export class RoomService {
         });
         if (!room) throw new NotFoundException(`Room with id: ${id} not found`);
         room.messages = await this.messageService.get(room.id);
-        return room;
+        return this.getRoomWithOwner(room);
     }
 
     async writeMessage(
@@ -117,8 +117,13 @@ export class RoomService {
             ],
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
+        const newRooms: Room[] = [];
+        for (const room of rooms) {
+            const roomWithOwner = this.getRoomWithOwner(room);
+            newRooms.push(roomWithOwner);
+        }
         return Promise.all(
-            rooms.map(async (room) => {
+            newRooms.map(async (room) => {
                 room.messages = await this.messageService.get(room.id);
                 return room;
             })
@@ -203,5 +208,32 @@ export class RoomService {
 
         await this.messageGateway.sendMessage(null, msgRoom);
         // TODO: notifs
+    }
+
+    private getRoomWithOwner(room: Room): Room {
+        if (room.adoptant) {
+            delete room.adoptant.email;
+            delete room.adoptant.lastname;
+            delete room.adoptant.animals;
+            delete room.adoptant.preferences;
+            delete room.adoptant.flutterToken;
+            delete room.adoptant.refreshToken;
+            delete room.adoptant.code;
+            delete room.adoptant.createDate;
+            delete room.adoptant.closeDate;
+        }
+        if (room.animal) {
+            delete room.animal.owner.email;
+            delete room.animal.owner.lastname;
+            delete room.animal.owner.animals;
+            delete room.animal.owner.preferences;
+            delete room.animal.owner.flutterToken;
+            delete room.animal.owner.refreshToken;
+            delete room.animal.owner.code;
+            delete room.animal.owner.createDate;
+            delete room.animal.owner.closeDate;
+        }
+
+        return room;
     }
 }

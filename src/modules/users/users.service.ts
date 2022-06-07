@@ -18,7 +18,6 @@ import { Animal } from '../animals/entities/animal.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { MailService } from '../../shared/mail/mail.service';
 import { v4 as uuidv4 } from 'uuid';
-import { S3Service } from '../s3/s3.service';
 
 const { JWT_REFRESH_EXPIRATION } = process.env;
 
@@ -29,7 +28,6 @@ export class UsersService {
         @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService,
         private readonly emailService: MailService,
-        private readonly s3Service: S3Service
     ) {}
 
     async getAll(relations: string[] = []) {
@@ -45,7 +43,6 @@ export class UsersService {
         });
 
         if (!user) throw new NotFoundException(`User with id: ${id} not found`);
-        user.password = undefined;
         return user;
     }
 

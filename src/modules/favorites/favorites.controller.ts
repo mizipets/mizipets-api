@@ -29,7 +29,7 @@ export class FavoritesController {
         @Req() req,
         @Param('userId') userId: string
     ): Promise<Favorites[]> {
-        if (req.user.role !== Roles.ADMIN || req.user.id !== parseInt(userId)) {
+        if (req.user.id !== parseInt(userId) && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException("Can't access others favorites");
         }
         return this.favoritesService.getFavoritesOfUser(parseInt(userId));
@@ -38,7 +38,13 @@ export class FavoritesController {
     @Get(':userId/populated')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
-    async getPopulatedFavoritesOfUser(@Param('userId') userId: string) {
+    async getPopulatedFavoritesOfUser(
+        @Req() req,
+        @Param('userId') userId: string
+    ) {
+        if (req.user.id !== parseInt(userId) && req.user.role !== Roles.ADMIN) {
+            throw new ForbiddenException("Can't access others favorites");
+        }
         return await this.favoritesService.getPopulatedFavoritesOfUser(
             parseInt(userId)
         );

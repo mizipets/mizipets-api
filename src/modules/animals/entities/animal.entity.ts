@@ -7,7 +7,7 @@ import {
     Entity,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryGeneratedColumn
 } from 'typeorm';
 import { Room } from '../../room/entities/room.entity';
 import { User } from '../../users/entities/user.entity';

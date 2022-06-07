@@ -85,16 +85,16 @@ export class AnimalsService {
     }
 
     async getById(id: number): Promise<Animal> {
-        const animalDB = await this.repository.findOne(id, {
+        const animal = await this.repository.findOne(id, {
             where: {
                 deletedDate: null
             },
             relations: ['race', 'race.specie', 'owner']
         });
-        if (!animalDB) {
+        if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return animalDB;
+            return this.getOwner(animal);
         }
     }
 
@@ -107,7 +107,13 @@ export class AnimalsService {
             relations
         });
 
-        return animals;
+        const newAnimals: Animal[] = [];
+        for (const animal of animals) {
+            const animalWithOwner = this.getOwner(animal);
+            newAnimals.push(animalWithOwner);
+        }
+
+        return newAnimals;
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -153,7 +159,14 @@ export class AnimalsService {
             relations: ['race', 'race.specie', 'owner'],
             take: params.limit ? 5 : null
         });
-        return animals;
+        const newAnimals: Animal[] = [];
+
+        for (const animal of animals) {
+            const animalWithOwner = this.getOwner(animal);
+            newAnimals.push(animalWithOwner);
+        }
+
+        return newAnimals;
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -247,5 +260,19 @@ export class AnimalsService {
         } else {
             return favorite;
         }
+    }
+
+    private getOwner(animal: Animal): Animal {
+        delete animal.owner.email;
+        delete animal.owner.lastname;
+        delete animal.owner.animals;
+        delete animal.owner.preferences;
+        delete animal.owner.flutterToken;
+        delete animal.owner.refreshToken;
+        delete animal.owner.code;
+        delete animal.owner.createDate;
+        delete animal.owner.closeDate;
+
+        return animal;
     }
 }
