@@ -28,6 +28,17 @@ services:
     networks:
       - mizipetsnetwork
     restart: always
+  front:
+    image: natin56y/mizipets-front-staging
+    container_name: front
+    pull_policy: always
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+    networks:
+      - mizipetsnetwork
+    restart: always
   postgres_db:
     image: postgres
     ports:
