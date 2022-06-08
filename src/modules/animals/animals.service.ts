@@ -194,6 +194,7 @@ export class AnimalsService {
     }
 
     async delete(id: number): Promise<boolean> {
+        await this.favoritesService.removeFromAllUser(id, ServiceType.ADOPTION);
         const result = await this.repository
             .createQueryBuilder()
             .update(Animal)

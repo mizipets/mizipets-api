@@ -19,6 +19,7 @@ import { AnimalsService } from '../animals/animals.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { MessageService } from './message.service';
+import { RoomStatus } from './enums/room-status.enum';
 
 @Injectable()
 export class RoomService {
@@ -33,7 +34,7 @@ export class RoomService {
 
     async create(user: User, animal: Animal): Promise<Room> {
         const room = new Room();
-        room.closed = false;
+        room.status = RoomStatus.OPENED;
         room.requestGive = false;
         room.adoptant = user;
         room.animal = animal;
@@ -148,8 +149,9 @@ export class RoomService {
         await this.messageGateway.sendMessage(null, msgRoom);
     }
 
-    async acceptRequestGive(roomId: number, messageId: number, user: User) {
+    async acceptRequestGive(roomId: number, messageId: number) {
         await this.messageService.delete(messageId);
+
         const roomDB = await this.getById(roomId);
 
         roomDB.requestGive = false;
@@ -159,6 +161,7 @@ export class RoomService {
         animal.isAdoption = false;
         animal.lastOwner = animal.owner;
         animal.owner = roomDB.adoptant;
+        roomDB.adoptant = animal.lastOwner;
 
         this.favoritesService.removeFavorite(
             animal.owner.id,
@@ -166,7 +169,7 @@ export class RoomService {
             animal.id
         );
 
-        roomDB.closed = true;
+        roomDB.status = RoomStatus.GIVED;
         roomDB.animal = await this.animalsService.save(animal);
 
         await this.repository.save(roomDB);
@@ -175,24 +178,13 @@ export class RoomService {
             roomCode: roomDB.code,
             roomId: roomDB.id,
             userId: roomDB.animal.owner.id.toString(),
-            msg: `${roomDB.animal.owner.firstname} accepted receiving ${roomDB.animal.name}`,
+            msg: `accepted receiving ${roomDB.animal.name}, this room will still exist.`,
             type: MessageType.accepted
         };
         await this.messageGateway.sendMessage(null, msgRoom);
-
-        const msgCloseRoom: MsgToRoom = {
-            roomCode: roomDB.code,
-            roomId: roomDB.id,
-            userId: roomDB.animal.owner.id.toString(),
-            msg: `Conversation ended`,
-            type: MessageType.close
-        };
-        await this.messageGateway.sendMessage(null, msgCloseRoom);
-
-        // TODO: notifs
     }
 
-    async refuseRequestGive(roomId: number, messageId: number, user: User) {
+    async refuseRequestGive(roomId: number, messageId: number) {
         await this.messageService.delete(messageId);
         const roomDB = await this.getById(roomId);
 
@@ -203,12 +195,27 @@ export class RoomService {
         const msgRoom: MsgToRoom = {
             roomCode: roomDB.code,
             roomId: roomDB.id,
-            userId: roomDB.animal.owner.id.toString(),
-            msg: `${roomDB.animal.owner.firstname} refused receiving ${roomDB.animal.name}`,
+            userId: roomDB.adoptant.id.toString(),
+            msg: `${roomDB.adoptant.firstname} refused receiving ${roomDB.animal.name}`,
             type: MessageType.refused
         };
-
         await this.messageGateway.sendMessage(null, msgRoom);
-        // TODO: notifs
+    }
+
+    async closeRoom(roomId: number) {
+        const roomDB = await this.getById(roomId);
+        roomDB.status = RoomStatus.CLOSED;
+        const msgCloseRoom: MsgToRoom = {
+            roomCode: roomDB.code,
+            roomId: roomDB.id,
+            userId: roomDB.animal.owner.id.toString(),
+            msg: `Conversation ended`,
+            type: MessageType.close
+        };
+        await this.messageGateway.sendMessage(null, msgCloseRoom);
+        await this.favoritesService.removeFromAllUser(
+            roomDB.animal.id,
+            ServiceType.ADOPTION
+        );
     }
 }

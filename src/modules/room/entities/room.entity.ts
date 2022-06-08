@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Animal } from '../../animals/entities/animal.entity';
 import { User } from '../../users/entities/user.entity';
+import { RoomStatus } from '../enums/room-status.enum';
 import { Message } from './message.entity';
 
 @Entity('rooms')
@@ -22,8 +23,8 @@ export class Room {
     @Column()
     code: string;
 
-    @Column({ default: false })
-    closed: boolean;
+    @Column({ nullable: false, default: RoomStatus.OPENED })
+    status: RoomStatus;
 
     @Column({ default: false })
     requestGive: boolean;

@@ -134,8 +134,7 @@ export class RoomController {
     ): Promise<void> {
         await this.roomService.acceptRequestGive(
             parseInt(roomId),
-            body.messageId,
-            req.user
+            body.messageId
         );
     }
 
@@ -149,8 +148,7 @@ export class RoomController {
     ): Promise<void> {
         await this.roomService.refuseRequestGive(
             parseInt(roomId),
-            body.messageId,
-            req.user
+            body.messageId
         );
     }
 

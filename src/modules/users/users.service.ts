@@ -27,7 +27,7 @@ export class UsersService {
         @InjectRepository(User) private readonly repository: Repository<User>,
         @Inject(forwardRef(() => FavoritesService))
         private readonly favoritesService: FavoritesService,
-        private readonly emailService: MailService,
+        private readonly emailService: MailService
     ) {}
 
     async getAll(relations: string[] = []) {
@@ -148,6 +148,13 @@ export class UsersService {
         await this.repository
             .createQueryBuilder()
             .update(User)
+            .set({ flutterToken: null })
+            .where('flutterToken = :token', { token: token })
+            .execute();
+
+        await this.repository
+            .createQueryBuilder()
+            .update(User)
             .set({ flutterToken: token })
             .where('id = :id', { id: id })
             .execute();
@@ -199,5 +206,13 @@ export class UsersService {
         const user = await this.getById(owner.id, ['animals']);
         user.animals.push(animal);
         return this.repository.save(user);
+    }
+
+    async getIdOfAllUsers(): Promise<number[]> {
+        return (
+            await this.repository.find({
+                select: ['id']
+            })
+        ).map((user) => user.id);
     }
 }
