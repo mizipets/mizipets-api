@@ -44,4 +44,10 @@ export class Room {
     getCode(): string {
         return `${this.adoptant.id}-room-${this.animal.id}`;
     }
+
+    getLastMessageDate(): Date | null {
+        return this.messages.length === 0
+            ? null
+            : this.messages.at(this.messages.length - 1).created;
+    }
 }

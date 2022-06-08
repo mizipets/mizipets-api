@@ -78,7 +78,13 @@ export class RoomController {
         @Req() req,
         @Query('userId') userId: string
     ): Promise<Room[]> {
-        return await this.roomService.findByUserId(parseInt(userId));
+        return await (
+            await this.roomService.findByUserId(parseInt(userId))
+        ).sort((a, b) => {
+            if (a.getLastMessageDate() < b.getLastMessageDate()) return 1;
+            if (a.getLastMessageDate() > b.getLastMessageDate()) return -1;
+            return 0;
+        });
     }
 
     @Get(':roomId/:animalId/orCreate')
