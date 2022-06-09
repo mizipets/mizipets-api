@@ -12,9 +12,12 @@ import * as compression from 'compression';
 import * as morgan from 'morgan';
 import { CustomExceptionFilter } from './shared/exception/custom-exception.filter';
 import { DiscordService } from './shared/discord/discord.service';
+import { Logger } from './shared/logger/logger';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+        logger: new Logger('Nest')
+    });
     const origins = ['http://localhost:4200', 'http://49.12.198.51:4200'];
 
     app.enableCors({ origin: origins });
