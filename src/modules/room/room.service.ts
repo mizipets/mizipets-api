@@ -9,7 +9,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { User } from '../users/entities/user.entity';
 import { Message, MessageType } from './entities/message.entity';
@@ -178,10 +178,59 @@ export class RoomService {
             roomCode: roomDB.code,
             roomId: roomDB.id,
             userId: roomDB.animal.owner.id.toString(),
-            msg: `accepted receiving ${roomDB.animal.name}, this room will still exist.`,
+            msg: `accepted receiving ${roomDB.animal.name}`,
             type: MessageType.accepted
         };
         await this.messageGateway.sendMessage(null, msgRoom);
+
+        await this.closeAllWithAnimalExcept(roomDB);
+    }
+
+    async closeAllWithAnimalExcept(room: Room): Promise<void> {
+        const roomsToClose = await this.repository.find({
+            where: {
+                id: Not(room.id),
+                animal: {
+                    id: room.animal.id
+                }
+            },
+            relations: ['animal', 'animal.owner', 'adoptant']
+        });
+        await Promise.all(
+            roomsToClose.map(async (roomToClose) => {
+                await this.close(roomToClose);
+            })
+        );
+    }
+
+    async close(room: Room): Promise<void> {
+        const msgRoom: MsgToRoom = {
+            roomCode: room.code,
+            roomId: room.id,
+            userId: room.animal.owner.id.toString(),
+            msg: `room closed by owner`,
+            type: MessageType.close
+        };
+        await this.messageGateway.sendMessage(null, msgRoom);
+
+        await this.repository.update(
+            {
+                id: room.id
+            },
+            {
+                status: RoomStatus.CLOSED
+            }
+        );
+        await this.favoritesService.removeFavorite(
+            room.adoptant.id,
+            ServiceType.ADOPTION,
+            room.animal.id
+        );
+        await this.favoritesService.removeFavorite(
+            room.animal.owner.id,
+            ServiceType.ADOPTION,
+            room.animal.id
+        );
     }
 
     async refuseRequestGive(roomId: number, messageId: number) {

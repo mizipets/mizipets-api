@@ -158,6 +158,14 @@ export class RoomController {
         );
     }
 
+    @Put(':roomId/close')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async close(@Param('roomId') roomId: string): Promise<void> {
+        const room = await this.roomService.getById(parseInt(roomId));
+        await this.roomService.close(room);
+    }
+
     @Get(':roomId/messages')
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
