@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { forwardRef, Inject, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosInstance } from 'axios';
 import { FindConditions, FindManyOptions, Repository } from 'typeorm';
@@ -16,6 +16,7 @@ export class NotificationsService {
     constructor(
         @InjectRepository(Notification)
         private readonly repository: Repository<Notification>,
+        @Inject(forwardRef(() => UsersService))
         private usersService: UsersService
     ) {
         this.client = axios.create({

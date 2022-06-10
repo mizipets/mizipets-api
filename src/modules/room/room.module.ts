@@ -18,10 +18,10 @@ import { NotificationsModule } from '../notifications/notifications.module';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Room, Message]),
-        UsersModule,
-        AnimalsModule,
-        FavoritesModule,
-        NotificationsModule
+        forwardRef(() => UsersModule),
+        forwardRef(() => AnimalsModule),
+        forwardRef(() => FavoritesModule),
+        forwardRef(() => NotificationsModule)
     ],
     providers: [RoomService, RoomGateway, MessageService],
     exports: [RoomService],

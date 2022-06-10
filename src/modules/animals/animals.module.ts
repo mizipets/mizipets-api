@@ -5,6 +5,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FavoritesModule } from '../favorites/favorites.module';
+import { RoomModule } from '../room/room.module';
 import { S3Module } from '../s3/s3.module';
 import { UsersModule } from '../users/users.module';
 import { AnimalsController } from './animals.controller';
@@ -22,7 +23,8 @@ import { SpeciesService } from './species.service';
         TypeOrmModule.forFeature([Animal, Specie, Race]),
         forwardRef(() => UsersModule),
         forwardRef(() => FavoritesModule),
-        forwardRef(() => S3Module)
+        forwardRef(() => S3Module),
+        forwardRef(() => RoomModule)
     ],
     controllers: [AnimalsController, SpeciesController, RacesController],
     providers: [AnimalsService, SpeciesService, RacesService],
