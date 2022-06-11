@@ -17,10 +17,13 @@ export class Reminder {
     isReccurent: boolean;
 
     @Column('text')
-    reccurence: Recurrence;
+    recurrence: Recurrence;
 
     @Column()
     start: Date;
+
+    @Column({ default: true })
+    isOn: boolean;
 
     @ManyToOne(() => Animal, (animal) => animal.reminders)
     animal: Animal;
@@ -32,7 +35,7 @@ export class Reminder {
     }
 
     private getReccurenceSeconds(): number {
-        switch (this.reccurence) {
+        switch (this.recurrence) {
             case 'daily':
                 return 60 * 60 * 24;
             case 'weekly':

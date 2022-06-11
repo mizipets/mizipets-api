@@ -12,7 +12,7 @@ import {
 import { Room } from '../../room/entities/room.entity';
 import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
-import { Reminder } from './reminder.entity.';
+import { Reminder } from './reminder.entity';
 import { Race } from './race.entity';
 
 @Entity('animals')
