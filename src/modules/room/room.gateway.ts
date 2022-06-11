@@ -53,7 +53,7 @@ export class RoomGateway
 
     @SubscribeMessage('sendMsgToRoom')
     async sendMessage(client: Socket, body: MsgToRoom): Promise<void> {
-        const room = await this.roomService.getById(body.roomId);
+        const room = await this.roomService.getBy({ id: body.roomId });
         const msgMaxLength = 10000;
         if (
             true ||

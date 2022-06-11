@@ -16,9 +16,9 @@ import { DeviceModule } from '../device/device.module';
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
-        FavoritesModule,
         MailModule,
         DeviceModule,
+        forwardRef(() => FavoritesModule),
         forwardRef(() => AnimalsModule),
         forwardRef(() => S3Module)
     ],

@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AnimalsService } from '../animals/animals.service';
 import { ServiceType } from '../services/enums/service-type.enum';
+import { UsersService } from '../users/users.service';
 import {
     Favorites,
     Reference,
@@ -30,7 +31,9 @@ export class FavoritesService {
         @InjectRepository(Favorites)
         private readonly repository: Repository<Favorites>,
         @Inject(forwardRef(() => AnimalsService))
-        private animalsService: AnimalsService
+        private animalsService: AnimalsService,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService
     ) {}
 
     async getById(id: number): Promise<Favorites> {
@@ -122,6 +125,16 @@ export class FavoritesService {
             })
         );
         return await promises;
+    }
+
+    async removeFromAllUser(referenceId: number, type: ServiceType) {
+        const userIds = await this.usersService.getIdOfAllUsers();
+
+        const removeIdActions = userIds.map((userId) =>
+            this.removeFavorite(userId, type, referenceId)
+        );
+
+        return Promise.all(removeIdActions);
     }
 
     async removeFavorite(

@@ -28,6 +28,7 @@ import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
 import { Roles } from '../authentication/enum/roles.emum';
 import { S3Service } from '../s3/s3.service';
+import { RoomService } from '../room/room.service';
 
 @Injectable()
 export class AnimalsService {
@@ -43,7 +44,9 @@ export class AnimalsService {
         @Inject(forwardRef(() => FavoritesService))
         private favoritesService: FavoritesService,
         @Inject(forwardRef(() => S3Service))
-        private s3Service: S3Service
+        private s3Service: S3Service,
+        @Inject(forwardRef(() => RoomService))
+        private roomService: RoomService
     ) {}
 
     async create(
@@ -85,16 +88,17 @@ export class AnimalsService {
     }
 
     async getById(id: number): Promise<Animal> {
-        const animalDB = await this.repository.findOne(id, {
+        const animal = await this.repository.findOne(id, {
             where: {
                 deletedDate: null
             },
             relations: ['race', 'race.specie', 'owner', 'reminders']
         });
-        if (!animalDB) {
+        if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return animalDB;
+            animal.owner.removeSensitiveData();
+            return animal;
         }
     }
 
@@ -107,7 +111,11 @@ export class AnimalsService {
             relations
         });
 
-        return animals;
+        return animals.map((animal: Animal) => {
+            if (Object.keys(animal).includes('owner'))
+                animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
@@ -153,7 +161,11 @@ export class AnimalsService {
             relations: ['race', 'race.specie', 'owner', 'reminders'],
             take: params.limit ? 5 : null
         });
-        return animals;
+
+        return animals.map((animal: Animal) => {
+            animal.owner.removeSensitiveData();
+            return animal;
+        });
     }
 
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
@@ -185,6 +197,8 @@ export class AnimalsService {
     }
 
     async delete(id: number): Promise<boolean> {
+        await this.favoritesService.removeFromAllUser(id, ServiceType.ADOPTION);
+        await this.roomService.closeAllWithAnimal(id);
         const result = await this.repository
             .createQueryBuilder()
             .update(Animal)

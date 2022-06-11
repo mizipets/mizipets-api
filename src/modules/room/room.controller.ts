@@ -17,6 +17,7 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { UsersService } from '../users/users.service';
 import { Message } from './entities/message.entity';
 import { Room } from './entities/room.entity';
+import { RoomStatus } from './enums/room-status.enum';
 import { MessageService } from './message.service';
 import { RoomService } from './room.service';
 
@@ -78,7 +79,13 @@ export class RoomController {
         @Req() req,
         @Query('userId') userId: string
     ): Promise<Room[]> {
-        return await this.roomService.findByUserId(parseInt(userId));
+        return await (
+            await this.roomService.findByUserId(parseInt(userId))
+        ).sort((a, b) => {
+            if (a.getLastMessageDate() < b.getLastMessageDate()) return 1;
+            if (a.getLastMessageDate() > b.getLastMessageDate()) return -1;
+            return 0;
+        });
     }
 
     @Get(':roomId/:animalId/orCreate')
@@ -92,7 +99,9 @@ export class RoomController {
         const roomDB =
             roomId === 'null'
                 ? null
-                : await this.roomService.getById(parseInt(roomId));
+                : await this.roomService.getBy({
+                      id: parseInt(roomId)
+                  });
         if (roomDB) {
             return roomDB;
         } else {
@@ -134,8 +143,7 @@ export class RoomController {
     ): Promise<void> {
         await this.roomService.acceptRequestGive(
             parseInt(roomId),
-            body.messageId,
-            req.user
+            body.messageId
         );
     }
 
@@ -149,9 +157,16 @@ export class RoomController {
     ): Promise<void> {
         await this.roomService.refuseRequestGive(
             parseInt(roomId),
-            body.messageId,
-            req.user
+            body.messageId
         );
+    }
+
+    @Put(':roomId/close')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async close(@Param('roomId') roomId: string): Promise<void> {
+        const room = await this.roomService.getBy({ id: parseInt(roomId) });
+        await this.roomService.close(room);
     }
 
     @Get(':roomId/messages')

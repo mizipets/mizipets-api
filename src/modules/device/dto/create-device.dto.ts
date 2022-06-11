@@ -2,7 +2,7 @@
  * @author Latif SAGNA
  * @create 2022-03-11
  */
-import { IsNotEmpty, IsDate, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDeviceDto {
     @IsNotEmpty()

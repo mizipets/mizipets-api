@@ -11,7 +11,7 @@ export class MessageService {
     ) {}
 
     async create(message: Message) {
-        return this.repository.save(message);
+        return await this.repository.save(message);
     }
 
     async delete(id: number) {
