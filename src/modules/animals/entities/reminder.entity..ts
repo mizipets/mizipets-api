@@ -1,18 +1,34 @@
-export class HealthBook {
-    vaccins: Vaccin[];
-}
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-06-09
+ */
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Animal } from './animal.entity';
 
-export class Vaccin implements Reminder {
+@Entity('reminders')
+export class Reminder {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column('text')
     name: string;
-    isReccurent: boolean;
-    reccurence: Recurrence;
-    start: number;
 
-    1000 % 5
+    @Column()
+    isReccurent: boolean;
+
+    @Column('text')
+    reccurence: Recurrence;
+
+    @Column()
+    start: Date;
+
+    @ManyToOne(() => Animal, (animal) => animal.reminders)
+    animal: Animal;
+
     async isReminderToday(): Promise<boolean> {
         // const modulo = (this.start - Date.now()) % this.getReccurenceSeconds();
         // return modulo <;
-        return true;
+        return false;
     }
 
     private getReccurenceSeconds(): number {
@@ -33,13 +49,6 @@ export class Vaccin implements Reminder {
                 return 60 * 60 * 24 * 31 * 12;
         }
     }
-}
-
-export interface Reminder {
-    isReccurent: boolean;
-    reccurence: Recurrence;
-    start: number;
-    isReminderToday(): Promise<boolean>;
 }
 
 export type Recurrence =
