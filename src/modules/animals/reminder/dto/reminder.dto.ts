@@ -9,7 +9,7 @@ import {
     IsNumber,
     IsString
 } from 'class-validator';
-import { Recurrence } from '../../entities/reminder.entity';
+import { Recurrence } from '../entities/reminder.entity';
 
 export class ReminderDto {
     @IsString()
