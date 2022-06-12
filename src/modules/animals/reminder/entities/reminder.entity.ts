@@ -57,25 +57,6 @@ export class Reminder {
         return moment(currentDay.toDate()).isSame(moment(reminderDay.toDate()));
     }
 
-    private getReccurenceDays(): number {
-        switch (this.recurrence) {
-            case 'daily':
-                return 1;
-            case 'weekly':
-                return 7;
-            case 'monthly':
-                return 31;
-            case 'bimonthly':
-                return 31 * 2;
-            case 'trimesterly':
-                return 31 * 4;
-            case 'semesterly':
-                return 31 * 6;
-            case 'yearly':
-                return 31 * 12;
-        }
-    }
-
     private getReccurenceStartOf(): moment.unitOfTime.StartOf {
         switch (this.recurrence) {
             case 'daily':

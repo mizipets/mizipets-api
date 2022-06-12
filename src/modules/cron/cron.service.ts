@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { RemindersService } from '../animals/reminder/reminder.service';
+import { NotificationDTO } from '../notifications/dto/notification.dto';
+import { NotificationsService } from '../notifications/notifications.service';
+import { ServiceType } from '../services/enums/service-type.enum';
 
 const { CRON_SCHEDULE } = process.env;
 
@@ -8,9 +11,12 @@ const { CRON_SCHEDULE } = process.env;
 export class CronService {
     private logger: Logger = new Logger(CronService.name);
 
-    constructor(private remindersService: RemindersService) {}
+    constructor(
+        private remindersService: RemindersService,
+        private notificationsService: NotificationsService
+    ) {}
 
-    @Cron('*/2 * * * * *')
+    @Cron(CRON_SCHEDULE ?? '0 08 * * *')
     async checkMedicalReminders() {
         this.logger.log('Start reminder check');
 
@@ -24,6 +30,16 @@ export class CronService {
         for (const reminder of reminders) {
             if (reminder.isReminderAtDate()) {
                 console.log(`Send notif to owner of ${reminder.animal.name}`);
+
+                const notification: NotificationDTO = {
+                    type: ServiceType.PETS,
+                    title: `Reminder for `,
+                    body: `[${reminder.name}] This is your ${reminder.recurrence} reminder for ${reminder.animal.name}`
+                };
+                await this.notificationsService.send(
+                    [reminder.animal.owner.id],
+                    notification
+                );
             }
         }
 

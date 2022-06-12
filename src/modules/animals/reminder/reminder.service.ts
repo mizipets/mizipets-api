@@ -37,7 +37,7 @@ export class RemindersService {
     async getAllWhere(where: FindConditions<Reminder>) {
         return await this.repository.find({
             where: where,
-            relations: ['animal']
+            relations: ['animal', 'animal.owner']
         });
     }
 

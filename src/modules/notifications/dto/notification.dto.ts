@@ -4,5 +4,5 @@ export class NotificationDTO {
     type: ServiceType;
     title: string;
     body: string;
-    icon: string;
+    icon?: string;
 }
