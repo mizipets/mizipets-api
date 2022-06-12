@@ -3,10 +3,10 @@
  * @create 2022-03-23
  */
 import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
-import { Roles } from '../authentication/enum/roles.emum';
-import { OnlyRoles } from '../authentication/guards/role.decorator';
+import { Roles } from '../../authentication/enum/roles.emum';
+import { OnlyRoles } from '../../authentication/guards/role.decorator';
 import { SpeciesService } from './species.service';
-import { Specie } from './entities/specie.entity';
+import { Specie } from '../entities/specie.entity';
 
 @Controller('species')
 export class SpeciesController {

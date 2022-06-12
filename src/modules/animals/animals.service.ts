@@ -92,7 +92,7 @@ export class AnimalsService {
             where: {
                 deletedDate: null
             },
-            relations: ['race', 'race.specie', 'owner']
+            relations: ['race', 'race.specie', 'owner', 'reminders']
         });
         if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -104,7 +104,7 @@ export class AnimalsService {
 
     async getByIds(
         ids: number[],
-        relations = ['race', 'race.specie', 'owner']
+        relations = ['race', 'race.specie', 'owner', 'reminders']
     ): Promise<Animal[]> {
         const animals = await this.repository.find({
             where: { id: In(ids), deletedDate: null },
@@ -158,7 +158,7 @@ export class AnimalsService {
 
         const animals = await this.repository.find({
             where: queries,
-            relations: ['race', 'race.specie', 'owner'],
+            relations: ['race', 'race.specie', 'owner', 'reminders'],
             take: params.limit ? 5 : null
         });
 
