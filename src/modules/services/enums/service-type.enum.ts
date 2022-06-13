@@ -5,6 +5,6 @@
 export enum ServiceType {
     ADOPTION = 'ADOPTION',
     PETS = 'PETS',
-    ADVICE = 'ADVICE',
+    ADVICES = 'ADVICES',
     VETS = 'VETS'
 }

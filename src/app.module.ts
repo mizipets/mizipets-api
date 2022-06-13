@@ -12,17 +12,21 @@ import { DiscordService } from './shared/discord/discord.service';
 import { AnimalsModule } from './modules/animals/animals.module';
 import { MailModule } from './shared/mail/mail.module';
 import { ServicesModule } from './modules/services/services.module';
-import { MessagesModule } from './modules/room/messages/messages.module';
 import { RoomModule } from './modules/room/room.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
+import { S3Module } from './modules/s3/s3.module';
+import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { DeviceModule } from './modules/device/device.module';
+import { AdvicesModule } from './modules/advices/advices.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
     imports: [
         ThrottlerModule.forRoot({
             ttl: 60,
-            limit: 10
+            limit: 100
         }),
         TypeOrmModule.forRoot({
             type: 'postgres',
@@ -49,8 +53,12 @@ import * as path from 'path';
         MailModule,
         AnimalsModule,
         ServicesModule,
+        S3Module,
         RoomModule,
-        MessagesModule
+        MonitoringModule,
+        DeviceModule,
+        AdvicesModule,
+        NotificationsModule
     ],
     controllers: [],
     providers: [

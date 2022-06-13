@@ -1,5 +1,5 @@
 /**
- * @author Maxime D'HARBOULLE
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
  * @create 2022-03-16
  */
 import {
@@ -18,18 +18,18 @@ export class Service {
     @Column()
     name: string;
 
-    @Column()
-    type: ServiceType;
-
-    @Column()
+    @Column('text', { nullable: true })
     description: string;
 
     @Column()
-    image: string;
+    imagePath: string;
+
+    @Column()
+    serviceType: ServiceType;
 
     @Column()
     isActive: boolean;
 
     @CreateDateColumn()
-    created: Date;
+    createDate: Date;
 }

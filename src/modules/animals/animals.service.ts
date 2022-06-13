@@ -4,17 +4,18 @@
  */
 import {
     ForbiddenException,
+    forwardRef,
+    Inject,
     Injectable,
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, In, Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import {
     AdoptionReferences,
     Favorites
 } from '../favorites/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
-import { RoomService } from '../room/room.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -22,8 +23,12 @@ import { CreateAnimalDTO } from './dto/create-animal.dto';
 import { UpdateAnimalDTO } from './dto/update-animal.dto';
 import { Animal } from './entities/animal.entity';
 import { Race } from './entities/race.entity';
-import { Species } from './entities/species.entity';
+import { Specie } from './entities/specie.entity';
 import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
+import { Search } from './animals.controller';
+import { Roles } from '../authentication/enum/roles.emum';
+import { S3Service } from '../s3/s3.service';
+import { RoomService } from '../room/room.service';
 
 @Injectable()
 export class AnimalsService {
@@ -32,11 +37,16 @@ export class AnimalsService {
         private readonly repository: Repository<Animal>,
         @InjectRepository(Race)
         private readonly raceRepository: Repository<Race>,
-        @InjectRepository(Species)
-        private readonly speciesRepository: Repository<Species>,
-        private readonly usersService: UsersService,
-        private readonly favoritesService: FavoritesService,
-        private readonly roomService: RoomService
+        @InjectRepository(Specie)
+        private readonly speciesRepository: Repository<Specie>,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
+        @Inject(forwardRef(() => FavoritesService))
+        private favoritesService: FavoritesService,
+        @Inject(forwardRef(() => S3Service))
+        private s3Service: S3Service,
+        @Inject(forwardRef(() => RoomService))
+        private roomService: RoomService
     ) {}
 
     async create(
@@ -47,7 +57,7 @@ export class AnimalsService {
         const animal = new Animal();
 
         const race = await this.raceRepository.findOne(dto.raceId, {
-            relations: ['species']
+            relations: ['specie']
         });
         if (!race) {
             throw new NotFoundException(
@@ -55,10 +65,10 @@ export class AnimalsService {
             );
         }
 
-        const specie = await this.speciesRepository.findOne(race.species.id);
+        const specie = await this.speciesRepository.findOne(race.specie.id);
         if (!specie) {
             throw new NotFoundException(
-                `specie with id '${race.species.id}' does not exist`
+                `specie with id '${race.specie.id}' does not exist`
             );
         }
 
@@ -77,53 +87,84 @@ export class AnimalsService {
         return animalDB;
     }
 
-    async getAll(): Promise<Animal[]> {
-        return await this.repository.find({
-            relations: ['race', 'race.species', 'owner']
-        });
-    }
-
     async getById(id: number): Promise<Animal> {
-        const animalDB = await this.repository.findOne(id, {
-            relations: ['race', 'race.species', 'owner']
+        const animal = await this.repository.findOne(id, {
+            where: {
+                deletedDate: null
+            },
+            relations: ['race', 'race.specie', 'owner', 'reminders']
         });
-        if (!animalDB) {
+        if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
         } else {
-            return animalDB;
+            animal.owner.removeSensitiveData();
+            return animal;
         }
     }
 
-    async getAdoption(user: User): Promise<Animal[]> {
+    async getByIds(
+        ids: number[],
+        relations = ['race', 'race.specie', 'owner', 'reminders']
+    ): Promise<Animal[]> {
+        const animals = await this.repository.find({
+            where: { id: In(ids), deletedDate: null },
+            relations
+        });
+
+        return animals.map((animal: Animal) => {
+            if (Object.keys(animal).includes('owner'))
+                animal.owner.removeSensitiveData();
+            return animal;
+        });
+    }
+
+    async getAnimal(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
 
         const reference = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         ).reference as AdoptionReferences;
 
-        return await this.repository
-            .createQueryBuilder()
-            .select('animal')
-            .from(Animal, 'animal')
-            .where('animal.isAdoption = :isAdoption', {
-                isAdoption: true
-            })
-            .andWhere('animal.ownerId != :userId', {
-                userId: userDB.id
-            })
-            .andWhere({ id: Not(In(reference.disliked)) })
-            .andWhere({ id: Not(In(reference.liked)) })
-            .getMany();
-    }
+        const avoidIds = [...reference.disliked, ...reference.liked];
 
-    async getAdoptionsByOwner(userId: number): Promise<Animal[]> {
-        return await this.repository.find({
-            where: {
-                owner: {
-                    id: userId
-                }
-            },
-            relations: ['race', 'race.species']
+        const originalQuery: any = {
+            id: Not(In(avoidIds)),
+            deletedDate: null
+        };
+        if (params.sex) originalQuery.sex = params.sex;
+        if (params.race) originalQuery.race = params.race;
+        if (params.specie)
+            originalQuery.race = { specie: { id: params.specie.id } };
+
+        if (params.isAdoption !== undefined) {
+            originalQuery.isAdoption = params.isAdoption;
+        }
+
+        const currentOwnerQuery = Object.assign({}, originalQuery);
+        currentOwnerQuery.owner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const lastOwnerQuery = Object.assign({}, originalQuery);
+        lastOwnerQuery.lastOwner = {
+            id: params.ownerId ? params.ownerId : Not(user.id)
+        };
+
+        const queries: any[] = [currentOwnerQuery];
+
+        if (user.role === Roles.PRO) {
+            queries.push(lastOwnerQuery);
+        }
+
+        const animals = await this.repository.find({
+            where: queries,
+            relations: ['race', 'race.specie', 'owner', 'reminders'],
+            take: params.limit ? 5 : null
+        });
+
+        return animals.map((animal: Animal) => {
+            animal.owner.removeSensitiveData();
+            return animal;
         });
     }
 
@@ -133,7 +174,7 @@ export class AnimalsService {
         let race: Race;
         if (dto.raceId) {
             race = await this.raceRepository.findOne(dto.raceId, {
-                relations: ['species']
+                relations: ['specie']
             });
         }
         updated.race = race ?? updated.race;
@@ -141,13 +182,31 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
-        updated.images = dto.images ?? updated.images;
-
         return await this.repository.save(updated);
     }
 
-    async delete(id: number): Promise<DeleteResult> {
-        return this.repository.delete(id);
+    async save(animal: Animal): Promise<Animal> {
+        return await this.repository.save(animal);
+    }
+
+    async updateImages(id: number, image: string): Promise<void> {
+        const updated = await this.getById(id);
+
+        updated.images.push(image);
+        await this.repository.save(updated);
+    }
+
+    async delete(id: number): Promise<boolean> {
+        await this.favoritesService.removeFromAllUser(id, ServiceType.ADOPTION);
+        await this.roomService.closeAllWithAnimal(id);
+        const result = await this.repository
+            .createQueryBuilder()
+            .update(Animal)
+            .set({ deletedDate: new Date() })
+            .where('id = :id', { id: id })
+            .execute();
+
+        return result.affected == 1;
     }
 
     async like(token: JwtPayloadDto, new_id: number): Promise<Favorites> {
@@ -165,8 +224,6 @@ export class AnimalsService {
         if (animal.owner.id === token.id) {
             throw new ForbiddenException("Can't like your own adoption");
         }
-
-        await this.roomService.create(user, animal);
 
         if (!reference.liked.includes(new_id)) {
             reference.liked.push(new_id);

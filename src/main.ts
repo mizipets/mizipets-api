@@ -15,7 +15,7 @@ import { DiscordService } from './shared/discord/discord.service';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const origins = ['http://localhost:4200'];
+    const origins = ['http://localhost:4200', 'http://49.12.198.51:4200'];
 
     app.enableCors({ origin: origins });
     app.use(compression());
@@ -30,7 +30,7 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle('Mizipets API')
         .setDescription(
-            'Mizipets is a mobile application give services for pets'
+            'Mizipets is a mobile application providing services for pets'
         )
         .setVersion('1.0')
         .build();

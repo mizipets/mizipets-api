@@ -14,13 +14,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(private usersService: UsersService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: process.env.ENV === 'local',
+            ignoreExpiration: false,
             secretOrKey: process.env.JWT_SECRET
         });
     }
 
     async validate(payload: JwtPayloadDto): Promise<JwtPayloadDto> {
-        const user: User = await this.usersService.getById(payload.id);
+        const user: User = await this.usersService.getById(payload.id, []);
         if (!user) throw new UnauthorizedException('Invalid token.');
 
         return payload;

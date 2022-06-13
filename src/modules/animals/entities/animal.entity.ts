@@ -12,6 +12,7 @@ import {
 import { Room } from '../../room/entities/room.entity';
 import { User } from '../../users/entities/user.entity';
 import { Sex } from '../enum/sex.enum';
+import { Reminder } from './reminder.entity';
 import { Race } from './race.entity';
 
 @Entity('animals')
@@ -38,6 +39,9 @@ export class Animal {
     isLost: boolean;
 
     @Column({ nullable: true })
+    deletedDate: Date;
+
+    @Column({ nullable: true })
     birthDate: Date;
 
     @Column()
@@ -49,6 +53,12 @@ export class Animal {
     @ManyToOne(() => User, (user) => user.animals)
     owner: User;
 
+    @ManyToOne(() => User, (user) => user.pastAnimals)
+    lastOwner: User;
+
     @OneToMany(() => Room, (room) => room.animal)
     rooms: Room[];
+
+    @OneToMany(() => Reminder, (reminder) => reminder.animal)
+    reminders: Reminder[];
 }

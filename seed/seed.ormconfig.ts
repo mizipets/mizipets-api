@@ -1,9 +1,6 @@
 /**
- * @author Maxime d'Harboullé
- * @email maxime.dharboulle@gmail.com
- * @create date 2022-03-20 21:26:13
- * @modify date 2022-03-20 21:26:13
- * @desc [description]
+ * @author Maxime D'HARBOULLE
+ * @create 2022-03-20
  */
 import { ConnectionOptions } from 'typeorm';
 import '../src/initEnv';

@@ -1,34 +1,34 @@
 [
     {
         "id": 1,
-        "name": "Adopt an Animal",
-        "type": "ADOPTION",
-        "description": "description",
-        "image": "https://example.com",
-        "isActive": true
+        "name": "adoption",
+        "description": "",
+        "imagePath": "assets/images/adopt-panda.png",
+        "serviceType": "ADOPTION",
+        "isActive": false
     },
     {
         "id": 2,
-        "name": "Your Pets",
-        "type": "PETS",
-        "description": "description",
-        "image": "https://example.com",
-        "isActive": true
+        "name": "pets",
+        "description": "",
+        "imagePath": "assets/images/my-panda.png",
+        "serviceType": "PETS",
+        "isActive": false
     },
     {
         "id": 3,
-        "name": "Advice Service",
-        "type": "ADVICE",
-        "description": "description",
-        "image": "https://example.com",
-        "isActive": true
+        "name": "advices",
+        "description": "",
+        "imagePath": "assets/images/advice-panda.png",
+        "serviceType": "ADVICES",
+        "isActive": false
     },
     {
         "id": 4,
-        "name": "Find your vet",
-        "type": "VET",
-        "description": "description",
-        "image": "https://example.com",
-        "isActive": true
+        "name": "vets",
+        "description": "",
+        "imagePath": "assets/images/vet-panda.png",
+        "serviceType": "VETS",
+        "isActive": false
     }
 ]

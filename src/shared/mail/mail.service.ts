@@ -43,4 +43,26 @@ export class MailService {
             }
         });
     }
+
+    async sendCloseAccount(user: User) {
+        await this.mailerService.sendMail({
+            to: user.email,
+            subject: 'Mizipiets - Account closed',
+            template: 'close-account',
+            context: {
+                firstname: user.firstname
+            }
+        });
+    }
+
+    async sendNewConnection(user: User) {
+        await this.mailerService.sendMail({
+            to: user.email,
+            subject: 'Mizipiets - New connection',
+            template: 'new-connection',
+            context: {
+                firstname: user.firstname
+            }
+        });
+    }
 }

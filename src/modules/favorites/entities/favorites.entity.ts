@@ -12,11 +12,7 @@ export class Favorites {
     id: number;
 
     @Column('json')
-    reference:
-        | AdoptionReferences
-        | AdviceReferences
-        | PetsReferences
-        | VetsReferences;
+    reference: Reference;
 
     @Column()
     type: ServiceType;
@@ -25,13 +21,11 @@ export class Favorites {
     user: User;
 }
 
+export type Reference = AdoptionReferences | AdviceReferences | VetsReferences;
+
 export class AdoptionReferences {
     disliked: number[];
     liked: number[];
-}
-
-export class PetsReferences {
-    id?: number;
 }
 
 export class AdviceReferences {

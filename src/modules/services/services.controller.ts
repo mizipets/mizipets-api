@@ -1,8 +1,9 @@
 /**
- * @author Maxime D'HARBOULLE
+ * @author Maxime D'HARBOULLE & Julien DA CORTE
  * @create 2022-03-16
  */
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -14,6 +15,7 @@ import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServicesService } from './services.service';
 import { Service } from './entities/service.entity';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Controller('services')
 export class ServicesController {
@@ -28,6 +30,7 @@ export class ServicesController {
 
     @Get('active')
     @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     public async getAllActive(): Promise<Service[]> {
         return this.servicesService.getAllActive();
     }
@@ -37,6 +40,16 @@ export class ServicesController {
     @OnlyRoles(Roles.ADMIN)
     public async getById(@Param('id') id: number): Promise<Service> {
         return this.servicesService.getById(id);
+    }
+
+    @Put(':id')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.ADMIN)
+    public async update(
+        @Param('id') id: number,
+        @Body() serviceDto: UpdateServiceDto
+    ): Promise<Service> {
+        return this.servicesService.update(id, serviceDto);
     }
 
     @Put(':id/activate')
