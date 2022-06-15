@@ -88,7 +88,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
                 \n${exception.stack}`
             );
             if (ENV === 'prod' || ENV === 'staging')
-               await this.discordService.sendMsg(msg);
+                await this.discordService.sendMsg(msg);
         }
         return response.status(status).json(exceptionMessage);
     }

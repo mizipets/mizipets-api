@@ -1,8 +1,8 @@
 name:  Deploy api prod
 
-on:
-   release:
-    types: [published]
+on: 
+  workflow_dispatch:
+    branches: ['master']
     
 jobs:
   deploy:

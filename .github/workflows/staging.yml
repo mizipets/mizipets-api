@@ -2,7 +2,7 @@ name: Deploy api staging
 
 on: 
   workflow_dispatch:
-    branches: [master]
+    branches: ['staging']
 
 jobs:
   deploy:
