@@ -17,7 +17,7 @@ jobs:
         port: 22
         script: |
           cd mizipets-api
-          docker-compose stop
+          docker-compose -f docker-compose.staging.yml stop
           git checkout master
           docker rm -f mizipets-api_api_1
           docker rmi -f mizipets-api_api_1
@@ -27,4 +27,4 @@ jobs:
           mkdir envs
           cp ~/.env.prod ./envs/.env.prod
           cp ~/.env.local ./envs/.env.local
-          docker-compose up -d --build --env-file ./.compose/.env.staging
+          docker-compose -f docker-compose.staging.yml up -d --build

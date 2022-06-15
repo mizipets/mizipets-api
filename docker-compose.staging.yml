@@ -20,7 +20,7 @@ services:
   api:
     build: 
       context: .
-      dockerfile: "./Dockerfile.${DOCKER_ENV}"
+      dockerfile: "./Dockerfile.staging"
     container_name: api
     depends_on:
       - postgres_db
