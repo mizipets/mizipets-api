@@ -25,6 +25,6 @@ jobs:
           git pull
           rm -rf envs
           mkdir envs
-          cp ~/.env.prod ./envs/.env.prod
+          cp ~/.env.staging ./envs/.env.staging
           cp ~/.env.local ./envs/.env.local
           docker-compose -f docker-compose.staging.yml up -d --build
