@@ -18,7 +18,9 @@ x-minio-common: &minio-common
 
 services:
   api:
-    build: .
+    build: 
+      context: .
+      dockerfile: "./Dockerfile.${DOCKER_ENV}"
     container_name: api
     depends_on:
       - postgres_db

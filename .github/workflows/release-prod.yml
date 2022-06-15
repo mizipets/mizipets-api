@@ -1,9 +1,9 @@
-name: Deploy api staging
+name:  Deploy api prod
 
-on: 
-  workflow_dispatch:
-    branches: [master]
-
+on:
+   release:
+    types: [published]
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,4 +27,4 @@ jobs:
           mkdir envs
           cp ~/.env.prod ./envs/.env.prod
           cp ~/.env.local ./envs/.env.local
-          docker-compose up -d --build --env-file ./.compose/.env.staging
+          docker-compose up -d --build --env-file ./.compose/.env.prod

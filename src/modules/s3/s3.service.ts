@@ -17,7 +17,6 @@ import { UsersService } from '../users/users.service';
 const {
     AWS_S3_BUCKET_URL,
     AWS_S3_BUCKET_NAME,
-    API_URL,
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
     PORT
