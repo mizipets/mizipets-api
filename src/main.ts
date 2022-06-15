@@ -17,7 +17,11 @@ const { ENV, PORT, NAME } = process.env;
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const origins = ['http://localhost:4200', 'http://49.12.198.51:4200'];
+    const origins = [
+        'http://localhost:4200',
+        'https://staging.mizipets.com',
+        'https://mizipets.com'
+    ];
 
     app.enableCors({ origin: origins });
     app.use(compression());
