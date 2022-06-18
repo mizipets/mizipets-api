@@ -28,6 +28,7 @@ import { JwtPayloadDto } from '../authentication/dto/jwt-payload.dto';
 import { Search } from './animals.controller';
 import { Roles } from '../authentication/enum/roles.emum';
 import { S3Service } from '../s3/s3.service';
+import { RoomService } from '../room/room.service';
 
 @Injectable()
 export class AnimalsService {
@@ -43,7 +44,9 @@ export class AnimalsService {
         @Inject(forwardRef(() => FavoritesService))
         private favoritesService: FavoritesService,
         @Inject(forwardRef(() => S3Service))
-        private s3Service: S3Service
+        private s3Service: S3Service,
+        @Inject(forwardRef(() => RoomService))
+        private roomService: RoomService
     ) {}
 
     async create(
@@ -89,7 +92,7 @@ export class AnimalsService {
             where: {
                 deletedDate: null
             },
-            relations: ['race', 'race.specie', 'owner']
+            relations: ['race', 'race.specie', 'owner', 'reminders']
         });
         if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -101,7 +104,7 @@ export class AnimalsService {
 
     async getByIds(
         ids: number[],
-        relations = ['race', 'race.specie', 'owner']
+        relations = ['race', 'race.specie', 'owner', 'reminders']
     ): Promise<Animal[]> {
         const animals = await this.repository.find({
             where: { id: In(ids), deletedDate: null },
@@ -155,7 +158,7 @@ export class AnimalsService {
 
         const animals = await this.repository.find({
             where: queries,
-            relations: ['race', 'race.specie', 'owner'],
+            relations: ['race', 'race.specie', 'owner', 'reminders'],
             take: params.limit ? 5 : null
         });
 
@@ -195,6 +198,7 @@ export class AnimalsService {
 
     async delete(id: number): Promise<boolean> {
         await this.favoritesService.removeFromAllUser(id, ServiceType.ADOPTION);
+        await this.roomService.closeAllWithAnimal(id);
         const result = await this.repository
             .createQueryBuilder()
             .update(Animal)

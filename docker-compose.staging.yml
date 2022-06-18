@@ -1,0 +1,161 @@
+version: "3.9"
+
+x-minio-common: &minio-common
+  image: quay.io/minio/minio:RELEASE.2022-05-08T23-50-31Z
+  restart: always
+  command: server --console-address ":9001" http://minio{1...4}/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  environment:
+    MINIO_ROOT_USER: minioadmin
+    MINIO_ROOT_PASSWORD: minioadmin
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: "./Dockerfile.staging"
+    container_name: api
+    depends_on:
+      - postgres_db
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    networks:
+      - mizipetsnetwork
+    restart: always
+  front:
+    image: natin56y/mizipets-front-staging
+    container_name: front
+    pull_policy: always
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+    networks:
+      - mizipetsnetwork
+    restart: always
+  postgres_db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-mizipets:/var/lib/postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - mizipetsnetwork
+
+  loki:
+    image: grafana/loki:2.0.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command:
+      - --config.file=/mnt/config/loki-config.yaml
+    volumes:
+      - ./.loki/loki-config.yaml:/mnt/config/loki-config.yaml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3030:3000
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes: 
+      - ./.grafana/provisioning-datasources.yml:/etc/grafana/provisioning/datasources/provisioning-datasources.yml
+
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - data1-1:/data1
+      - data1-2:/data2
+
+  minio2:
+    <<: *minio-common
+    hostname: minio2
+    volumes:
+      - data2-1:/data1
+      - data2-2:/data2
+
+  minio3:
+    <<: *minio-common
+    hostname: minio3
+    volumes:
+      - data3-1:/data1
+      - data3-2:/data2
+
+  minio4:
+    <<: *minio-common
+    hostname: minio4
+    volumes:
+      - data4-1:/data1
+      - data4-2:/data2
+
+  nginx:
+    image: nginx:1.19.2-alpine
+    restart: always
+    hostname: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    depends_on:
+      - minio1
+      - minio2
+      - minio3
+      - minio4
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   volumes:
+  #     - ./.prometheus/config.yml:/etc/prometheus/prometheus.yml
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #   ports:
+  #     - '9090:9090'
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: monitoring_grafana
+  #   command: bash -c "
+  #     chown -R root:root /etc/grafana && \
+  #     chmod -R a+r /etc/grafana && \
+  #     chown -R grafana:grafana /var/lib/grafana && \
+  #     chown -R grafana:grafana /usr/share/grafana"
+  #   restart: unless-stopped
+  #   user: '472'
+  #   links:
+  #     - prometheus:prometheus
+  #   volumes:
+  #     - ./data/grafana:/var/lib/grafana
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=12345
+  #   ports:
+  #     - '3030:3000'
+volumes:
+  postgres-mizipets:
+  data1-1:
+  data1-2:
+  data2-1:
+  data2-2:
+  data3-1:
+  data3-2:
+  data4-1:
+  data4-2:
+
+networks:
+  mizipetsnetwork:
+    driver: bridge

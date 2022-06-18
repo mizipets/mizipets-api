@@ -18,7 +18,9 @@ x-minio-common: &minio-common
 
 services:
   api:
-    build: .
+    build: 
+      context: .
+      dockerfile: "./Dockerfile.prod"
     container_name: api
     depends_on:
       - postgres_db
@@ -29,7 +31,7 @@ services:
       - mizipetsnetwork
     restart: always
   front:
-    image: natin56y/mizipets-front-staging
+    image: natin56y/mizipets-front
     container_name: front
     pull_policy: always
     depends_on:
@@ -52,28 +54,6 @@ services:
       POSTGRES_DB: postgres
     networks:
       - mizipetsnetwork
-
-  loki:
-    image: grafana/loki:2.0.0
-    container_name: loki
-    ports:
-      - "3100:3100"
-    command:
-      - --config.file=/mnt/config/loki-config.yaml
-    volumes:
-      - ./.loki/loki-config.yaml:/mnt/config/loki-config.yaml:ro
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - 3030:3000
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-    volumes: 
-      - ./.grafana/provisioning-datasources.yml:/etc/grafana/provisioning/datasources/provisioning-datasources.yml
-
   minio1:
     <<: *minio-common
     hostname: minio1

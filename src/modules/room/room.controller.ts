@@ -17,6 +17,7 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { UsersService } from '../users/users.service';
 import { Message } from './entities/message.entity';
 import { Room } from './entities/room.entity';
+import { RoomStatus } from './enums/room-status.enum';
 import { MessageService } from './message.service';
 import { RoomService } from './room.service';
 
@@ -98,7 +99,9 @@ export class RoomController {
         const roomDB =
             roomId === 'null'
                 ? null
-                : await this.roomService.getById(parseInt(roomId));
+                : await this.roomService.getBy({
+                      id: parseInt(roomId)
+                  });
         if (roomDB) {
             return roomDB;
         } else {
@@ -156,6 +159,14 @@ export class RoomController {
             parseInt(roomId),
             body.messageId
         );
+    }
+
+    @Put(':roomId/close')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async close(@Param('roomId') roomId: string): Promise<void> {
+        const room = await this.roomService.getBy({ id: parseInt(roomId) });
+        await this.roomService.close(room);
     }
 
     @Get(':roomId/messages')

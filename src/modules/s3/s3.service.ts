@@ -7,7 +7,8 @@ import {
     ForbiddenException,
     forwardRef,
     Inject,
-    Injectable
+    Injectable,
+    InternalServerErrorException
 } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as AWS from 'aws-sdk';
@@ -17,7 +18,6 @@ import { UsersService } from '../users/users.service';
 const {
     AWS_S3_BUCKET_URL,
     AWS_S3_BUCKET_NAME,
-    API_URL,
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
     PORT
@@ -50,7 +50,6 @@ export class S3Service {
             throw new ForbiddenException('Only images are allowed');
 
         const photo = await this.uploadToS3(type, id, file);
-        // const apiImageUrl = this.keyToUrl(photo.key);
 
         if (type === 'animal') {
             const animal = await this.animalService.getById(id);
@@ -74,32 +73,25 @@ export class S3Service {
         return `${AWS_S3_BUCKET_URL}/mizipets/${key}`;
     }
 
-    public async getPresignedUrl(key: string): Promise<string> {
-        if (!key) {
-            return '';
-        }
-        const url = s3.getSignedUrl('getObject', {
-            Expires: 60 * 60 * 24,
-            Bucket: AWS_S3_BUCKET_NAME,
-            Key: key
-        });
-
-        return url.split('?').at(0);
-    }
-
     private async uploadToS3(
         type: string,
         id: number,
         file: any
     ): Promise<any> {
         const newUuid = uuidv4();
-        return s3
-            .upload({
-                Bucket: AWS_S3_BUCKET_NAME,
-                Body: file.buffer,
-                Key: `${type}_${id}_${newUuid}`
-            })
-            .promise();
+        try {
+            return await s3
+                .upload({
+                    Bucket: AWS_S3_BUCKET_NAME,
+                    Body: file.buffer,
+                    Key: `${type}_${id}_${newUuid}`
+                })
+                .promise();
+        } catch (e) {
+            throw new InternalServerErrorException(
+                "can't upload image " + e.message
+            );
+        }
     }
 
     private checkMimetype(imageType: string): boolean {

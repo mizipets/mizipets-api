@@ -14,13 +14,15 @@ import { CustomExceptionFilter } from './shared/exception/custom-exception.filte
 import { DiscordService } from './shared/discord/discord.service';
 import { Logger } from './shared/logger/logger';
 
-const { ENV } = process.env;
+const { ENV, PORT, NAME } = process.env;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, {
-        logger: new Logger('Nest')
-    });
-    const origins = ['http://localhost:4200', 'http://49.12.198.51:4200'];
+    const app = await NestFactory.create(AppModule);
+    const origins = [
+        'http://localhost:4200',
+        'https://staging.mizipets.com',
+        'https://mizipets.com'
+    ];
 
     app.enableCors({ origin: origins });
     app.use(compression());
@@ -35,7 +37,7 @@ async function bootstrap() {
     );
 
     const config = new DocumentBuilder()
-        .setTitle('Mizipets API')
+        .setTitle(`${NAME} $${ENV}`)
         .setDescription(
             'Mizipets is a mobile application providing services for pets'
         )
@@ -45,7 +47,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
 
-    await app.listen(process.env.PORT || 3000);
+    await app.listen(PORT || 3000);
 }
 
 bootstrap();
