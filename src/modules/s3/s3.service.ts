@@ -7,7 +7,8 @@ import {
     ForbiddenException,
     forwardRef,
     Inject,
-    Injectable
+    Injectable,
+    InternalServerErrorException
 } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as AWS from 'aws-sdk';
@@ -79,14 +80,18 @@ export class S3Service {
     ): Promise<any> {
         const newUuid = uuidv4();
         try {
-            return s3
+            return await s3
                 .upload({
                     Bucket: AWS_S3_BUCKET_NAME,
                     Body: file.buffer,
                     Key: `${type}_${id}_${newUuid}`
                 })
                 .promise();
-        } catch (error) {}
+        } catch (e) {
+            throw new InternalServerErrorException(
+                "can't upload image " + e.message
+            );
+        }
     }
 
     private checkMimetype(imageType: string): boolean {
