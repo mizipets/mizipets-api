@@ -21,7 +21,6 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { DeviceModule } from './modules/device/device.module';
 import { AdvicesModule } from './modules/advices/advices.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { Logger } from './shared/logger/logger';
 
 @Module({
     imports: [

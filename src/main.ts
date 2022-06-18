@@ -14,6 +14,8 @@ import { CustomExceptionFilter } from './shared/exception/custom-exception.filte
 import { DiscordService } from './shared/discord/discord.service';
 import { Logger } from './shared/logger/logger';
 
+const { ENV } = process.env;
+
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
         logger: new Logger('Nest')
@@ -25,7 +27,9 @@ async function bootstrap() {
     app.use(helmet());
     app.setGlobalPrefix(process.env.API_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ disableErrorMessages: false }));
-    app.use(morgan('tiny'));
+    if (ENV === 'dev') {
+        app.use(morgan('tiny'));
+    }
     app.useGlobalFilters(
         new CustomExceptionFilter(app.get<DiscordService>(DiscordService))
     );
