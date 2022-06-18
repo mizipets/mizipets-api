@@ -67,8 +67,7 @@ import { Logger } from './shared/logger/logger';
             provide: APP_GUARD,
             useClass: ThrottlerGuard
         },
-        DiscordService,
-        Logger
+        DiscordService
     ]
 })
 export class AppModule {}

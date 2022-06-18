@@ -1,6 +1,10 @@
 import { Injectable, LoggerService, LogLevel } from '@nestjs/common';
-import { createLogger, Logger as WinstonLogger } from 'winston';
-import LokiTransport from 'winston-loki';
+import {
+    createLogger,
+    Logger as WinstonLogger,
+    transports,
+    format
+} from 'winston';
 
 @Injectable()
 export class Logger implements LoggerService {
@@ -9,17 +13,28 @@ export class Logger implements LoggerService {
     labels = [{ env: 'dev' }, { env: 'prod' }];
 
     constructor(private contextName: string) {
-        this.loki = createLogger();
-        this.loki.add(
-            new LokiTransport({
-                host: 'http://localhost:3100',
-                labels: { job: 'app' }
-            })
-        );
+        const options = {
+            defaultMeta: { name: 'api' },
+            // batching: true,
+            // interval: 10,
+            transports: [
+                // new LokiTransport({
+                //     host: 'http://localhost:3100',
+                //     labels: { job: 'app' }
+                // })
+                new transports.Http({
+                    host: 'http://localhost',
+                    port: 3100,
+                    path: '/'
+                }),
+                new transports.Console()
+            ]
+        };
+        this.loki = createLogger(options);
     }
 
     public log(message: any, ...optionalParams: any[]) {
-        this.sendToLoki(message, 'error');
+        this.sendToLoki(message, 'info');
     }
 
     public error(message: any, ...optionalParams: any[]) {
@@ -47,7 +62,7 @@ export class Logger implements LoggerService {
             level,
             message,
             (error?: any, level?: string, message?: string, meta?: any) => {
-                console.log(error, level, message, meta);
+                console.log('error', error, level, message, meta);
             }
         );
     }
