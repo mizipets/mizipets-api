@@ -8,11 +8,11 @@ import {
     HttpException,
     ArgumentsHost,
     HttpStatus,
-    Injectable,
-    Logger
+    Injectable
 } from '@nestjs/common';
 import * as HttpStatusCode from 'http-status-codes';
 import { DiscordService } from '../discord/discord.service';
+import { Logger } from '../logger/logger';
 
 const { ENV } = process.env;
 
