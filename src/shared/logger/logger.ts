@@ -3,6 +3,7 @@ import { createLogger, Logger as WinstonLogger, transports } from 'winston';
 import LokiTransport from 'winston-loki';
 
 const { ENV } = process.env;
+
 @Injectable()
 export class Logger implements LoggerService {
     loki: WinstonLogger;
@@ -12,7 +13,7 @@ export class Logger implements LoggerService {
             batching: false,
             transports: [
                 ENV === 'dev'
-                    ? new transports.Console({})
+                    ? new transports.Console()
                     : new LokiTransport({
                           host: 'http://localhost:3100',
                           json: false,
