@@ -54,7 +54,7 @@ services:
       POSTGRES_DB: postgres
     networks:
       - mizipetsnetwork
-  
+   
   loki:
     image: grafana/loki:2.0.0
     container_name: loki
