@@ -65,7 +65,8 @@ export class AnimalsController {
         @Query('specieId') specieId: string,
         @Query('ownerId') ownerId: string,
         @Query('isAdoption') isAdoption: string,
-        @Query('limit') limit: string
+        @Query('limit') limit: string,
+        @Query('fetchLastOwner') fetchLastOwner: string
     ): Promise<Animal[]> {
         const params: Search = new Search();
         if (sex) params.sex = sex;
@@ -83,6 +84,12 @@ export class AnimalsController {
 
         if (isAdoption != undefined) {
             params.isAdoption = isAdoption === 'true';
+        }
+
+        if (fetchLastOwner != undefined) {
+            params.fetchLastOwner = fetchLastOwner === 'true';
+        } else {
+            params.fetchLastOwner = false;
         }
 
         return this.animalsService.getAnimal(req.user, params);
@@ -151,4 +158,5 @@ export class Search {
     ownerId: number;
     limit: boolean;
     isAdoption: boolean;
+    fetchLastOwner: boolean;
 }
