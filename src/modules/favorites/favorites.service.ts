@@ -169,4 +169,34 @@ export class FavoritesService {
 
         return await this.repository.save(favorite);
     }
+
+    async like(userId: number, referenceId: number): Promise<Favorites> {
+        const favorite = await this.getByUserIdAndType(
+            userId,
+            ServiceType.ADOPTION
+        );
+        const reference = favorite.reference as AdoptionReferences;
+        reference.liked.push(referenceId);
+        reference.disliked = reference.disliked.filter(
+            (id) => id !== referenceId
+        );
+
+        favorite.reference = reference;
+
+        return await this.repository.save(favorite);
+    }
+
+    async dislike(userId: number, referenceId: number): Promise<Favorites> {
+        const favorite = await this.getByUserIdAndType(
+            userId,
+            ServiceType.ADOPTION
+        );
+        const reference = favorite.reference as AdoptionReferences;
+        reference.liked = reference.disliked.filter((id) => id !== referenceId);
+        reference.disliked.push(referenceId);
+
+        favorite.reference = reference;
+
+        return await this.repository.save(favorite);
+    }
 }

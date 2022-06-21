@@ -1,9 +1,9 @@
-name: Deploy api staging
+name:  Deploy api prod
 
 on: 
   workflow_dispatch:
-    branches: ['staging']
-
+    branches: ['master']
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -11,13 +11,13 @@ jobs:
     - name: ssh commands
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.STAGING_HOST }}
-        username: ${{ secrets.STAGING_USER }}
-        key: ${{ secrets.STAGING_KEY }}
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USER }}
+        key: ${{ secrets.PROD_KEY }}
         port: 22
         script: |
           cd mizipets-api
-          docker compose -f docker-compose.staging.yml stop
+          docker-compose -f docker-compose.prod.yml stop
           git checkout master
           docker rm -f mizipets-api_api_1
           docker rmi -f mizipets-api_api_1
@@ -25,6 +25,6 @@ jobs:
           git pull
           rm -rf envs
           mkdir envs
-          cp ~/.env.staging ./envs/.env.staging
+          cp ~/.env.prod ./envs/.env.prod
           cp ~/.env.local ./envs/.env.local
-          docker compose -f docker-compose.staging.yml up -d --build
+          docker-compose -f docker-compose.prod.yml up -d --build 

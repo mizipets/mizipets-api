@@ -4,6 +4,7 @@ import axios, { AxiosInstance } from 'axios';
 import { FindConditions, FindManyOptions, Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { NotificationDTO } from './dto/notification.dto';
+import { NotificationType } from './entities/notification-type.enum';
 import { Notification } from './entities/notification.entity';
 
 const { FCM_SERVER_KEY, FCM_ENDPOINT_URL } = process.env;
@@ -57,6 +58,8 @@ export class NotificationsService {
     }
 
     private async sendToDevices(notification: Notification, token: string) {
+        const serviceText = new Map<NotificationType, string>();
+        serviceText.set(NotificationType.MESSAGE, '🐾');
         const fcmNotification = {
             title: `🐾 - ${notification.title}`,
             priority: 'high',
