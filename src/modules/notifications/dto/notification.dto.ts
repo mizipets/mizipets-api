@@ -1,7 +1,7 @@
-import { ServiceType } from '../../services/enums/service-type.enum';
+import { NotificationType } from '../entities/notification-type.enum';
 
 export class NotificationDTO {
-    type: ServiceType;
+    type: NotificationType;
     title: string;
     body: string;
     icon: string;
