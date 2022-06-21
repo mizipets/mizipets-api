@@ -15,7 +15,6 @@ import {
 import { Roles } from '../../authentication/enum/roles.emum';
 import { OnlyRoles } from '../../authentication/guards/role.decorator';
 import { Reminder } from '../entities/reminder.entity';
-import { EditReminderDto } from './dto/edit-reminder.dto';
 import { ReminderDto } from './dto/reminder.dto';
 import { RemindersService } from './reminder.service';
 
