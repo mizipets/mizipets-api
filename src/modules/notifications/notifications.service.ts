@@ -35,7 +35,7 @@ export class NotificationsService {
             type: notificationDto.type,
             title: notificationDto.title,
             body: notificationDto.body,
-            icon: '@drawable/app_icon'
+            icon: '@mipmap/ic_launcher'
         } as Notification;
 
         tokens

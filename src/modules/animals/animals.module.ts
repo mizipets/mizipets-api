@@ -11,7 +11,7 @@ import { UsersModule } from '../users/users.module';
 import { AnimalsController } from './animals.controller';
 import { AnimalsService } from './animals.service';
 import { Animal } from './entities/animal.entity';
-import { Reminder } from './entities/reminder.entity';
+import { Reminder } from './reminder/entities/reminder.entity';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
 import { RacesController } from './race/races.controller';
