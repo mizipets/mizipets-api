@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { RemindersService } from '../animals/reminder/reminder.service';
 import { NotificationDTO } from '../notifications/dto/notification.dto';
+import { NotificationType } from '../notifications/entities/notification-type.enum';
 import { NotificationsService } from '../notifications/notifications.service';
-import { ServiceType } from '../services/enums/service-type.enum';
 
 const { CRON_SCHEDULE } = process.env;
 
@@ -28,11 +28,11 @@ export class CronService {
         });
 
         for (const reminder of reminders) {
-            if (reminder.isReminderAtDate()) {
+            if (reminder.isReminderAtDate(new Date())) {
                 console.log(`Send notif to owner of ${reminder.animal.name}`);
 
                 const notification: NotificationDTO = {
-                    type: ServiceType.PETS,
+                    type: NotificationType.REMINDER,
                     title: `Reminder for `,
                     body: `[${reminder.name}] This is your ${reminder.recurrence} reminder for ${reminder.animal.name}`
                 };
