@@ -4,7 +4,7 @@
  */
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Animal } from '../../entities/animal.entity';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Entity('reminders')
 export class Reminder {
