@@ -14,9 +14,14 @@ export class Logger implements LoggerService {
             transports: [
                 new transports.Console(),
                 new LokiTransport({
-                    host: 'http://loki:3100',
+                    host: `http://${
+                        ENV === 'local' ? 'localhost' : 'loki'
+                    }:3100`,
                     json: false,
-                    labels: { job: 'api' }
+                    labels: { job: 'api' },
+                    onConnectionError: (error) => {
+                        console.error(error);
+                    }
                 })
             ]
         };
