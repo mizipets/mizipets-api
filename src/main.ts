@@ -9,7 +9,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import compression from 'compression';
-import * as morgan from 'morgan';
+import morgan from 'morgan';
 import { CustomExceptionFilter } from './shared/exception/custom-exception.filter';
 import { DiscordService } from './shared/discord/discord.service';
 import { Logger } from './shared/logger/logger';
@@ -33,7 +33,7 @@ async function bootstrap() {
     app.use(helmet());
     app.setGlobalPrefix(process.env.API_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ disableErrorMessages: false }));
-    if (ENV === 'dev') {
+    if (ENV === 'local') {
         app.use(morgan('tiny'));
     }
     app.useGlobalFilters(
