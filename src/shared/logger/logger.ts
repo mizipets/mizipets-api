@@ -12,13 +12,12 @@ export class Logger implements LoggerService {
         const options = {
             batching: false,
             transports: [
-                ENV === 'local'
-                    ? new transports.Console()
-                    : new LokiTransport({
-                          host: 'http://localhost:3100',
-                          json: false,
-                          labels: { job: 'api' }
-                      })
+                new transports.Console(),
+                new LokiTransport({
+                    host: 'http://localhost:3100',
+                    json: false,
+                    labels: { job: 'api' }
+                })
             ]
         };
         this.loki = createLogger(options);
