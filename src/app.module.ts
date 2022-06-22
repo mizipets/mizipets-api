@@ -23,12 +23,32 @@ import { AdvicesModule } from './modules/advices/advices.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { CronModule } from './modules/cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
+import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
 @Module({
     imports: [
-        ThrottlerModule.forRoot({
-            ttl: 60,
-            limit: 100
+        RedisModule.forRoot(
+            {
+                readyLog: true,
+                errorLog: true,
+                config: {
+                    host: 'localhost',
+                    port: 6379
+                }
+            },
+            true
+        ),
+        ThrottlerModule.forRootAsync({
+            useFactory(redisService: RedisService) {
+                const redis = redisService.getClient();
+                return {
+                    ttl: 60,
+                    limit: 100,
+                    storage: new ThrottlerStorageRedisService(redis)
+                };
+            },
+            inject: [RedisService]
         }),
         TypeOrmModule.forRoot({
             type: 'postgres',

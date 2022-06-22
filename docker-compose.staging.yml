@@ -24,6 +24,7 @@ services:
     container_name: api
     depends_on:
       - postgres_db
+      - redis
     ports:
       - "3000:3000"
       - "3001:3001"
@@ -96,6 +97,13 @@ services:
       - minio2
       - minio3
       - minio4
+
+  redis:
+    image: "redis:alpine"
+    hostname: redis
+    ports:
+      - "6379:6379"
+
   # prometheus:
   #   image: prom/prometheus:latest
   #   volumes:
