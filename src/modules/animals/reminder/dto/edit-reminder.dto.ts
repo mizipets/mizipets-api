@@ -3,7 +3,7 @@
  * @create 2022-06-09
  */
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Recurrence } from '../../entities/reminder.entity';
+import { Recurrence } from '../entities/reminder.entity';
 
 export class EditReminderDto {
     @IsString()

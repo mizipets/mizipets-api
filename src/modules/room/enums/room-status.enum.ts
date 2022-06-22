@@ -1,5 +1,6 @@
 export enum RoomStatus {
     OPENED = 'OPENED',
     GIVED = 'GIVED',
-    CLOSED = 'CLOSED'
+    CLOSED = 'CLOSED',
+    ARCHIVED = 'ARCHIVED'
 }

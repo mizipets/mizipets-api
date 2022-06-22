@@ -23,7 +23,9 @@ async function bootstrap() {
     const origins = [
         'http://localhost:4200',
         'https://staging.mizipets.com',
-        'https://mizipets.com'
+        'https://www.staging.mizipets.com',
+        'https://mizipets.com',
+        'https://www.mizipets.com'
     ];
 
     app.enableCors({ origin: origins });

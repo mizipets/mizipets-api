@@ -9,8 +9,8 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { ServiceType } from '../../services/enums/service-type.enum';
 import { User } from '../../users/entities/user.entity';
+import { NotificationType } from './notification-type.enum';
 
 @Entity('notifications')
 export class Notification {
@@ -18,7 +18,7 @@ export class Notification {
     id: number;
 
     @Column('text')
-    type: ServiceType;
+    type: NotificationType;
 
     @Column('text')
     title: string;

@@ -14,6 +14,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger } from '../../shared/logger/logger';
 import { Roles } from '../authentication/enum/roles.emum';
+import { NotificationType } from '../notifications/entities/notification-type.enum';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { MessageType } from './entities/message.entity';
@@ -67,7 +68,7 @@ export class RoomGateway
                         : room.animal.owner.id
                 ],
                 {
-                    type: ServiceType.ADOPTION,
+                    type: NotificationType.MESSAGE,
                     title:
                         parseInt(body.userId) === room.animal.owner.id
                             ? room.animal.owner.role !== Roles.PRO
