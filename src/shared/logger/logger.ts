@@ -15,7 +15,7 @@ export class Logger implements LoggerService {
                 new transports.Console(),
                 new LokiTransport({
                     host: `http://${
-                        ENV === 'local' ? 'localhost' : 'host.docker.internal'
+                        ENV === 'local' ? 'localhost' : 'loki'
                     }:3100`,
                     json: false,
                     labels: { job: 'api' },
