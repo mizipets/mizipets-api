@@ -18,7 +18,7 @@ jobs:
         script: |
           cd mizipets-api
           docker compose -f docker-compose.staging.yml stop
-          git checkout master
+          git checkout staging
           docker rm -f mizipets-api_api_1
           docker rmi -f mizipets-api_api_1
           docker compose pull front

@@ -9,7 +9,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, Not, Repository } from 'typeorm';
+import { FindConditions, In, Not, Repository } from 'typeorm';
 import { Animal } from '../animals/entities/animal.entity';
 import { User } from '../users/entities/user.entity';
 import { Message, MessageType } from './entities/message.entity';
@@ -65,7 +65,8 @@ export class RoomService {
                 },
                 adoptant: {
                     id: user.id
-                }
+                },
+                status: Not(RoomStatus.ARCHIVED)
             },
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
         });
@@ -78,6 +79,7 @@ export class RoomService {
     }
 
     async getBy(where: FindConditions<Room>): Promise<Room> {
+        where.status = Not(RoomStatus.ARCHIVED);
         const room: Room = await this.repository.findOne({
             where: where,
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
@@ -114,12 +116,14 @@ export class RoomService {
                         owner: {
                             id: id
                         }
-                    }
+                    },
+                    status: Not(RoomStatus.ARCHIVED)
                 },
                 {
                     adoptant: {
                         id: id
-                    }
+                    },
+                    status: Not(RoomStatus.ARCHIVED)
                 }
             ],
             relations: ['adoptant', 'animal', 'animal.owner', 'animal.race']
@@ -194,7 +198,8 @@ export class RoomService {
                 id: Not(room.id),
                 animal: {
                     id: room.animal.id
-                }
+                },
+                status: Not(In([RoomStatus.CLOSED, RoomStatus.ARCHIVED]))
             },
             relations: ['animal', 'animal.owner', 'adoptant']
         });
@@ -210,7 +215,8 @@ export class RoomService {
             where: {
                 animal: {
                     id: animalId
-                }
+                },
+                status: Not(In([RoomStatus.CLOSED, RoomStatus.ARCHIVED]))
             },
             relations: ['animal', 'animal.owner', 'adoptant']
         });
@@ -226,7 +232,7 @@ export class RoomService {
             roomCode: room.code,
             roomId: room.id,
             userId: room.animal.owner.id.toString(),
-            msg: `room closed by owner`,
+            msg: `Room closed`,
             type: MessageType.close
         };
         await this.messageGateway.sendMessage(null, msgRoom);
@@ -239,16 +245,18 @@ export class RoomService {
                 status: RoomStatus.CLOSED
             }
         );
-        await this.favoritesService.removeFavorite(
-            room.adoptant.id,
-            ServiceType.ADOPTION,
-            room.animal.id
-        );
-        await this.favoritesService.removeFavorite(
+
+        await this.favoritesService.dislike(room.adoptant.id, room.animal.id);
+        await this.favoritesService.dislike(
             room.animal.owner.id,
-            ServiceType.ADOPTION,
             room.animal.id
         );
+    }
+
+    async archive(room: Room): Promise<void> {
+        await this.repository.update(room.id, {
+            status: RoomStatus.ARCHIVED
+        });
     }
 
     async refuseRequestGive(roomId: number, messageId: number) {
@@ -268,21 +276,4 @@ export class RoomService {
         };
         await this.messageGateway.sendMessage(null, msgRoom);
     }
-
-    // async closeRoom(roomId: number) {
-    //     const roomDB = await this.getById(roomId);
-    //     roomDB.status = RoomStatus.CLOSED;
-    //     const msgCloseRoom: MsgToRoom = {
-    //         roomCode: roomDB.code,
-    //         roomId: roomDB.id,
-    //         userId: roomDB.animal.owner.id.toString(),
-    //         msg: `Conversation ended`,
-    //         type: MessageType.close
-    //     };
-    //     await this.messageGateway.sendMessage(null, msgCloseRoom);
-    //     await this.favoritesService.removeFromAllUser(
-    //         roomDB.animal.id,
-    //         ServiceType.ADOPTION
-    //     );
-    // }
 }

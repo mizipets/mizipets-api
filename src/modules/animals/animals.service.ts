@@ -152,7 +152,7 @@ export class AnimalsService {
 
         const queries: any[] = [currentOwnerQuery];
 
-        if (user.role === Roles.PRO) {
+        if (user.role === Roles.PRO && params.fetchLastOwner) {
             queries.push(lastOwnerQuery);
         }
 

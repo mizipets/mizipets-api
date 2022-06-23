@@ -22,6 +22,7 @@ services:
       context: .
       dockerfile: "./Dockerfile.staging"
     container_name: api
+    hostname: api
     depends_on:
       - postgres_db
     ports:
@@ -52,6 +53,32 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    networks:
+      - mizipetsnetwork
+
+  loki:
+    image: grafana/loki:2.0.0
+    hostname: loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command:
+      - --config.file=/mnt/config/loki-config.yaml
+    volumes:
+      - ./.loki/loki-config.yaml:/mnt/config/loki-config.yaml:ro
+    networks:
+      - mizipetsnetwork
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3030:3000
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes: 
+      - ./.grafana/provisioning-datasources.yml:/etc/grafana/provisioning/datasources/provisioning-datasources.yml
     networks:
       - mizipetsnetwork
   minio1:

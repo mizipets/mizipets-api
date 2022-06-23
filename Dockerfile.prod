@@ -1,14 +1,12 @@
 FROM node:16.14.0-alpine As production
 
-WORKDIR /usr/src/pet-finder-api
+WORKDIR /usr/src/mizipets
 
 COPY package*.json ./
 
-RUN echo ${API_PREFIX}
+RUN npm ci
 
-RUN npm install -g @nestjs/cli
-
-RUN npm install
+RUN npm i -g @nestjs/cli
 
 COPY . .
 

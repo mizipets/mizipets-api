@@ -4,10 +4,8 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Reminder } from '../entities/reminder.entity';
-import { Specie } from '../entities/specie.entity';
-import { EditReminderDto } from './dto/edit-reminder.dto';
+import { FindConditions, Repository } from 'typeorm';
+import { Reminder } from './entities/reminder.entity';
 import { ReminderDto } from './dto/reminder.dto';
 
 @Injectable()
@@ -34,6 +32,13 @@ export class RemindersService {
         );
         const created = await this.repository.save(reminderSave);
         return await this.repository.findOne(created.id);
+    }
+
+    async getAllWhere(where: FindConditions<Reminder>) {
+        return await this.repository.find({
+            where: where,
+            relations: ['animal', 'animal.owner']
+        });
     }
 
     async update(reminder: Reminder) {

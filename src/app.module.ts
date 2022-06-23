@@ -17,10 +17,11 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import * as path from 'path';
 import { S3Module } from './modules/s3/s3.module';
-import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { DeviceModule } from './modules/device/device.module';
 import { AdvicesModule } from './modules/advices/advices.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { CronModule } from './modules/cron/cron.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -47,6 +48,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
             },
             resolvers: [new HeaderResolver(['x-custom-lang'])]
         }),
+        ScheduleModule.forRoot(),
         RootModule,
         AuthenticationModule,
         UsersModule,
@@ -55,10 +57,10 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
         ServicesModule,
         S3Module,
         RoomModule,
-        MonitoringModule,
         DeviceModule,
         AdvicesModule,
-        NotificationsModule
+        NotificationsModule,
+        CronModule
     ],
     controllers: [],
     providers: [
