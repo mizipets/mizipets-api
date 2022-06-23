@@ -1,5 +1,10 @@
 import { Injectable, LoggerService, LogLevel } from '@nestjs/common';
-import { createLogger, Logger as WinstonLogger, transports } from 'winston';
+import {
+    createLogger,
+    Logger as WinstonLogger,
+    transports,
+    format
+} from 'winston';
 import LokiTransport from 'winston-loki';
 
 const { ENV } = process.env;
@@ -10,6 +15,15 @@ export class Logger implements LoggerService {
 
     constructor(private contextName: string = 'app') {
         const options = {
+            format: format.combine(
+                format.colorize({
+                    level: true
+                }),
+                format.printf(
+                    (info) =>
+                        `[${this.contextName}] ${info.level}: ${info.message}`
+                )
+            ),
             batching: false,
             transports: [
                 new transports.Console(),
