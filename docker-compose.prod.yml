@@ -57,6 +57,7 @@ services:
    
   loki:
     image: grafana/loki:2.0.0
+    hostname: loki
     container_name: loki
     ports:
       - "3100:3100"
@@ -64,10 +65,13 @@ services:
       - --config.file=/mnt/config/loki-config.yaml
     volumes:
       - ./.loki/loki-config.yaml:/mnt/config/loki-config.yaml:ro
+    networks:
+      - mizipetsnetwork
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    hostname: grafana
     ports:
       - 3030:3000
     environment:
@@ -75,6 +79,8 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     volumes: 
       - ./.grafana/provisioning-datasources.yml:/etc/grafana/provisioning/datasources/provisioning-datasources.yml
+    networks:
+      - mizipetsnetwork
 
   minio1:
     <<: *minio-common
