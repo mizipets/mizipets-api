@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { AnimalsService } from '../animals/animals.service';
 import { UsersService } from '../users/users.service';
+import { Logger } from '../../shared/logger/logger';
 
 const {
     AWS_S3_BUCKET_URL,
@@ -33,6 +34,7 @@ const s3 = new AWS.S3({
 
 @Injectable()
 export class S3Service {
+    logger = new Logger('Upload');
     constructor(
         @Inject(forwardRef(() => AnimalsService))
         private animalService: AnimalsService,
