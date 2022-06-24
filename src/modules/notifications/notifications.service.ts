@@ -2,10 +2,12 @@ import { forwardRef, Inject, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosInstance } from 'axios';
 import { FindConditions, FindManyOptions, Repository } from 'typeorm';
+import { Roles } from '../authentication/enum/roles.emum';
 import { UsersService } from '../users/users.service';
 import { NotificationDTO } from './dto/notification.dto';
 import { NotificationType } from './entities/notification-type.enum';
 import { Notification } from './entities/notification.entity';
+import { NotificationsGateway } from './notification.gateway';
 
 const { FCM_SERVER_KEY, FCM_ENDPOINT_URL } = process.env;
 
@@ -17,6 +19,7 @@ export class NotificationsService {
     constructor(
         @InjectRepository(Notification)
         private readonly repository: Repository<Notification>,
+        private readonly notificationsGateway: NotificationsGateway,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService
     ) {
@@ -26,10 +29,8 @@ export class NotificationsService {
     }
 
     public async send(userIds: number[], notificationDto: NotificationDTO) {
-        const tokens: string[] = await Promise.all(
-            userIds.map(
-                async (id) => (await this.usersService.getById(id)).flutterToken
-            )
+        const users = await Promise.all(
+            userIds.map(async (id) => await this.usersService.getById(id))
         );
         const notification = {
             type: notificationDto.type,
@@ -38,11 +39,17 @@ export class NotificationsService {
             icon: '@mipmap/ic_launcher'
         } as Notification;
 
-        tokens
-            .filter((token) => token != null)
-            .forEach(async (token) => {
-                await this.sendToDevices(notification, token);
-            });
+        users.forEach(async (user) => {
+            if (user.role === Roles.PRO) {
+                await this.notificationsGateway.sendFrontNotification(
+                    user.id,
+                    notification
+                );
+            }
+            if (user.flutterToken) {
+                await this.sendToDevices(notification, user.flutterToken);
+            }
+        });
 
         userIds.forEach(async (id) => {
             const userNotification = Object.assign(
