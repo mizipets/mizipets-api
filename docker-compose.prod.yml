@@ -54,6 +54,34 @@ services:
       POSTGRES_DB: postgres
     networks:
       - mizipetsnetwork
+   
+  loki:
+    image: grafana/loki:2.0.0
+    hostname: loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command:
+      - --config.file=/mnt/config/loki-config.yaml
+    volumes:
+      - ./.loki/loki-config.yaml:/mnt/config/loki-config.yaml:ro
+    networks:
+      - mizipetsnetwork
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    ports:
+      - 3030:3000
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes: 
+      - ./.grafana/provisioning-datasources.yml:/etc/grafana/provisioning/datasources/provisioning-datasources.yml
+    networks:
+      - mizipetsnetwork
+
   minio1:
     <<: *minio-common
     hostname: minio1
@@ -96,33 +124,7 @@ services:
       - minio2
       - minio3
       - minio4
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   volumes:
-  #     - ./.prometheus/config.yml:/etc/prometheus/prometheus.yml
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #   ports:
-  #     - '9090:9090'
 
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: monitoring_grafana
-  #   command: bash -c "
-  #     chown -R root:root /etc/grafana && \
-  #     chmod -R a+r /etc/grafana && \
-  #     chown -R grafana:grafana /var/lib/grafana && \
-  #     chown -R grafana:grafana /usr/share/grafana"
-  #   restart: unless-stopped
-  #   user: '472'
-  #   links:
-  #     - prometheus:prometheus
-  #   volumes:
-  #     - ./data/grafana:/var/lib/grafana
-  #   environment:
-  #     - GF_SECURITY_ADMIN_PASSWORD=12345
-  #   ports:
-  #     - '3030:3000'
 volumes:
   postgres-mizipets:
   data1-1:

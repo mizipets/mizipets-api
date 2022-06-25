@@ -8,15 +8,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import * as compression from 'compression';
-import * as morgan from 'morgan';
+import compression from 'compression';
+import morgan from 'morgan';
 import { CustomExceptionFilter } from './shared/exception/custom-exception.filter';
 import { DiscordService } from './shared/discord/discord.service';
+import { Logger } from './shared/logger/logger';
 
 const { ENV, PORT, NAME } = process.env;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+        logger: new Logger()
+    });
     const origins = [
         'http://localhost:4200',
         'https://staging.mizipets.com',
@@ -30,7 +33,9 @@ async function bootstrap() {
     app.use(helmet());
     app.setGlobalPrefix(process.env.API_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ disableErrorMessages: false }));
-    app.use(morgan('tiny'));
+    if (ENV === 'local') {
+        app.use(morgan('tiny'));
+    }
     app.useGlobalFilters(
         new CustomExceptionFilter(app.get<DiscordService>(DiscordService))
     );

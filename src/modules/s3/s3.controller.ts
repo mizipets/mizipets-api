@@ -24,7 +24,13 @@ export class S3Controller {
     constructor(private readonly s3Service: S3Service) {}
 
     @Post(':id')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(
+        FileInterceptor('file', {
+            limits: {
+                fileSize: 10000000
+            }
+        })
+    )
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async uploadFile(

@@ -1,8 +1,9 @@
-import { forwardRef, Inject, Logger } from '@nestjs/common';
+import { forwardRef, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosInstance } from 'axios';
 import { FindConditions, FindManyOptions, Repository } from 'typeorm';
 import { Roles } from '../authentication/enum/roles.emum';
+import { Logger } from '../../shared/logger/logger';
 import { UsersService } from '../users/users.service';
 import { NotificationDTO } from './dto/notification.dto';
 import { NotificationType } from './entities/notification-type.enum';

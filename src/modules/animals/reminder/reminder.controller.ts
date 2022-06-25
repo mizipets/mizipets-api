@@ -15,7 +15,6 @@ import {
 import { Roles } from '../../authentication/enum/roles.emum';
 import { OnlyRoles } from '../../authentication/guards/role.decorator';
 import { Reminder } from './entities/reminder.entity';
-import { EditReminderDto } from './dto/edit-reminder.dto';
 import { ReminderDto } from './dto/reminder.dto';
 import { RemindersService } from './reminder.service';
 
@@ -24,20 +23,20 @@ export class RemindersController {
     constructor(private remindersService: RemindersService) {}
 
     @Post()
-    @OnlyRoles(Roles.STANDARD)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
     @HttpCode(HttpStatus.CREATED)
     async create(@Body() reminderDto: ReminderDto) {
         return await this.remindersService.create(reminderDto);
     }
 
     @Put(':id')
-    @OnlyRoles(Roles.STANDARD)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
     async edit(@Body() reminder: Reminder) {
         return await this.remindersService.update(reminder);
     }
 
     @Delete(':id')
-    @OnlyRoles(Roles.STANDARD)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
     async delete(@Param('id') id: number) {
         return await this.remindersService.delete(id);
     }
