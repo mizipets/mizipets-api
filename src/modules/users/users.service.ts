@@ -144,7 +144,7 @@ export class UsersService {
         return refreshToken;
     }
 
-    async updateFlutterToken(token: string, id: number): Promise<string> {
+    async updateFlutterToken(token: string, id: number): Promise<void> {
         await this.repository
             .createQueryBuilder()
             .update(User)
@@ -152,14 +152,25 @@ export class UsersService {
             .where('flutterToken = :token', { token: token })
             .execute();
 
-        await this.repository
-            .createQueryBuilder()
-            .update(User)
-            .set({ flutterToken: token })
-            .where('id = :id', { id: id })
-            .execute();
-
-        return token;
+        const usersWithExitingToken = (
+            await this.repository.find({
+                where: [
+                    {
+                        flutterToken: token
+                    },
+                    {
+                        id: id
+                    }
+                ]
+            })
+        ).map((user) => {
+            user.flutterToken = null;
+            if (user.id === id) {
+                user.flutterToken = token;
+            }
+            return user;
+        });
+        await this.repository.save(usersWithExitingToken);
     }
 
     async updatePassword(id: number, password: string): Promise<void> {
