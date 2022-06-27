@@ -182,6 +182,7 @@ export class AnimalsService {
         updated.name = dto.name ?? updated.name;
         updated.birthDate = dto.birthDate ?? updated.birthDate;
         updated.comment = dto.comment ?? updated.comment;
+        updated.images = dto.images ?? updated.images;
         return await this.repository.save(updated);
     }
 

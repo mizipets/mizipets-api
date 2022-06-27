@@ -77,10 +77,9 @@ export class CustomExceptionFilter implements ExceptionFilter {
             status !== HttpStatus.UNAUTHORIZED &&
             status !== HttpStatus.NOT_FOUND &&
             status !== HttpStatus.FORBIDDEN &&
-            status !== HttpStatus.TOO_MANY_REQUESTS
+            status !== HttpStatus.TOO_MANY_REQUESTS &&
+            status !== HttpStatus.PAYLOAD_TOO_LARGE
         ) {
-            console.log();
-
             this.logger.error(
                 `${Date().toString()}
                 ${request.user ? '\nuid: ' + request.user.id : ''}

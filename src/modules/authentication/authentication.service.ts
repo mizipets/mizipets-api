@@ -18,6 +18,7 @@ import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeviceService } from '../device/device.service';
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 
 @Injectable()
 export class AuthenticationService {
@@ -111,18 +112,13 @@ export class AuthenticationService {
         return isCodeValid;
     }
 
-    async resetPassword(login: LoginDto, code: number): Promise<void> {
+    async resetPassword(login: ResetPasswordDto): Promise<void> {
         const user: User = await this.userService.getByEmail(login.email);
-        const isCodeValid: boolean = AuthenticationService.checkCode(
-            user.code,
-            code
-        );
+        await this.verifyCode(user.email, login.code);
 
-        if (!isCodeValid) throw new ForbiddenException('Invalid code!');
+        let newPassword: string = await hash(login.password, 10);
 
-        user.password = await hash(login.password, 10);
-        await this.userService.updatePassword(user.id, user.password);
-        user.password = undefined;
+        await this.userService.updatePassword(user.id, newPassword);
         await this.mailService.sendChangedPassword(user);
     }
 
@@ -131,7 +127,7 @@ export class AuthenticationService {
     }
 
     private static generateCode(): number {
-        return Math.floor(100000 + Math.random() * 900000);
+        return Math.floor(1000 + Math.random() * 9000);
     }
 
     private getJwtPayload(user: User, refreshToken: string): JwtResponseDto {

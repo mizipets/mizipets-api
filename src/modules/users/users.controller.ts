@@ -78,13 +78,10 @@ export class UsersController {
         @Request() req,
         @Param('id') id: string,
         @Body() tokenDTO: { token: string }
-    ): Promise<string> {
+    ): Promise<void> {
         if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't update this user");
-        return this.userService.updateFlutterToken(
-            tokenDTO.token,
-            parseInt(id)
-        );
+        await this.userService.updateFlutterToken(tokenDTO.token, parseInt(id));
     }
 
     @Put(':id/close')
