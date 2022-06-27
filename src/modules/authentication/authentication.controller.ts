@@ -18,7 +18,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { User } from '../users/entities/user.entity';
 import { JwtResponseDto } from './dto/jwt-response.dto';
-import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -50,9 +50,7 @@ export class AuthenticationController {
 
     @Put('reset/password')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async resetPassword(
-        @Body() login: ResetPasswordDto
-    ): Promise<void> {
+    async resetPassword(@Body() login: ResetPasswordDto): Promise<void> {
         return this.authService.resetPassword(login);
     }
 

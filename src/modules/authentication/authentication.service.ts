@@ -18,7 +18,7 @@ import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../../shared/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { DeviceService } from '../device/device.service';
-import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -116,7 +116,7 @@ export class AuthenticationService {
         const user: User = await this.userService.getByEmail(login.email);
         await this.verifyCode(user.email, login.code);
 
-        let newPassword: string = await hash(login.password, 10);
+        const newPassword: string = await hash(login.password, 10);
 
         await this.userService.updatePassword(user.id, newPassword);
         await this.mailService.sendChangedPassword(user);
