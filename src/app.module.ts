@@ -25,6 +25,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
+const { ENV } = process.env;
+
 @Module({
     imports: [
         RedisModule.forRoot(
@@ -32,7 +34,7 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
                 readyLog: true,
                 errorLog: true,
                 config: {
-                    host: 'localhost',
+                    host: ENV === 'dev' ? 'localhost' : 'redis',
                     port: 6379
                 }
             },
