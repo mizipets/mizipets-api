@@ -124,6 +124,14 @@ services:
       - minio2
       - minio3
       - minio4
+  
+  redis:
+    image: "redis:alpine"
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mizipetsnetwork
 
 volumes:
   postgres-mizipets:
