@@ -34,7 +34,7 @@ const { ENV } = process.env;
                 readyLog: true,
                 errorLog: true,
                 config: {
-                    host: ENV === 'dev' ? 'localhost' : 'redis',
+                    host: ENV === 'local' ? 'localhost' : 'redis',
                     port: 6379
                 }
             },
