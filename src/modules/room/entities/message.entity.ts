@@ -9,7 +9,7 @@ import { Room } from './room.entity';
 @Entity('messages')
 export class Message {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column()
     text: string;
@@ -22,6 +22,9 @@ export class Message {
 
     @Column()
     type: MessageType;
+
+    @Column('int', { array: true, default: [] })
+    seen: number[];
 
     @ManyToOne(() => Room, (room) => room.messages)
     room: Room;

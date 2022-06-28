@@ -104,6 +104,7 @@ export class RoomService {
         message.type = type;
         message.room = new Room();
         message.room.id = roomId;
+        message.seen = [];
 
         return await this.messageService.create(message);
     }
