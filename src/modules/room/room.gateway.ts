@@ -16,8 +16,8 @@ import { Logger } from '../../shared/logger/logger';
 import { Roles } from '../authentication/enum/roles.emum';
 import { NotificationType } from '../notifications/entities/notification-type.enum';
 import { NotificationsService } from '../notifications/notifications.service';
-import { ServiceType } from '../services/enums/service-type.enum';
-import { MessageType } from './entities/message.entity';
+import { Message, MessageType } from './entities/message.entity';
+import { MessageService } from './message.service';
 import { RoomService } from './room.service';
 
 const { MESSAGE_PORT } = process.env;
@@ -33,6 +33,8 @@ export class RoomGateway
     constructor(
         @Inject(forwardRef(() => RoomService))
         private readonly roomService: RoomService,
+        @Inject(forwardRef(() => MessageService))
+        private readonly messageService: MessageService,
         private readonly notificationsService: NotificationsService
     ) {}
 
@@ -91,6 +93,23 @@ export class RoomGateway
             body.type
         );
         this.server.to(body.roomCode).emit('receiveMsgToRoom', message);
+    }
+
+    @SubscribeMessage('seenMessages')
+    async seenMessages(
+        client: Socket,
+        body: { messageIds: number[]; userIds: number[]; roomId: number }
+    ): Promise<void> {
+        const room = await this.roomService.getBy({ id: body.roomId });
+        await this.messageService.addSeenMessage(
+            body.userIds,
+            body.messageIds,
+            room.code
+        );
+    }
+
+    public async sendSeenMessages(messages: Message[], roomCode: string) {
+        this.server.to(roomCode).emit('receiveSeenMessages', messages);
     }
 
     @SubscribeMessage('join')

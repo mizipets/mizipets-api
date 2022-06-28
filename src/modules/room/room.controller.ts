@@ -104,6 +104,15 @@ export class RoomController {
                       id: parseInt(roomId)
                   });
         if (roomDB) {
+            const seenMessages = await this.messageService.addSeenMessage(
+                [req.user.id],
+                roomDB.messages.map((msg) => msg.id),
+                roomDB.code
+            );
+            roomDB.messages.forEach((msg) => {
+                const seenMsg = seenMessages.find((seen) => seen.id === msg.id);
+                if (seenMsg) msg = seenMsg;
+            });
             return roomDB;
         } else {
             const user = await this.usersService.getById(req.user.id);
@@ -186,6 +195,12 @@ export class RoomController {
         @Param('roomId') roomId: number,
         @Query('offset') offset: number
     ): Promise<Message[]> {
-        return await this.messageService.get(roomId, offset);
+        const room = await this.roomService.getBy({ id: roomId });
+        const messages = await this.messageService.get(room.id, offset);
+        return await this.messageService.addSeenMessage(
+            [req.user.id],
+            messages.map((msg) => msg.id),
+            room.code
+        );
     }
 }

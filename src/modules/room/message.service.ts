@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
+import { RoomGateway } from './room.gateway';
 
 @Injectable()
 export class MessageService {
     constructor(
         @InjectRepository(Message)
-        private readonly repository: Repository<Message>
+        private readonly repository: Repository<Message>,
+        @Inject(forwardRef(() => RoomGateway))
+        private readonly roomGateway: RoomGateway
     ) {}
 
     async create(message: Message) {
@@ -32,5 +35,26 @@ export class MessageService {
             skip: offset
         });
         return msgs.reverse();
+    }
+
+    async addSeenMessage(
+        userIds: number[],
+        messageIds: number[],
+        roomCode: string
+    ): Promise<Message[]> {
+        const msgs = await this.repository.find({
+            where: {
+                id: In(messageIds)
+            }
+        });
+
+        msgs.forEach((msg) => {
+            msg.seen = Array.from(new Set([...msg.seen, ...userIds]));
+            return msg;
+        });
+
+        this.roomGateway.sendSeenMessages(msgs, roomCode);
+
+        return await this.repository.save(msgs);
     }
 }
