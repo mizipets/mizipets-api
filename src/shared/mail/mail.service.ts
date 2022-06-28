@@ -14,7 +14,7 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Welcome to Mizipiets !',
-            template: 'welcome',
+            template: `welcome-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
             }
@@ -25,7 +25,7 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - Reset Password',
-            template: 'reset-password',
+            template: `reset-password-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname,
                 code: code
@@ -37,7 +37,7 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - Reset Password',
-            template: 'changed-password',
+            template: `changed-password-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
             }
@@ -48,7 +48,7 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - Account closed',
-            template: 'close-account',
+            template: `close-account-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
             }
@@ -59,7 +59,7 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Mizipiets - New connection',
-            template: 'new-connection',
+            template: `new-connection-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
             }
