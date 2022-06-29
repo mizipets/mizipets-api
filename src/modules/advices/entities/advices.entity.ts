@@ -14,12 +14,6 @@ export class Advice {
     id: number;
 
     @Column('text')
-    title: string;
-
-    @Column('text')
-    content: string;
-
-    @Column('text')
     type: AdviceType;
 
     @Column('text')
@@ -31,9 +25,20 @@ export class Advice {
     @Column('text')
     url: string;
 
-    @Column('text')
-    urlLabel: string;
+    @Column({ array: true })
+    contents: AdviceContentLang[];
 
     @CreateDateColumn()
     created: Date;
+}
+
+export class AdviceContentLang {
+    lang: string;
+    content: AdviceContent;
+}
+
+export class AdviceContent {
+    title: string;
+    body: string;
+    urlLabel: string;
 }
