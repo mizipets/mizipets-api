@@ -10,6 +10,7 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    Post,
     Req
 } from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
@@ -47,6 +48,21 @@ export class FavoritesController {
         }
         return await this.favoritesService.getPopulatedFavoritesOfUser(
             parseInt(userId)
+        );
+    }
+
+    @Post(':userId/:type/:referenceID')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
+    async addFavorite(
+        @Param('userId') userId: string,
+        @Param('type') type: ServiceType,
+        @Param('referenceID') referenceID: string
+    ): Promise<Favorites> {
+        return this.favoritesService.addFavorite(
+            parseInt(userId),
+            type,
+            parseInt(referenceID)
         );
     }
 
