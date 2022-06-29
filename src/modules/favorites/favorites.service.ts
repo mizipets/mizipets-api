@@ -9,7 +9,8 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { AdvicesService } from '../advices/advices.service';
 import { AnimalsService } from '../animals/animals.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { UsersService } from '../users/users.service';
@@ -22,6 +23,7 @@ import {
 } from './entities/favorites.entity';
 import {
     AdoptionReferencesPopulated,
+    AdviceReferencesPopulated,
     FavoritesPopulated
 } from './entities/favorites.populated';
 
@@ -32,6 +34,8 @@ export class FavoritesService {
         private readonly repository: Repository<Favorites>,
         @Inject(forwardRef(() => AnimalsService))
         private animalsService: AnimalsService,
+        @Inject(forwardRef(() => AdvicesService))
+        private advicesService: AdvicesService,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService
     ) {}
@@ -96,11 +100,13 @@ export class FavoritesService {
                 const populate = new FavoritesPopulated();
                 populate.id = favorite.id;
                 populate.type = favorite.type;
+
+                let reference;
+                let referencePopulated;
                 switch (favorite.type) {
                     case ServiceType.ADOPTION:
-                        const reference =
-                            favorite.reference as AdoptionReferences;
-                        const referencePopulated =
+                        reference = favorite.reference as AdoptionReferences;
+                        referencePopulated =
                             favorite.reference as AdoptionReferencesPopulated;
                         referencePopulated.disliked =
                             await this.animalsService.getByIds(
@@ -115,6 +121,12 @@ export class FavoritesService {
                         populate.reference = referencePopulated;
                         break;
                     case ServiceType.ADVICES:
+                        reference = favorite.reference as AdviceReferences;
+                        referencePopulated =
+                            favorite.reference as AdviceReferencesPopulated;
+                        referencePopulated.liked =
+                            await this.advicesService.getByIds(reference.liked);
+                        populate.reference = referencePopulated;
                         break;
                     case ServiceType.VETS:
                         break;
@@ -148,20 +160,52 @@ export class FavoritesService {
         switch (favorite.type) {
             case ServiceType.ADOPTION:
                 reference = favorite.reference as AdoptionReferences;
-                reference.disliked = (reference.disliked as number[]).filter(
-                    (id) => id !== referenceId
-                ) as number[];
+                (reference as AdoptionReferences).disliked = (
+                    (reference as AdoptionReferences).disliked as number[]
+                ).filter((id) => id !== referenceId) as number[];
                 reference.liked = (reference.liked as number[]).filter(
                     (id) => id !== referenceId
                 );
                 break;
             case ServiceType.ADVICES:
                 reference = favorite.reference as AdviceReferences;
-                reference.id = null;
+                reference.liked = (reference.liked as number[]).filter(
+                    (id) => id !== referenceId
+                );
                 break;
             case ServiceType.VETS:
                 reference = favorite.reference as VetsReferences;
                 reference.id = null;
+                break;
+        }
+
+        favorite.reference = reference;
+
+        return await this.repository.save(favorite);
+    }
+    async addFavorite(
+        userId: number,
+        type: ServiceType,
+        referenceId: number
+    ): Promise<Favorites> {
+        const favorite = await this.getByUserIdAndType(userId, type);
+        let reference: Reference;
+
+        switch (favorite.type) {
+            case ServiceType.ADOPTION:
+                reference = favorite.reference as AdoptionReferences;
+                reference.liked.push(referenceId);
+                (reference as AdoptionReferences).disliked = (
+                    reference as AdoptionReferences
+                ).disliked.filter((id) => id !== referenceId);
+                break;
+            case ServiceType.ADVICES:
+                reference = favorite.reference as AdviceReferences;
+                reference.liked.push(referenceId);
+                break;
+            case ServiceType.VETS:
+                reference = favorite.reference as VetsReferences;
+                reference.id = referenceId;
                 break;
         }
 
