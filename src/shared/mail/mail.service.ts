@@ -11,9 +11,14 @@ export class MailService {
     constructor(private readonly mailerService: MailerService) {}
 
     async sendWelcome(user: User) {
+        let subject = 'Mizipets - ';
+        if (user.preferences.lang == 'fr')
+            subject += 'Bienvenue chez Mizipets!';
+        if (user.preferences.lang == 'en') subject += 'Welcome to Mizipiets !';
+
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Welcome to Mizipiets !',
+            subject: subject,
             template: `welcome-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
@@ -22,9 +27,14 @@ export class MailService {
     }
 
     async sendResetCode(user: User, code: string) {
+        let subject = 'Mizipets - ';
+        if (user.preferences.lang == 'fr')
+            subject += 'Recuperation Mot de passe';
+        if (user.preferences.lang == 'en') subject += 'Reset Password';
+
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Mizipiets - Reset Password',
+            subject: subject,
             template: `reset-password-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname,
@@ -34,9 +44,14 @@ export class MailService {
     }
 
     async sendChangedPassword(user: User) {
+        let subject = 'Mizipets - ';
+        if (user.preferences.lang == 'fr')
+            subject += 'Recuperation Mot de passe';
+        if (user.preferences.lang == 'en') subject += ' Reset Password';
+
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Mizipiets - Reset Password',
+            subject: subject,
             template: `changed-password-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
@@ -45,9 +60,13 @@ export class MailService {
     }
 
     async sendCloseAccount(user: User) {
+        let subject = 'Mizipets - ';
+        if (user.preferences.lang == 'fr') subject += 'Compte Fermé';
+        if (user.preferences.lang == 'en') subject += 'Account closed';
+
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Mizipiets - Account closed',
+            subject: subject,
             template: `close-account-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
@@ -56,9 +75,13 @@ export class MailService {
     }
 
     async sendNewConnection(user: User) {
+        let subject = 'Mizipets - ';
+        if (user.preferences.lang == 'fr') subject += 'Nouvelle connexion';
+        if (user.preferences.lang == 'en') subject += 'New connection';
+
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Mizipiets - New connection',
+            subject: subject,
             template: `new-connection-${user.preferences.lang}`,
             context: {
                 firstname: user.firstname
