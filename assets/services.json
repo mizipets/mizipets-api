@@ -1,33 +1,41 @@
 [
     {
         "id": 1,
-        "name": "adoption",
+        "name": "pets",
         "description": "",
-        "imagePath": "assets/images/adopt-panda.png",
-        "serviceType": "ADOPTION",
+        "imagePath": "assets/images/services/pets-service.png",
+        "serviceType": "PETS",
         "isActive": false
     },
     {
         "id": 2,
-        "name": "pets",
+        "name": "adoption",
         "description": "",
-        "imagePath": "assets/images/my-panda.png",
-        "serviceType": "PETS",
+        "imagePath": "assets/images/services/adoption-service.png",
+        "serviceType": "ADOPTION",
         "isActive": false
     },
     {
         "id": 3,
         "name": "advices",
         "description": "",
-        "imagePath": "assets/images/advice-panda.png",
+        "imagePath": "assets/images/services/advices-service.png",
         "serviceType": "ADVICES",
         "isActive": false
     },
     {
         "id": 4,
+        "name": "lost",
+        "description": "",
+        "imagePath": "assets/images/services/lost-service.png",
+        "serviceType": "LOST",
+        "isActive": false
+    },
+    {
+        "id": 5,
         "name": "vets",
         "description": "",
-        "imagePath": "assets/images/vet-panda.png",
+        "imagePath": "assets/images/services/vets-service.png",
         "serviceType": "VETS",
         "isActive": false
     }
