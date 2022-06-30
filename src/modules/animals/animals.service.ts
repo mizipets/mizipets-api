@@ -1,5 +1,5 @@
 /**
- * @author Maxime D'HARBOULLE
+ * @author Maxime D'HARBOULLE && Julien DA CORTE
  * @create 2022-03-23
  */
 import {
@@ -131,18 +131,16 @@ export class AnimalsService {
             id: Not(In(avoidIds)),
             deletedDate: null
         };
+
         if (params.sex) originalQuery.sex = params.sex;
         if (params.race) originalQuery.race = params.race;
-        if (params.specie)
-            originalQuery.race = { specie: { id: params.specie.id } };
-
-        if (params.isAdoption !== undefined) {
-            originalQuery.isAdoption = params.isAdoption;
-        }
+        if (params.specie) originalQuery.race = { specie: { id: params.specie.id } };
+        if (params.isAdoption !== undefined) originalQuery.isAdoption = params.isAdoption;
+        if (params.isLost !== undefined) originalQuery.isLost = params.isLost;
 
         const currentOwnerQuery = Object.assign({}, originalQuery);
         currentOwnerQuery.owner = {
-            id: params.ownerId ? params.ownerId : Not(user.id)
+            id: params.ownerId ? params.ownerId : Not(params.isSwipe ? user.id: -1)
         };
 
         const lastOwnerQuery = Object.assign({}, originalQuery);
@@ -168,6 +166,14 @@ export class AnimalsService {
         });
     }
 
+    async getFetchedAnimals(): Promise<Animal[]> {
+        return this.repository.find({
+            where: { isAdoption: true },
+            order: { id: "DESC" },
+            take: 5
+        });
+    }
+
     async update(id: number, dto: UpdateAnimalDTO): Promise<Animal> {
         const updated = await this.getById(id);
 
@@ -184,6 +190,16 @@ export class AnimalsService {
         updated.comment = dto.comment ?? updated.comment;
         updated.images = dto.images ?? updated.images;
         return await this.repository.save(updated);
+    }
+
+    async updateLostAnimal(id: number, isLost: boolean): Promise<Animal> {
+        await this.repository
+              .createQueryBuilder()
+              .update(Animal)
+              .set({ isLost: isLost })
+              .where('id = :id', { id: id })
+              .execute();
+        return this.getById(id);
     }
 
     async save(animal: Animal): Promise<Animal> {
