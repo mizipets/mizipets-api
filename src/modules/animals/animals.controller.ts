@@ -164,6 +164,16 @@ export class AnimalsController {
         }
         return;
     }
+
+    @Post(':id/report/:userId')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async report(
+        @Param('id') animalId: string,
+        @Param('userId') userId: string
+    ): Promise<void> {
+        await this.animalsService.report(parseInt(animalId), parseInt(userId));
+    }
 }
 
 export class Search {

@@ -5,6 +5,8 @@
 import {
     Column,
     Entity,
+    JoinTable,
+    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn
@@ -61,4 +63,8 @@ export class Animal {
 
     @OneToMany(() => Reminder, (reminder) => reminder.animal)
     reminders: Reminder[];
+
+    @ManyToMany(() => User)
+    @JoinTable()
+    reports: User[];
 }

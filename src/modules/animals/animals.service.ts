@@ -92,7 +92,7 @@ export class AnimalsService {
             where: {
                 deletedDate: null
             },
-            relations: ['race', 'race.specie', 'owner', 'reminders']
+            relations: ['race', 'race.specie', 'owner', 'reminders', 'reports']
         });
         if (!animal) {
             throw new NotFoundException(`No animal with id: ${id}`);
@@ -278,5 +278,13 @@ export class AnimalsService {
         } else {
             return favorite;
         }
+    }
+
+    async report(animalId: number, userId: number) {
+        const animal = await this.getById(animalId);
+        const user = await this.usersService.getById(userId);
+
+        animal.reports.push(user);
+        await this.repository.save(animal);
     }
 }

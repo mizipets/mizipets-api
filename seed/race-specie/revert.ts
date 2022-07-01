@@ -3,7 +3,7 @@
  * @create date 2022-03-20
  */
 import * as typeorm from 'typeorm';
-import ormconfig from './seed.ormconfig';
+import ormconfig from '../seed.ormconfig';
 
 const main = (): void => {
     typeorm
@@ -12,11 +12,6 @@ const main = (): void => {
             console.log('Connection opened');
 
             const runner = connection.createQueryRunner();
-
-            //advice
-            await runner.query('ALTER SEQUENCE advices_id_seq RESTART WITH 1');
-            await runner.query('DELETE FROM public.advices WHERE TRUE;');
-            console.log('Cleared advices');
 
             //races
             await runner.query('ALTER SEQUENCE races_id_seq RESTART WITH 1');
@@ -27,11 +22,6 @@ const main = (): void => {
             await runner.query('ALTER SEQUENCE species_id_seq RESTART WITH 1');
             await runner.query('DELETE FROM public.species WHERE TRUE;');
             console.log('Cleared species');
-
-            //service
-            await runner.query('ALTER SEQUENCE services_id_seq RESTART WITH 1');
-            await runner.query('DELETE FROM public.services WHERE TRUE;');
-            console.log('Cleared services');
 
             await connection.close();
             console.log('Connection closed');
