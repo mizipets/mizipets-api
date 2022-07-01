@@ -23,10 +23,10 @@
         "test:unit": "jest --config ./jest-unit.json",
         "seed:revert:services": "ts-node ./seed/services/revert.ts",
         "seed:revert:advices": "ts-node ./seed/advices/revert.ts",
-        "seed:revert:races": "ts-node ./seed/races/revert.ts",
+        "seed:revert:races": "ts-node ./seed/race-specie/revert.ts",
         "seed:services": "npm run seed:revert:services && ts-node ./seed/services/run.ts",
         "seed:advices": "npm run seed:revert:advices && ts-node ./seed/advices/run.ts",
-        "seed:races": "npm run seed:revert:races && ts-node ./seed/races/run.ts"
+        "seed:races": "npm run seed:revert:races && ts-node ./seed/race-specie/run.ts"
     },
     "dependencies": {
         "@firebase/messaging": "^0.9.12",
