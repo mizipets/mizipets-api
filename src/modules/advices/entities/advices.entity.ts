@@ -25,8 +25,12 @@ export class Advice {
     @Column('text')
     url: string;
 
-    @Column({ array: true })
-    contents: AdviceContentLang[];
+    @Column({
+        type: 'jsonb',
+        array: false,
+        nullable: false
+    })
+    langContent: AdviceContentLang[];
 
     @CreateDateColumn()
     created: Date;

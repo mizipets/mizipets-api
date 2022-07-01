@@ -1,11 +1,11 @@
 [
     {
-        "contents": [
+        "langContent": [
             {
                 "lang": "fr",
                 "content": {
                     "title": "Les chats en milieu urbain",
-                    "content": "Come vous le savez les chats en milieu urbains sont cools",
+                    "body": "Come vous le savez les chats en milieu urbains sont cools",
                     "urlLabel": "label url"
                 }
             },
@@ -13,7 +13,7 @@
                 "lang": "en",
                 "content": {
                     "title": "Cats in the urban lifestyle",
-                    "content": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
+                    "body": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
                     "urlLabel": "url label"
                 }
             }
@@ -24,76 +24,21 @@
         "specieId": 3
     },
     {
-        "title": "Dogs in the urban lifestyle",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "title": "Dogs can smell up to 9000 times better than humans",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TIP",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "title": "Dogs can smell better than a human",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "title": "A deep down analysis on dog bark vs tree bark",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "title": "The smallest and largest dogs",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "title": "The dogs that don't smell!",
-        "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-        "urlLabel": "url label",
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        
-        "contents": [
+        "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Horses and humans, a love story",
-                    "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
+                    "title": "Les chiens en milieu urbain",
+                    "body": "Come vous le savez les chats en milieu urbains sont cools",
+                    "urlLabel": "label url"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "The most loyal dog stories",
-                    "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label",
+                    "title": "Dogs in the urban lifestyle",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
                 }
             }
         ],
@@ -103,12 +48,158 @@
         "specieId": 2
     },
     {
-        "contents": [
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Dogs can smell up to 9000 times better than humans",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Dogs can smell up to 9000 times better than humans",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TIP",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Dogs can smell better than a human",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Dogs can smell better than a human",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Dogs can smell better than a human",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "A deep down analysis on dog bark vs tree bark",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "A deep down analysis on dog bark vs tree bark",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "A deep down analysis on dog bark vs tree bark",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "The dogs that don't smell!",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "The dogs that don't smell!",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Horses and humans, a love story",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "The most loyal dog stories",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
             {
                 "lang": "fr",
                 "content": {
                     "title": "Les cheveaux et les hommes",
-                    "content": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
                     "urlLabel": "url label"
                 }
             },
@@ -116,7 +207,7 @@
                 "lang": "en",
                 "content": {
                     "title": "",
-                    "content": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
+                    "body": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
                     "urlLabel": "url label"
                 }
             }
