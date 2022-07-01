@@ -8,6 +8,7 @@ import { FavoritesModule } from '../favorites/favorites.module';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Advice]),
+        UsersModule
         forwardRef(() => FavoritesModule)
     ],
     providers: [AdvicesService],

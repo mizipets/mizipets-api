@@ -76,6 +76,7 @@ const getServices = (): Service[] => {
 const getAdvices = (): Advice[] => {
     return jsonAdvices.map((advice) => {
         advice.specie = getSpecie(advice.specieId);
+        delete advice.specieId;
         return advice;
     }) as Advice[];
 };
