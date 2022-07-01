@@ -9,10 +9,12 @@ import { Favorites } from './entities/favorites.entity';
 import { FavoritesService } from './favorites.service';
 import { AnimalsModule } from '../animals/animals.module';
 import { UsersModule } from '../users/users.module';
+import { AdvicesModule } from '../advices/advices.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Favorites]),
+        forwardRef(() => AdvicesModule),
         forwardRef(() => AnimalsModule),
         forwardRef(() => UsersModule)
     ],

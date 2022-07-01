@@ -9,6 +9,8 @@ import { NotificationDTO } from './dto/notification.dto';
 import { NotificationType } from './entities/notification-type.enum';
 import { Notification } from './entities/notification.entity';
 import { NotificationsGateway } from './notification.gateway';
+import { User } from '../users/entities/user.entity';
+import { NotificationTypeLabel } from './entities/notification-type-label.enum';
 
 const { FCM_SERVER_KEY, FCM_ENDPOINT_URL } = process.env;
 
@@ -29,10 +31,14 @@ export class NotificationsService {
         });
     }
 
-    public async send(userIds: number[], notificationDto: NotificationDTO) {
+    public async sendToUserIds(
+        userIds: number[],
+        notificationDto: NotificationDTO
+    ) {
         const users = await Promise.all(
             userIds.map(async (id) => await this.usersService.getById(id))
         );
+
         const notification = {
             type: notificationDto.type,
             title: notificationDto.title,
@@ -41,35 +47,45 @@ export class NotificationsService {
         } as Notification;
 
         users.forEach(async (user) => {
-            if (user.role === Roles.PRO) {
-                await this.notificationsGateway.sendFrontNotification(
-                    user.id,
-                    notification
-                );
+            if (!user.preferences.notifications) {
+                return;
             }
-            if (user.flutterToken) {
-                await this.sendToDevices(notification, user.flutterToken);
-            }
+            this.sendNotificationToUser(user, notification);
         });
+    }
 
-        userIds.forEach(async (id) => {
-            const userNotification = Object.assign(
-                {
-                    user: {
-                        id: id
-                    }
-                },
+    private async sendNotificationToUser(
+        user: User,
+        notification: Notification
+    ) {
+        if (user.role === Roles.PRO) {
+            await this.notificationsGateway.sendFrontNotification(
+                user.id,
                 notification
             );
-            await this.repository.save(userNotification);
-        });
+        }
+        if (user.flutterToken) {
+            await this.sendToDevices(notification, user.flutterToken);
+        }
+
+        const userNotification = Object.assign(
+            {
+                user: {
+                    id: user.id
+                }
+            },
+            notification
+        );
+        await this.repository.save(userNotification);
     }
 
     private async sendToDevices(notification: Notification, token: string) {
         const serviceText = new Map<NotificationType, string>();
         serviceText.set(NotificationType.MESSAGE, '🐾');
         const fcmNotification = {
-            title: `🐾 - ${notification.title}`,
+            title: `${NotificationTypeLabel[notification.type]} - ${
+                notification.title
+            }`,
             priority: 'high',
             body: notification.body,
             icon: notification.icon

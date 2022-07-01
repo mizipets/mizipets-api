@@ -29,7 +29,7 @@ export class AdoptionReferences {
 }
 
 export class AdviceReferences {
-    id?: number;
+    liked: number[];
 }
 
 export class VetsReferences {

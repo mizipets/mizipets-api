@@ -36,7 +36,7 @@ export class CronService {
                     title: `Reminder for `,
                     body: `[${reminder.name}] This is your ${reminder.recurrence} reminder for ${reminder.animal.name}`
                 };
-                await this.notificationsService.send(
+                await this.notificationsService.sendToUserIds(
                     [reminder.animal.owner.id],
                     notification
                 );

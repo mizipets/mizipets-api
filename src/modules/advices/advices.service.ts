@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, Repository } from 'typeorm';
-import { UsersService } from '../users/users.service';
+import { FindConditions, In, Repository } from 'typeorm';
+import { FavoritesService } from '../favorites/favorites.service';
 import { Advice } from './entities/advices.entity';
 
 @Injectable()
 export class AdvicesService {
     constructor(
         @InjectRepository(Advice)
-        private readonly repository: Repository<Advice>
+        private readonly repository: Repository<Advice>,
+        @Inject(forwardRef(() => FavoritesService))
+        private favoritesService: FavoritesService
     ) {}
 
     async getAll() {
@@ -40,6 +42,14 @@ export class AdvicesService {
     async getOneBy(where: FindConditions<Advice>): Promise<Advice> {
         return await this.repository.findOne({
             where: where
+        });
+    }
+
+    async getByIds(ids: number[]) {
+        return await this.repository.find({
+            where: {
+                id: In(ids)
+            }
         });
     }
 }
