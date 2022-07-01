@@ -73,8 +73,12 @@ export class AnimalsController {
         const params: Search = new Search();
 
         if (sex) params.sex = sex;
-        if (raceId) params.race = await this.raceService.getById(parseInt(raceId));
-        if (specieId) params.specie = await this.speciesService.getById(parseInt(specieId));
+        if (raceId)
+            params.race = await this.raceService.getById(parseInt(raceId));
+        if (specieId)
+            params.specie = await this.speciesService.getById(
+                parseInt(specieId)
+            );
         if (ownerId) params.ownerId = parseInt(ownerId);
         if (isAdoption) params.isAdoption = isAdoption === 'true';
         if (isLost) params.isLost = isLost === 'true';
@@ -134,14 +138,14 @@ export class AnimalsController {
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async updateLostAnimal(
-      @Req() req,
-      @Param('id') id: string,
-      @Query('isLost') isLost: string,
+        @Req() req,
+        @Param('id') id: string,
+        @Query('isLost') isLost: string
     ): Promise<Animal> {
         const animal = await this.animalsService.getById(parseInt(id));
         if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
             throw new ForbiddenException(
-              "Can't update the animal of someone else!"
+                "Can't update the animal of someone else!"
             );
         }
         const lost = isLost === 'true';

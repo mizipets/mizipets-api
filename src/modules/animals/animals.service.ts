@@ -134,13 +134,17 @@ export class AnimalsService {
 
         if (params.sex) originalQuery.sex = params.sex;
         if (params.race) originalQuery.race = params.race;
-        if (params.specie) originalQuery.race = { specie: { id: params.specie.id } };
-        if (params.isAdoption !== undefined) originalQuery.isAdoption = params.isAdoption;
+        if (params.specie)
+            originalQuery.race = { specie: { id: params.specie.id } };
+        if (params.isAdoption !== undefined)
+            originalQuery.isAdoption = params.isAdoption;
         if (params.isLost !== undefined) originalQuery.isLost = params.isLost;
 
         const currentOwnerQuery = Object.assign({}, originalQuery);
         currentOwnerQuery.owner = {
-            id: params.ownerId ? params.ownerId : Not(params.isSwipe ? user.id: -1)
+            id: params.ownerId
+                ? params.ownerId
+                : Not(params.isSwipe ? user.id : -1)
         };
 
         const lastOwnerQuery = Object.assign({}, originalQuery);
@@ -169,7 +173,7 @@ export class AnimalsService {
     async getFetchedAnimals(): Promise<Animal[]> {
         return this.repository.find({
             where: { isAdoption: true },
-            order: { id: "DESC" },
+            order: { id: 'DESC' },
             take: 5
         });
     }
@@ -194,11 +198,11 @@ export class AnimalsService {
 
     async updateLostAnimal(id: number, isLost: boolean): Promise<Animal> {
         await this.repository
-              .createQueryBuilder()
-              .update(Animal)
-              .set({ isLost: isLost })
-              .where('id = :id', { id: id })
-              .execute();
+            .createQueryBuilder()
+            .update(Animal)
+            .set({ isLost: isLost })
+            .where('id = :id', { id: id })
+            .execute();
         return this.getById(id);
     }
 
