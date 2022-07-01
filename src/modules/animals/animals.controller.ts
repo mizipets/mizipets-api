@@ -65,10 +65,13 @@ export class AnimalsController {
         @Query('specieId') specieId: string,
         @Query('ownerId') ownerId: string,
         @Query('isAdoption') isAdoption: string,
+        @Query('isLost') isLost: string,
+        @Query('isSwipe') isSwipe: string,
         @Query('limit') limit: string,
         @Query('fetchLastOwner') fetchLastOwner: string
     ): Promise<Animal[]> {
         const params: Search = new Search();
+
         if (sex) params.sex = sex;
         if (raceId)
             params.race = await this.raceService.getById(parseInt(raceId));
@@ -76,23 +79,21 @@ export class AnimalsController {
             params.specie = await this.speciesService.getById(
                 parseInt(specieId)
             );
-        if (ownerId != undefined) {
-            params.ownerId = parseInt(ownerId);
-        }
+        if (ownerId) params.ownerId = parseInt(ownerId);
+        if (isAdoption) params.isAdoption = isAdoption === 'true';
+        if (isLost) params.isLost = isLost === 'true';
+        if (fetchLastOwner) params.fetchLastOwner = fetchLastOwner === 'true';
 
-        params.limit = limit && limit === 'true';
-
-        if (isAdoption != undefined) {
-            params.isAdoption = isAdoption === 'true';
-        }
-
-        if (fetchLastOwner != undefined) {
-            params.fetchLastOwner = fetchLastOwner === 'true';
-        } else {
-            params.fetchLastOwner = false;
-        }
+        params.isSwipe = isSwipe === 'true';
+        params.limit = limit === 'true';
 
         return this.animalsService.getAnimal(req.user, params);
+    }
+
+    @Get('fetched')
+    @HttpCode(HttpStatus.OK)
+    async getFetchedAnimals() {
+        return this.animalsService.getFetchedAnimals();
     }
 
     @Put('adoption/:id/like')
@@ -133,6 +134,24 @@ export class AnimalsController {
         return this.animalsService.update(parseInt(id), dto);
     }
 
+    @Put(':id/lost')
+    @HttpCode(HttpStatus.CREATED)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async updateLostAnimal(
+        @Req() req,
+        @Param('id') id: string,
+        @Query('isLost') isLost: string
+    ): Promise<Animal> {
+        const animal = await this.animalsService.getById(parseInt(id));
+        if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
+            throw new ForbiddenException(
+                "Can't update the animal of someone else!"
+            );
+        }
+        const lost = isLost === 'true';
+        return this.animalsService.updateLostAnimal(parseInt(id), lost);
+    }
+
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
@@ -149,6 +168,16 @@ export class AnimalsController {
         }
         return;
     }
+
+    @Post(':id/report/:userId')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD)
+    async report(
+        @Param('id') animalId: string,
+        @Param('userId') userId: string
+    ): Promise<void> {
+        await this.animalsService.report(parseInt(animalId), parseInt(userId));
+    }
 }
 
 export class Search {
@@ -158,5 +187,7 @@ export class Search {
     ownerId: number;
     limit: boolean;
     isAdoption: boolean;
+    isLost: boolean;
+    isSwipe: boolean;
     fetchLastOwner: boolean;
 }

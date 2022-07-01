@@ -12,6 +12,7 @@ import { MailModule } from '../../shared/mail/mail.module';
 import { AnimalsModule } from '../animals/animals.module';
 import { S3Module } from '../s3/s3.module';
 import { DeviceModule } from '../device/device.module';
+import { AdvicesModule } from '../advices/advices.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { DeviceModule } from '../device/device.module';
         DeviceModule,
         forwardRef(() => FavoritesModule),
         forwardRef(() => AnimalsModule),
+        forwardRef(() => AdvicesModule),
         forwardRef(() => S3Module)
     ],
     controllers: [UsersController],

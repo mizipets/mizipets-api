@@ -110,7 +110,6 @@ export class User {
             delete this.address;
             delete this.shelter;
         }
-        delete this.email;
         delete this.lastname;
         delete this.preferences;
         delete this.flutterToken;

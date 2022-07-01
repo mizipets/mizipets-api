@@ -63,7 +63,7 @@ export class RoomGateway
             true ||
             (await this.server.to(body.roomCode).allSockets()).size < 2
         ) {
-            this.notificationsService.send(
+            this.notificationsService.sendToUserIds(
                 [
                     parseInt(body.userId) === room.animal.owner.id
                         ? room.adoptant.id
