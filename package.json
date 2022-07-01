@@ -21,9 +21,12 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./jest-e2e.json",
         "test:unit": "jest --config ./jest-unit.json",
-        "seed:run": "npm run seed:revert && ts-node ./seed/seed-run.ts",
-        "seed:run:staging": "ENV=staging npm run seed:revert && ts-node ./seed/seed-run.ts",
-        "seed:revert": "ts-node ./seed/seed-revert.ts"
+        "seed:revert:services": "ts-node ./seed/services/revert.ts",
+        "seed:revert:advices": "ts-node ./seed/advices/revert.ts",
+        "seed:revert:races": "ts-node ./seed/races/revert.ts",
+        "seed:services": "npm run seed:revert:services && ts-node ./seed/services/run.ts",
+        "seed:advices": "npm run seed:revert:advices && ts-node ./seed/advices/run.ts",
+        "seed:races": "npm run seed:revert:races && ts-node ./seed/races/run.ts"
     },
     "dependencies": {
         "@firebase/messaging": "^0.9.12",

@@ -3,12 +3,12 @@
  * @create date 2022-03-20
  */
 import * as typeorm from 'typeorm';
-import { Race } from '../src/modules/animals/entities/race.entity';
-import { Specie } from '../src/modules/animals/entities/specie.entity';
-import { Service } from '../src/modules/services/entities/service.entity';
-import ormconfig from './seed.ormconfig';
+import { Race } from '../../src/modules/animals/entities/race.entity';
+import { Specie } from '../../src/modules/animals/entities/specie.entity';
+import { Service } from '../../src/modules/services/entities/service.entity';
+import ormconfig from '../seed.ormconfig';
 import * as fs from 'fs';
-import { Advice } from '../src/modules/advices/entities/advices.entity';
+import { Advice } from '../../src/modules/advices/entities/advices.entity';
 
 const jsonRaces: any = JSON.parse(
     fs.readFileSync('assets/races.json').toString()
@@ -86,15 +86,6 @@ const main = (): void => {
         console.log('Connection opened');
 
         const runner = connection.createQueryRunner();
-
-        await runner.manager.save(Specie, getSpecies());
-        console.log('Seeding Species complete');
-
-        await runner.manager.save(Race, getRaces());
-        console.log('Seeding Races complete');
-
-        await runner.manager.save(Service, getServices());
-        console.log('Seeding Services complete');
 
         await runner.manager.save(Advice, getAdvices());
         console.log('Seeding Advices complete');
