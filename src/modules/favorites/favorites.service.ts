@@ -71,7 +71,9 @@ export class FavoritesService {
             },
             {
                 type: ServiceType.ADVICES,
-                reference: { id: null }
+                reference: {
+                    liked: []
+                }
             },
             {
                 type: ServiceType.VETS,
