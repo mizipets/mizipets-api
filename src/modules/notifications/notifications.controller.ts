@@ -2,7 +2,15 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-05-28
  */
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Query
+} from '@nestjs/common';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { NotificationsService } from './notifications.service';
@@ -22,5 +30,12 @@ export class NotificationsController {
             },
             offset ?? 0
         );
+    }
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
+    async delete(@Param('id') id: number) {
+        await this.notificationsService.delete(id);
     }
 }
