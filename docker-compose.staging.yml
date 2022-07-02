@@ -23,8 +23,6 @@ services:
       dockerfile: "./Dockerfile.staging"
     container_name: api
     hostname: api
-    depends_on:
-      - postgres_db
       - redis
     ports:
       - "3000:3000"

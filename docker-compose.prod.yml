@@ -22,8 +22,9 @@ services:
       context: .
       dockerfile: "./Dockerfile.prod"
     container_name: api
+    hostname: api
     depends_on:
-      - postgres_db
+      - redis
     ports:
       - "3000:3000"
       - "3001:3001"
