@@ -116,7 +116,7 @@ services:
     restart: always
     hostname: nginx
     volumes:
-      - ./.minio/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "9000:9000"
       - "9001:9001"

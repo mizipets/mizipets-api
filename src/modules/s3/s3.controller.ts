@@ -27,7 +27,7 @@ export class S3Controller {
     @UseInterceptors(
         FileInterceptor('file', {
             limits: {
-                fileSize: 10 * 1024 * 1024 // 10 megabytes
+                fileSize: 10485760 // 10 megabytes
             }
         })
     )
