@@ -9,8 +9,9 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { AdvicesService } from '../advices/advices.service';
+import { AdviceLang } from '../advices/dto/advice-lang.dto';
 import { AnimalsService } from '../animals/animals.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { UsersService } from '../users/users.service';
@@ -96,6 +97,7 @@ export class FavoritesService {
     }
 
     async getPopulatedFavoritesOfUser(userId: number) {
+        const user = await this.usersService.getById(userId);
         const favorites = await this.repository.find({ user: { id: userId } });
         const promises = Promise.all(
             favorites.map(async (favorite) => {
@@ -126,8 +128,12 @@ export class FavoritesService {
                         reference = favorite.reference as AdviceReferences;
                         referencePopulated =
                             favorite.reference as AdviceReferencesPopulated;
-                        referencePopulated.liked =
-                            await this.advicesService.getByIds(reference.liked);
+                        referencePopulated.liked = (
+                            await this.advicesService.getByIds(reference.liked)
+                        ).map(
+                            (advice) =>
+                                new AdviceLang(advice, user.preferences.lang)
+                        );
                         populate.reference = referencePopulated;
                         break;
                     case ServiceType.VETS:
