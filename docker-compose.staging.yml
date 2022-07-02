@@ -60,6 +60,7 @@ services:
     image: grafana/loki:2.0.0
     hostname: loki
     container_name: loki
+    restart: always
     ports:
       - "3100:3100"
     command:
@@ -72,6 +73,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    restart: always
     ports:
       - 3030:3000
     environment:
@@ -126,6 +128,7 @@ services:
 
   redis:
     image: "redis:alpine"
+    restart: always
     hostname: redis
     ports:
       - "6379:6379"
