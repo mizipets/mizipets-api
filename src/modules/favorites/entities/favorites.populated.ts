@@ -2,7 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-03-25
  */
-import { Advice } from '../../advices/entities/advices.entity';
+import { AdviceLang } from '../../advices/dto/advice-lang.dto';
 import { Animal } from '../../animals/entities/animal.entity';
 import { ServiceType } from '../../services/enums/service-type.enum';
 import { User } from '../../users/entities/user.entity';
@@ -29,7 +29,7 @@ export class PetsReferencesPopulated {
 }
 
 export class AdviceReferencesPopulated {
-    liked: Advice[];
+    liked: AdviceLang[];
 }
 
 export class VetsReferencesPopulated {

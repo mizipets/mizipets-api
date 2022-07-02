@@ -1,4 +1,5 @@
 export enum NotificationTypeLabel {
     MESSAGE = '🐾',
-    REMINDER = '⏰'
+    REMINDER = '⏰',
+    ADOPTED = '💔'
 }

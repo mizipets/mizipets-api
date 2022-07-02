@@ -126,4 +126,8 @@ export class NotificationsService {
             skip: offset
         });
     }
+
+    async delete(id: number) {
+        return await this.repository.delete(id);
+    }
 }
