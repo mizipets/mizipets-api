@@ -4,16 +4,40 @@
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Les chats en milieu urbain",
-                    "body": "Come vous le savez les chats en milieu urbains sont cools",
+                    "title": "Le saviez-vous, les chiens et chats ne transpirent pas.",
+                    "body": "Le saviez-vous, les chiens et chats ne transpirent pas comme nous. Lorsque notre température corporelle augmente, on se met à transpirer pour nous aider à refroidir. Les chiens et chats n’ont pas ce mécanisme là, ce qui les rends particulièrement sensibles à la chaleur. Ils ne possèdent des glandes leurs permettant de transpirer qu’au niveau des coussinets et ils effectuent la plus grande partie de leur thermorégulation à travers leur langue ! C’est pourquoi les chiens halètent lorsqu’ils ont chaud.\n\nPetites astuces pour aider votre animal souffrant de la chaleur :\n\n    • Laisser l’animal le plus possible à l’ombre.\n\n    • Les sortir tôt le matin et tard le soir.\n\n    • Mettre des glaçons dans leur gamelle d’eau.\n\n    • Les mouiller.\n\n    • Avec un tissu imbibé d’eau fraîche venir frotter leurs pattes et visage.\n\nIl existe également des couvertures refroidissantes spécialement conçues pour aider votre animal à se refroidir",
                     "urlLabel": "label url"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "Cats in the urban lifestyle",
-                    "body": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Did you know that dogs and cats don't sweat?",
+                    "body": "Did you know that dogs and cats don't sweat like we do? When our body temperature rises, we begin to sweat to help cool us down. Dogs and cats do not have this mechanism, which makes them particularly sensitive to heat. They only have glands allowing them to sweat at the level of the pads and they carry out most of their thermoregulation through their tongue! This is why dogs pant when they are hot. \n\nLittle tips to help your pet suffering from heat:\n\n- Leave the animal as much as possible in the shade.\n\n- Take them out early in the morning and late at night.\n\n- Put ice cubes in their water bowl.\n\n- Wet them.\n\n- With a cloth soaked in fresh water come and rub their paws and face.\n\nThere are also specially designed cooling blankets to help your pet cool down.",
+                    "urlLabel": "url label"
+                }
+            }
+        ],
+        "type": "TEXT",
+        "imageUrl": "https://www.veterinaire-alliance.fr/wp-content/uploads/2015/08/iStock_000031375158Medium1-700x372.jpg",
+        "url": "url",
+        "specieId": 2
+    },
+    {
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Pourquoi donner un vermifuge à son chien, son chiot, son chat ou son chaton est très important et même, indispensable ?",
+                    "body": "Donner un vermifuge à son chien ou son chat va permettre 2 choses essentielles :\n\n    1)  Protéger votre animal des parasites intestinaux (les vers) : ces vers leur 'volent' des nutriments et les affaiblissent ou les blessent pour sucer leur sang. Certains peuvent migrer dans le cœur de l'animal et les tuer.\n\n    2) Vous protéger des contaminations possibles ainsi que vos enfants, plus fragiles : certains vers peuvent se balader sous votre peau, dans vos yeux, dans votre intestin et pour les plus dangereux vous détruire le foie comme dans l'echinococcose !\n\nVous devrez vous adresser à votre vétérinaire pour obtenir un vermifuge adapté aux besoins et au mode de vie de votre animal. Sans cet avis, vous risquez de donner un vermifuge qui n'aurait pas l'effet attendu et prendriez le risque de jeter votre argent par les fenêtres et de vous faire contaminer !\n\nLes recommandations quant au nombre de comprimé de vermifuge à donner à vos animaux par an est très changeante en fonction du vermifuge administré. Il faut donc se référer à un vétérinaire pour vous guider",
+                    "urlLabel": "label url"
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Why giving a dewormer to your dog, puppy, cat or kitten is very important and even essential?",
+                    "body": "Giving a dewormer to your dog or cat will allow 2 essential things:\n\n    1) Protect your animal from intestinal parasites (worms): these worms 'steal' their nutrients and weaken or injure them to suck their blood. Some can migrate into the heart of the animal and kill them.\n\n    2) Protect yourself from possible contamination as well as your children, who are more fragile: certain worms can wander under your skin, in your eyes, in your intestine and for the most dangerous destroy your liver as in echinococcosis!\n\nYou will need to speak to your veterinarian to get a dewormer that suits your pet's needs and lifestyle. Without this advice, you risk giving a dewormer which would not have the expected effect and would take the risk of throwing your money out the window and getting infected!\n\nThe recommendations as to the number of deworming tablets to give to your animals per year vary greatly depending on the dewormer administered. It is therefore necessary to refer to a veterinarian to guide you.",
                     "urlLabel": "url label"
                 }
             }
@@ -28,193 +52,624 @@
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Les chiens en milieu urbain",
-                    "body": "Come vous le savez les chats en milieu urbains sont cools",
-                    "urlLabel": "label url"
-                }
-            },
-            {
-                "lang": "en",
-                "content": {
-                    "title": "Dogs in the urban lifestyle",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
-                }
-            }
-        ],
-        "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
-        "url": "url",
-        "specieId": 2
-    },
-    {
-        "langContent": [
-            {
-                "lang": "fr",
-                "content": {
-                    "title": "Dogs can smell up to 9000 times better than humans",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Le saviez-vous, les chats sauvages ont les pupilles rondes.",
+                    "body": "Si on vous demandait de dessiner un chat, on a tous pour habitude de dessiner leurs yeux avec une pupille en fente verticale. Saviez-vous cependant que les chats sauvages ont leur pupille perpétuellement ronde ? \n\nLa fente verticale est une particularité des chats domestiques.",
                     "urlLabel": "url label"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "Dogs can smell up to 9000 times better than humans",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Did you know that wild cats have round pupils?",
+                    "body": "If you were asked to draw a cat, we all used to draw their eyes with a vertical slit pupil. Did you know, however, that wild cats have perpetually round pupils?\n\nThe vertical split is a peculiarity of domestic cats",
                     "urlLabel": "url label"
                 }
             }
         ],
         "type": "TIP",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://lemagduchat.ouest-france.fr/images/dossiers/2020-05/yeux-chat-brillent-073706.jpg",
         "url": "url",
-        "specieId": 2
+        "specieId": 3
     },
     {
         "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Dogs can smell better than a human",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Les chats blancs aux yeux bleus sont-ils toujours sourds ?",
+                    "body": "En réalité, les chats blancs aux yeux bleus ont une chance sur deux d’être sourds.\n\nCela s’explique au niveau de leur génétique. Pour qu’un chat soit blanc, il doit avoir hérité du gène W de l’un de ses parents. Lors de l’embryogenèse (donc lors du développement de l’embryon), le gène W bloque la migration des cellules responsables de la pigmentation (les mélanocytes) dans tout le corps. Ainsi, le poil restera blanc. \n\nDans 60 à 70% des cas, ce gène empêche également la pigmentation de l’iris qui restera donc bleue.\n\nDans 40 à 50% des cas, le gène W est responsable de la destruction des cellules du canal de Corti (les cellules de l’oreille). Ces dernières ne survivent pas au-delà du 5ème jour de vie du chaton qui deviendra alors sourd.",
                     "urlLabel": "url label"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "Dogs can smell better than a human",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Are white cats with blue eyes always deaf?",
+                    "body": "In fact, white cats with blue eyes have a one in two chance of being deaf.\n\nThis is due to their genetics. For a cat to be white, it must have inherited the W gene from one of its parents. During embryogenesis (therefore during the development of the embryo), the W gene blocks the migration of cells responsible for pigmentation (melanocytes) throughout the body. Thus, the hair will remain white.\n\nIn 60 to 70% of cases, this gene also prevents the pigmentation of the iris which will therefore remain blue.\n\nIn 40 to 50% of cases, the W gene is responsible for the destruction of the cells of the canal of Corti (the cells of the ear). The latter do not survive beyond the 5th day of the kitten's life, which will then become deaf.",
                     "urlLabel": "url label"
                 }
             }
         ],
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://www.provence7.com/wp-content/uploads/2013/08/Chat-blanc-aux-yeux-bleus.jpg",
         "url": "url",
-        "specieId": 2
+        "specieId": 3
     },
     {
         "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Dogs can smell better than a human",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Importance de la Taurine dans l’alimentation du chat.",
+                    "body": "Chez le chat, la Taurine est un acide aminé essentiel (c’est un dérivé de la cystéine). Le chat, étant un prédateur, a toujours puisé sa Taurine chez ses proies et n’as donc jamais eu besoin de le produire par lui-même, ainsi, chez ces animaux, les enzymes de synthèse de la Taurine sont très peu actives. Cependant, un seul repas sans Taurine peut être fatal pour le chat. \n\nIl joue un rôle important dans l’élaboration des sels biliaires. (Chez les autres animaux, les sels biliaires sont principalement constitué d’acide taurocholique (synthétisé à partir de taurine) et d’acide glycocolique (synthétisé à partir de glycine). Chez le chat, on retrouve uniquement l’acide taurocholique ce qui rends la taurine essentielle).\n\nLes symptômes d’une carence en taurine chez le chat sont importants :\n\n    • Dégénérescence rétinienne et diminution de l’acuité visuelle.\n\n    • Cardiomyopathie.\n\n    • Fonction immune altérée.\n\n    • Troubles reproductifs chez la chatte (avortements et résorption fœtale).\n\n    • Les chatons mis au monde par une mère carencée pendant la gestation souffriront de lésions souvent irréversibles : troubles du développement nerveux, retard de croissance et surdité.\n\nLe chat est un carnivore strict. Il a impérativement besoin de protéines d'origine animale dans sa ration pour être en bonne santé.",
                     "urlLabel": "url label"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "A deep down analysis on dog bark vs tree bark",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Importance of Taurine in the cat's diet.",
+                    "body": "In cats, Taurine is an essential amino acid (it is a derivative of cysteine). The cat, being a predator, has always drawn its Taurine from its prey and therefore has never needed to produce it by itself, thus, in these animals, the Taurine synthesis enzymes are very inactive. However, a single meal without Taurine can be fatal for the cat.\n\nIt plays an important role in the production of bile salts. (In other animals, bile salts are mainly made up of taurocholic acid (synthesized from taurine) and glycocolic acid (synthesized from glycine). In cats, only taurocholic acid is found, which makes essential taurine).\n\nSymptoms of taurine deficiency in cats are important:\n\n- Retinal degeneration and reduced visual acuity.\n\n- Cardiomyopathy.\n\n- Impaired immune function.\n\n- Reproductive disorders in cats (abortions and fetal resorption).\n\n- Kittens brought into the world by a deficient mother during gestation will often suffer from irreversible lesions: nervous development disorders, growth retardation and deafness.\n\nThe cat is a strict carnivore. It absolutely needs protein of animal origin in its ration to be healthy",
                     "urlLabel": "url label"
                 }
             }
         ],
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "http://cdn.shopify.com/s/files/1/0267/8970/7854/articles/la-taurine-dans-l-alimentation-de-mon-chat.jpg?v=1637770646",
         "url": "url",
-        "specieId": 2
+        "specieId": 3
     },
     {
         "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "A deep down analysis on dog bark vs tree bark",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Saviez-vous que 99,9% des chats tricolores sont des chattes ?",
+                    "body": "La robe du chat a 3 couleurs de base : le noir, l’orange et le blanc. L’origine de la couleur (sauf le blanc), les motifs (uni, dégradé, tigré) et les combinaisons sont présents dans les deux chromosomes sexuels du félin : XX pour les femelles et XY pour les mâles. La mère, via ses chromosomes X transmet les couleurs noires et oranges à ses petits. Le père lui, transmet la couleur noire ou orange via ses chromosomes X. \n\nLe chromosome Y permet la détermination du sexe du chaton. \n\nAinsi, dans cet exemple, le chaton femelle aura un pelage noir ET orange, le mâle lui, un pelage noir OU orange. S’ajoute ensuite (ou pas) la couleur blanche qui, est indépendante du caractère sexuel. C’est ainsi que seules les femelles peuvent avoir les trois couleurs. \n\nComment ce fait-il alors qu’on retrouve dans 0,01% des cas un mâle tricolore ? \n\nLe mâle tricolore est le fruit d’une anomalie génétique. Au lieu de posséder deux chromosomes (XY), monsieur en possède trois (XXY). Celui-ci souffrira alors du syndrome de Klinefelter et est stérile.",
                     "urlLabel": "url label"
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "A deep down analysis on dog bark vs tree bark",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
+                    "title": "Did you know that 99.9% of tricolor cats are female cats?",
+                    "body": "The cat's coat has 3 basic colors: black, orange and white. The origin of the color (except white), the patterns (solid, degraded, tiger) and the combinations are present in the two sex chromosomes of the feline: XX for females and XY for males. The mother, via her X chromosomes, transmits the black and orange colors to her young. The father transmits the color black or orange via his X chromosomes.\n\nThe Y chromosome allows the sex of the kitten to be determined.\n\nThus, in this example, the female kitten will have a black AND orange coat, the male him, a black OR orange coat. Then adds (or not) the white color which is independent of the sexual character. This is how only females can have all three colors.\n\nHow is it that we find in 0.01% of cases a tricolor male?\n\nThe tricolor male is the result of a genetic anomaly. Instead of having two chromosomes (XY), Mr. has three (XXY). This one will then suffer from Klinefelter's syndrome and is sterile.",
                     "urlLabel": "url label"
                 }
             }
         ],
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://maviedechat.net/wp-content/uploads/2018/12/Tortoiseshell_cat_9665916133.jpg",
         "url": "url",
-        "specieId": 2
+        "specieId": 3
     },
     {
         "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "The dogs that don't smell!",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
+                    "title": "Saviez-vous que l’odorat d’un chien est 20 fois plus développé que celui de l’homme ?",
+                    "body": "L’odorat est le sens le plus développé chez le chien. C'est grâce à son odorat principalement que le chien repère son habitat, ses congénères, son alimentation, il joue un rôle important dans la communication, le comportement sexuel, le comportement alimentaire.\n\nL'efficacité de l'odorat du chien vient de plusieurs facteurs :\n\n    • Muqueuse olfactive (dans le nez) dont la surface est 50 fois plus importante chez le chien par rapport à l'homme.\n\n    • Cellules du cerveau dédiées à l'analyses des odeurs 40 fois plus nombreuses chez le chien que chez l'homme.\n\n    • Il possède un organe supplémentaire dans le palais supérieur et relié au nez par deux petits canaux, c'est l'organe voméronasal. Il permet d'analyser les odeurs avec énormément de précision même lorsque la quantité de molécules odorantes est très faible.\n\n    • L'animal est aussi capable de détecter des phéromones libérées à grande distance et permettant de transmettre une communication particulière : message sexuel, hiérarchique, émotionnel... Ce sont des informations que l'homme n'est pas capable de détecter.\n\nCette capacité de reconnaissance des odeurs explique que votre chien détecte un médicament caché dans ses aliments, qu'il n'aime pas qu'on lui applique shampoing et lotion sur le poils (en général il va se rouler partout...), qu'il reconnaît votre odeur sur un vêtement que vous lui laissez en votre absence...\n\nMais de cette capacité exceptionnelle, l'homme en a aussi tiré partie en l'utilisant pour ses besoins : chien détecteur de drogue, d'explosif, chien de secours en avalanche, chien truffier... tous ces animaux mettent leur odorat hors du commun au service de l'homme.",
+                    "urlLabel": ""
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "The dogs that don't smell!",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
+                    "title": "Did you know that a dog's sense of smell is 20 times better than a human's?",
+                    "body": "Smell is the most developed sense in dogs. It is mainly thanks to its sense of smell that the dog locates its habitat, its congeners, its food, it plays an important role in communication, sexual behavior, eating behavior\n\nThe effectiveness of the dog's sense of smell comes from several factors:\n\n- Olfactory mucosa (in the nose) whose surface is 50 times larger in dogs than in humans.\n\n- Brain cells dedicated to the analysis of odors 40 times more numerous in dogs than in humans.\n\n- It has an additional organ in the upper palate and connected to the nose by two small channels, it is the vomeronasal organ. It makes it possible to analyze odors with great precision even when the quantity of odorous molecules is very low.\n\n- The animal is also capable of detecting pheromones released at a great distance and allowing the transmission of a particular communication: sexual, hierarchical, emotional message... These are information that humans are not able to detect.\n\nThis ability to recognize smells explains why your dog detects a drug hidden in his food, that he does not like having shampoo and lotion applied to his hair (usually he will roll around...), that he he recognizes your scent on a piece of clothing that you leave for him in your absence...\n\nBut man has also taken advantage of this exceptional capacity by using it for his needs: drug and explosive detection dog, avalanche rescue dog, truffle dog... all these animals put their sense of smell out of the common in the service of ma\n\n",
+                    "urlLabel": ""
                 }
             }
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://www.pourquoidocteur.fr/media/article/thunbs/uploded_bimka1-1494582061.jpg",
         "url": "url",
         "specieId": 2
-    },
-    {
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Saviez-vous que certains chiens ont la langue bleue ?",
+                    "body": "Les races de chien dont la langue est bleue sont rares. En fait, le chow-chow est la principale race de chien dont la langue est bleue naturellement. D’ailleurs, en ce qui le concerne, ce particularisme pigmentaire s’applique également à son palais et ses babines. Cette pigmentation bleue naturelle rend la bouche du chow-chow plus sombre que celle des autres chiens. Elle se retrouve également chez les chiens croisés chow-chow et, dans certains cas, chez certains sharpeïs.\n\nCependant, une coloration bleutée de la langue ou des muqueuses du chien est un signe de cyanose. C’est un symptôme clinique qui peut avoir des conséquences très graves pour votre chien, qui peut même conduire à son décès si vous n’y prenez pas garde. Une langue bleue de chien indique que son sang est désoxygéné et que l’animal a un problème respiratoire ou de circulation sanguine, souvent d’origine cardiaque.  Si en plus de constater que votre chien a la langue bleue, vous percevez en lui d’autres symptômes comme une toux rauque, un comportement apathique ou une respiration bruyante, voire très rapide, emmenez-le d’urgence consulter un vétérinaire.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that some dogs have blue tongues?",
+                    "body": "Dog breeds with blue tongues are rare. In fact, the chow-chow is the main breed of dog whose tongue is naturally blue. Moreover, as far as he is concerned, this pigmentary particularism also applies to his palate and his lips. This natural blue pigmentation makes the chow chow's mouth darker than that of other dogs. It is also found in chow-chow crossbred dogs and, in some cases, in some sharpei.\n\nHowever, a bluish discoloration of the dog's tongue or mucous membranes is a sign of cyanosis. It is a clinical symptom that can have very serious consequences for your dog, which can even lead to his death if you are not careful. A dog's blue tongue indicates that its blood is deoxygenated and that the animal has a respiratory or blood circulation problem, often of cardiac origin. If, in addition to noticing that your dog has a blue tongue, you perceive other symptoms in him such as a hoarse cough, listless behavior or noisy, even very rapid breathing, take him to see a veterinarian urgently.",
+                    "urlLabel": ""
+                }
+            }
+        ],
         
-        "langContent": [
-            {
-                "lang": "fr",
-                "content": {
-                    "title": "Horses and humans, a love story",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
-                }
-            },
-            {
-                "lang": "en",
-                "content": {
-                    "title": "The most loyal dog stories",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
-                }
-            }
-        ],
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://static.wamiz.com/images/contrib/content/CHIEN%20CHOW%20CHOW-content-60180e3057edd.jpg",
         "url": "url",
         "specieId": 2
-    },
-    {
+    },{
         "langContent": [
             {
                 "lang": "fr",
                 "content": {
-                    "title": "Les cheveaux et les hommes",
-                    "body": "As you know, dogs in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
+                    "title": "Existe-il des chiens hypoallergéniques ? ",
+                    "body": "Lorsqu'on souffre d'allergies, il peut être difficile au quotidien de vivre avec un chien. Heureusement, il existe des races qui produisent moins d'allergènes que d'autres. \n\nL'allergie chez les animaux n'est pas directement liée à leurs poils, mais aux protéines allergènes de leurs salives. Lorsqu'un chien se lèche, il dépose sur ses poils cette protéine, lorsque le chien perd ses poils, la protéine se propage et déclenche les allergies. Ils existent certaines races de chien qui produisent une faible quantité d'allergène, on les appelle des «chiens hypoallergéniques».\n\nCes cinq races de chiens sont dites hypoallergéniques :\n\n    1. Le Caniche.\n\n    2. Le Shih Tzu.\n\n    3. Le Kerry Blue Terrier.\n\n    4. Le Bichon Maltais.\n\n    5. Le Chien D’eau Portugais. ",
+                    "urlLabel": ""
                 }
             },
             {
                 "lang": "en",
                 "content": {
-                    "title": "",
-                    "body": "As you know, cats in urban areas need to adapt and overcome the various situations they encounter",
-                    "urlLabel": "url label"
+                    "title": "Are there hypoallergenic dogs?",
+                    "body": "When you suffer from allergies, it can be difficult to live with a dog on a daily basis. Fortunately, there are breeds that produce fewer allergens than others.\n\nAllergy in animals is not directly linked to their hair, but to the allergenic proteins in their saliva. When a dog licks itself, it deposits this protein on its hair, when the dog loses its hair, the protein spreads and triggers allergies. There are certain dog breeds that produce a low amount of allergen, they are called “hypoallergenic dogs”.\n\nThese five dog breeds are said to be hypoallergenic:\n\n1. The Poodle.\n\n2. The Shih Tzu.\n\n3. The Kerry Blue Terrier.\n\n4. The Bichon Maltese.\n\n5. The Portuguese Water Dog",
+                    "urlLabel": ""
                 }
             }
         ],
+        
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://www.canibest.com/www/canibest/static/images/illustrations/fiche-race-chien-eau-portugais-cao-agua.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Saviez-vous que certaines races de chiens ont les pattes palmées ? ",
+                    "body": "Les chiens possédant des pattes palmées sont des bons nageurs. \n\nL’humain a créé des races de chiens qu’ils pourraient les éduquer pour en faire des chiens de sauvetage en mer. Pour devenir des toutous sauveteurs, ils doivent posséder les qualités suivantes: poil imperméable, endurance, résistance au froid et à l’humidité, pattes palmées, grande force de traction. Ils doivent également être tenaces et ne pas renoncer tant que le sauvetage n’est pas terminé. Le champion toute catégorie est le Terre Neuve. Il possède de réelles aptitudes pour le sauvetage, même sans y avoir été entraîné.\n\nMais le Terre Neuve n’a pas le monopole et d’autres races sont également choisies pour cette mission: le Golden Retriever, le Labrador, le Leonberg, le Landseer, le Saint Bernard, et le Terrier Noir de Russie. Ces toutous possèdent également toutes les caractéristiques requises pour devenir des toutous sauveteurs.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that some dog breeds have webbed feet?",
+                    "body": "Dogs with webbed feet are good swimmers.\n\nThe human has created breeds of dogs that they could educate them to make them rescue dogs at sea. To become rescue doggies, they must have the following qualities: waterproof coat, endurance, resistance to cold and moisture, webbed paws, great pulling force. They must also be tenacious and not give up until the rescue is complete. The overall champion is Newfoundland. He has real skills for rescue, even without having been trained.\n\nBut the Newfoundland does not have the monopoly and other breeds are also chosen for this mission: the Golden Retriever, the Labrador, the Leonberger, the Landseer, the Saint Bernard, and the Black Russian Terrier. These doggies also have all the characteristics required to become rescue doggies.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://i.servimg.com/u/f47/10/07/09/23/pattes10.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Le saviez-vous, le cheval est incapable de respirer par la bouche. ",
+                    "body": "Étant donné la mobilité et la longueur de leur voile du palais, les chevaux sont incapables de respirer par la bouche. En effet, leur voile du palais empêche la communication entre le tube digestif et le nez. \n\nCette particularité anatomique les force donc à respirer uniquement par le nez ce qui est extrêmement limitant. ",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that horses cannot breathe through their mouth?",
+                    "body": "Due to the mobility and length of their soft palate, horses are unable to breathe through their mouths. Indeed, their soft palate prevents communication between the digestive tract and the nose.\n\nThis anatomical particularity therefore forces them to breathe only through their nose, which is extremely limiting.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://img.ohmymag.com/article/1280/etude/cheval-heureux_dbb5626a15199c69adb1d04b6ce60e2524166f51.jpg",
         "url": "url",
         "specieId": 5
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Comparons la main du cheval et de l’humain. ",
+                    "body": "Vous êtes-vous déjà demandé à quoi correspondait exactement la main du cheval ? \n\nIci nous avons le squelette de la main d’un humain. Cette dernière est constituée des os formant le carpe, de 5 métacarpes, de 5 phalanges proximales, de 4 phalanges intermédiaires et de 5 phalanges distales. \n\nChez le cheval, la main commence à partir du boulet ! Le boulet du cheval correspond au carpe humain, ensuite nous retrouvons un métacarpe (avec deux métacarpes vestigiaux sur les côtés), une phalange proximale, une phalange intermédiaire et une phalange distale. ",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Let's compare the hand of the horse and the human.",
+                    "body": "Have you ever wondered what exactly the horse's hand is?\n\nHere we have the skeleton of a human hand. The latter is made up of the bones forming the carpus, 5 metacarpals, 5 proximal phalanges, 4 intermediate phalanges and 5 distal phalanges.\n\nIn the horse, the hand starts from the ball! The horse's fetlock corresponds to the human carpus, then we find a pastern (with two vestigial pasterns on the sides), a proximal phalanx, an intermediate phalanx and a distal phalanx.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://www.toomed.com/blog/wp-content/uploads/2018/09/squelette_main-1.jpg",
+        "url": "url",
+        "specieId": 5
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Le saviez-vous que les dents des chevaux poussent en continu ?",
+                    "body": "Les dents des chevaux sont assez spécifiques car elles poussent en continu, ce qui requiert de les limer continuellement (un peu comme vos ongles). \n\nLes chevaux sont des animaux qui mangent et mâchent en continu lorsqu’ils vivent à l’état sauvage, ce qui leur permet de bien user leurs dents naturellement. En box, l’environnement naturel du cheval ne peut pas être recréé et le cheval ne mâche pas correctement/ n’utilise pas toutes ses dents comme il devrait pouvoir le faire. C’est pour cela que pour les chevaux vivant en box il est très important de les faire voir au moins une fois par an par un dentiste équin qui viendra limer les dents de votre cheval afin qu’il ne se blesse pas l’intérieur de la bouche et vive sainement. \n\nPour un cheval ne vivant pas en prairie et passant la plupart de son temps en box, le travail du technicien dentiste équin est tout aussi indispensable que celui du Maréchal-ferrant. ",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that horses' teeth grow continuously?",
+                    "body": "Horse teeth are quite specific because they grow continuously, requiring continuous filing (much like your fingernails).\n\nHorses are animals that eat and chew continuously when living in the wild, which allows them to wear down their teeth naturally. In the box, the horse's natural environment cannot be recreated and the horse does not chew properly/use all of its teeth as it should be able to. This is why for horses living in stables it is very important to have them seen at least once a year by an equine dentist who will file your horse's teeth so that he does not hurt himself inside. mouth and live healthily.\n\nFor a horse that does not live in the pasture and spends most of its time in the box, the work of the equine dental technician is just as essential as that of the Farrier.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://magasinsaveve.be/-/media/Sites/Shared/Pcm%20Digital%20Assets/b/d/3/bd3b01260b0e47f6b6bca5b601578346.jpg?w=&h=&bc=&hash=6FF46697C813776AA3E4EF9028877478EC161D14",
+        "url": "url",
+        "specieId": 5
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Le saviez-vous, le cheval est incapable de vomir.",
+                    "body": "Notre estomac est composé de 3 parties, un cardia, un fundus et un pylore. Chez les humains, le cardia permet une entrée et une sortie des aliments qui peuvent donc aller à contre sens si le centre de vomissement est stimulé. Chez les chevaux, le cardia possède un sphincter très serré qui empêche toute sortie rétrograde des aliments. \n\nC'est pour cela qu'il est important de ne pas donner de trop grands morceaux d'aliments ou en trop grandes quantités. Le cheval est plus à risque pour les bouchons oesophagiens et son incapacité de vomir peut rendre cela très dangereux.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that horses cannot vomit?",
+                    "body": "Our stomach is made up of 3 parts, a cardia, a fundus and a pylorus. In humans, the cardia allows the entry and exit of food which can therefore go in the opposite direction if the vomiting center is stimulated. In horses, the cardia has a very tight sphincter which prevents any retrograde outflow of food.\n\nThis is why it is important not to give too large pieces of food or in too large quantities. The horse is more at risk for esophageal plugs and its inability to vomit can make this very dangerous.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://cheval-assur.com/assets/uploads/fo/content/articles/5e59238f19e25.jpg",
+        "url": "url",
+        "specieId": 5
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Vous êtes-vous déjà demandé pourquoi le cheval effectuait le flehmen ?",
+                    "body": "Le flehmen est une expression faciale pendant laquelle le cheval lève la tête, allonge son cou et son muffle, relève et retrousse la lèvre supérieure et ferme ses narines. \n\nCette expression faciale est souvent sujette à des rires et mal interprétée, mais savez-vous vraiment ce qu’elle signifie ? \n\nLe cheval fait ça lorsqu’il perçoit une odeur inhabituelle ou très chargée. Il fait cela lorsqu’il veut mémoriser ou analyser une odeur (la jument à la naissance de son poulain, lorsqu’un étalon croise les crottins d’un autre étalon, ou lorsque l’étalon sent l’odeur d’une femelle en chaleur). Souvent ce sont les mâles qui adoptent cette attitude, mais il suffit de présenter à un équidé un objet ayant une odeur qu’il ne connaît pas pour qu’il tente de l’identifier de cette manière. \n\nCette attitude permet de faire passer l’air dans l’organe voméro-nasal qui a une petite encoche se trouvant juste derrière les incisives supérieures. Cet organe est spécifique à la perception des phéromones et donc spécifique à la reproduction. ",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Have you ever wondered why the horse performs flehmen?",
+                    "body": "The flehmen is a facial expression during which the horse raises its head, lengthens its neck and muzzle, lifts and curls its upper lip and closes its nostrils.\n\nThis facial expression is often laughed at and misinterpreted, but do you really know what it means?\n\nThe horse does this when it perceives an unusual or very charged odor. He does this when he wants to memorize or analyze a smell (the mare at the birth of her foal, when a stallion crosses the droppings of another stallion, or when the stallion smells the smell of a female in heat ). Often it is the males who adopt this attitude, but it suffices to present an equine with an object having an odor that it does not know for it to attempt to identify it in this way.\n\nThis attitude allows air to pass through the vomeronasal organ which has a small notch located just behind the upper incisors. This organ is specific to the perception of pheromones and therefore specific to reproduction",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Flehmendes_Pferd_32_c.jpg/1200px-Flehmendes_Pferd_32_c.jpg",
+        "url": "url",
+        "specieId": 5
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Saviez-vous que les poules en vieillissant peuvent devenir des coqs ? ",
+                    "body": "La poule possède au départ 2 ovaires : un ovaire gauche qui va se développer avec tout le système du côté gauche, et un ovaire droit. \n\nChez les oiseaux, quand la femelle prend de l’âge, les périodes de ponte se raccourcissent très vite et à un moment donné, l’ovaire gauche ne va plus du tout produire d’hormones femelles (œstrogènes et progestérone). Quand la production hormonale s’arrête, l’ovaire droit va se transformer en testicule, et comme son canal est présent, la poule devient morphologiquement un coq. Il peut aussi devenir fécondant car il y a du sperme qui va être fabriqué au niveau du testicule et il pourra alors féconder d’autres poules. \n\nEn même temps que le testicule se développe, on va avoir des caractères sexuels secondaires masculins qui vont se développer : on va avoir la crête qui pousse, et va devenir très rouge. ",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that hens can turn into roosters as they age?",
+                    "body": "The hen initially has 2 ovaries: a left ovary which will develop with the whole system on the left side, and a right ovary.\n\nIn birds, when the female gets older, the spawning periods shorten very quickly and at some point, the left ovary will no longer produce any female hormones (estrogen and progesterone). When hormonal production stops, the right ovary will turn into a testicle, and as its canal is present, the hen becomes morphologically a rooster. It can also become fertilizing because there is sperm that will be produced in the testicle and it can then fertilize other hens.\n\nAt the same time as the testicle develops, we will have secondary male sexual characteristics which will develop: we will have the crest which grows, and will become very red.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/Chicken_-_melbourne_show_2005.jpg",
+        "url": "url",
+        "specieId": 6
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Pourquoi mon lapin mange t’il ses crottes ? ",
+                    "body": "Rassurez-vous, chez le lapin ce comportement est tout à fait normal !\n\nLe lapin produit deux types de crottes : \n\n    1. Des crottes rondes, dures et sèches.\n\n    2. Des cæcotrophes, qui sont des crottes molles, humides, brillantes, collées en grappe et très odorantes. \n\nCe sont les cæcotrophes qui sont mangés par le lapin.\n\nLa production de ces deux types de crottes est due au fait que le lapin doit faire passer les aliments deux fois à travers son tube digestif pour pouvoir les digérer complètement. Les crottes dures sont des déchets non digérables par le lapin et les cæcotrophes sont des crottes qui sont produites par l’animal après un premier cycle de digestion et qui sont ensuite consommées à nouveau de façon à en extraire les éléments qui n’ont pas pu être digérés lors du premier passage. \n\nCette double digestion est due au fait que le lapin mange essentiellement des végétaux riches en fibres. La cellulose est le principal constituant de la paroi des cellules végétales, mais chez les mammifères la cellulose ne peut être absorbée par l’organisme qu’après avoir été transformée par des bactéries qui ne vivent que dans une seule partie du système digestif du lapin : le cæcum. Le problème c’est que ce cæcum est situé à la fin de l’intestin grêle. Or c’est au niveau de l’intestin grêle que se fait le recyclage des nutriments produits par les bactéries présentes dans le cæcum.\n\nAu premier passage des aliments dans le tube digestif il y a donc une dégradation de la cellulose, mais les nutriments formés ne peuvent pas être assimilés. Pour profiter pleinement de ces nutriments, le lapin a donc besoin d’ingérer une deuxième fois les aliments (devenus des cæcotrophes). Lors de leur second passage dans l’intestin grêle, les cæcotrophes libèrent les nutriments très riches qu’ils contiennent (des protéines, des acides gras et des vitamines B).\n\nEn conclusion, la cæcotrophie est un comportement alimentaire sain du lapin qui se développe vers l’âge de trois mois. Les cæcotrophes sont un élément essentiel de son alimentation. Si vous avez un lapin de compagnie, il est important de ne pas le déranger lorsqu’il mange ses cæcotrophes. De nombreux lapins refusent de les manger s’ils ne sont pas immédiatement ingérés et traînent un peu au sol. Un lapin qui vit dans un environnement trop stressant aura donc tendance à ne pas manger tous ses cæcotrophes ce qui peut conduire à des problèmes de santé. \n\nDe plus, chaque lapin reconnaît ses cæcotrophes et ne mangera pas les cæcotrophes d’un autre lapin.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Why does my rabbit eat his droppings?",
+                    "body": "Rest assured, in rabbits this behavior is completely normal!\n\nRabbits produce two types of droppings:\n\n1. Round, hard, dry poop.\n\n2. Caecotrophs, which are soft, moist, shiny droppings stuck together in clusters and very fragrant.\n\nThese are the caecotrophs that are eaten by the rabbit.\n\nThe production of these two types of droppings is due to the fact that the rabbit must pass food twice through its digestive tract in order to digest it completely. Hard droppings are non-digestible waste by the rabbit and caecotrophs are droppings which are produced by the animal after a first cycle of digestion and which are then consumed again in order to extract the elements which could not be digested on the first pass.\n\nThis double digestion is due to the fact that the rabbit mainly eats plants rich in fiber. Cellulose is the main constituent of plant cell walls, but in mammals cellulose can only be absorbed by the body after being transformed by bacteria that live in only one part of the rabbit's digestive system: the cecum. The problem is that this caecum is located at the end of the small intestine. However, it is in the small intestine that the recycling of nutrients produced by the bacteria present in the caecum takes place.\n\nDuring the first passage of food through the digestive tract, there is therefore a degradation of cellulose, but the nutrients formed cannot be assimilated. To take full advantage of these nutrients, the rabbit therefore needs to ingest the food a second time (which have become caecotrophs). During their second passage through the small intestine, caecotrophs release the very rich nutrients they contain (proteins, fatty acids and B vitamins).\n\nIn conclusion, caecotrophy is a healthy eating behavior in rabbits that develops around the age of three months. Caecotrophs are an essential part of its diet. If you have a pet rabbit, it is important not to disturb it when it eats its caecotrophs. Many rabbits refuse to eat them if they are not immediately ingested and drag on the ground for a bit. A rabbit that lives in an environment that is too stressful will therefore tend not to eat all of its caecotrophs, which can lead to health problems.\n\nIn addition, each rabbit recognizes its caecotrophs and will not eat another rabbit's caecotrophs",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://cdn.sortiraparis.com/images/80/1665/744135-paris-les-lapins-de-garenne-sont-desormais-libres-de-gambader-aux-invalides.jpg",
+        "url": "url",
+        "specieId": 6
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Saviez-vous que les bébés du cochon d’inde naissent totalement constitués ? ",
+                    "body": "Les petits naissent avec un état de développement avancé : ce sont des cobayes en miniature. Ils pèsent en moyenne 80g à la naissance. Plus la portée est nombreuse, plus les bébés seront petits à la naissance. Ils ont les yeux ouverts (ils le sont déjà 15 jours avant la mise bas), le corps entièrement recouvert de poils. Ils ont des mouvements bien coordonnés et des dents déjà biseautées qui leur permettent de prendre de la nourriture solide dès la naissance. \n\nLe plus souvent les portées sont de 3 à 4 petits, mais elles peuvent aller de 1 à 8. \n\nUne femelle peut en théorie donner jusqu’à 4 à 5 portées par an mais ceci est vivement déconseillé en raison de l'épuisement de la femelle.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Did you know that guinea pig babies are born fully formed?",
+                    "body": "The young are born with an advanced state of development: they are miniature guinea pigs. They weigh an average of 80g at birth. The larger the litter, the smaller the babies will be at birth. They have their eyes open (they are already 15 days before birth), the body completely covered with hair. They have well-coordinated movements and already bevelled teeth that allow them to take solid food from birth.\n\nMost often litters are 3 to 4 young, but they can range from 1 to 8.\n\nA female can theoretically give up to 4 to 5 litters per year but this is strongly discouraged due to the exhaustion of the female.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://static.wixstatic.com/media/2e7c62_2de15a12e0e84588be242e8d1c7df276.jpg/v1/fill/w_528,h_348,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/2e7c62_2de15a12e0e84588be242e8d1c7df276.jpg",
+        "url": "url",
+        "specieId": 6
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Les serpents voient-ils dans le noir ?",
+                    "body": "C’est à la nuit tombée que beaucoup le crotale, python et boa partent traquer leurs proies. Au menu : rongeurs, lézards, grenouilles et parfois petits mammifères, qu’ils immobilisent puis tuent. Le reptile détecte ses proies par la chaleur qu’elles rayonnent en infrarouge. \n\nQu'ils soient non venimeux, tels les boas ou les pythons, ou venimeux, comme la vipère et le crotale, les serpents détectent leurs proies grâce au rayonnement infrarouge. Les yeux du serpent ne sont pas impliqués, car même quand ils sont masqués, l'animal parvient à détecter ses proies avec la même efficacité. La détection infrarouge fait intervenir des « fossettes sensorielles », de petites cavités situées à l’avant de la tête, sous chacune des narines. \n\nL’intérieur de chaque fossette comporte une mince membrane innervée par des cellules du système somato-sensoriel, celui chargé de détecter les variations de pression et les variations de température. Quand une proie se trouve à proximité, à moins d'un mètre, la chaleur qu’elle dégage sous forme de rayonnement infrarouge réchauffe la membrane. Les chercheurs américains viennent de découvrir que cette chaleur active certains récepteurs – des canaux ioniques – nommés TRPA1, situés sur les cellules nerveuses. Quand la température atteint un seuil de 28 °C, ces canaux s’ouvrent et les cellules nerveuses transmettent alors un signal électrique jusqu’au « tectum optique », au sommet du tronc cérébral. Le cerveau construit alors une image en trois dimensions de la proie, proche de celle que l’on obtient avec une caméra thermique.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Can snakes see in the dark?",
+                    "body": "It is at nightfall that many rattlesnakes, pythons and boas leave to hunt down their prey. On the menu: rodents, lizards, frogs and sometimes small mammals, which they immobilize and then kill. The reptile detects its prey by the heat they radiate in infrared.\n\nWhether non-venomous, such as boas or pythons, or venomous, such as vipers and rattlesnakes, snakes detect their prey using infrared radiation. The eyes of the snake are not involved, because even when they are masked, the animal manages to detect its prey with the same efficiency. Infrared detection involves “sensory dimples”, small cavities located at the front of the head, under each of the nostrils.\n\nThe interior of each dimple has a thin membrane innervated by cells of the somatosensory system, the one responsible for detecting pressure variations and temperature variations. When a prey is nearby, less than a meter, the heat it gives off in the form of infrared radiation warms the membrane. American researchers have just discovered that this heat activates certain receptors – ion channels – called TRPA1, located on nerve cells. When the temperature reaches a threshold of 28°C, these channels open and the nerve cells then transmit an electrical signal to the “optic tectum”, at the top of the brainstem. The brain then constructs a three-dimensional image of the prey, similar to that obtained with a thermal camera.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://lemagdesanimaux.ouest-france.fr/images/dossiers/2018-10/python-royal-105154.jpg",
+        "url": "url",
+        "specieId": 6
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Adopter un rat seul est-ce une bonne idée ? ",
+                    "body": "Le rat est un animal grégaire, il vit en groupe. Ces groupes sont souvent des groupes familiaux de plusieurs dizaines d’individus dans lesquels règne une hiérarchie stricte établie à l’aide de codes sociaux. Chaque rat y connait sa place, qu’il soit dominant ou dominé.\n\nLe rat domestique est très sociable et il adore la compagnie de ses congénères. Il est donc recommandé d'adopter au moins deux rats en même temps. Vivre seul va à l'encontre de son mode de vie naturel et peut entraîner des comportements non conformes à son espèce. \n\nEviter toutefois de mettre ensemble un mâle et une femelle au risque de vous retrouver avec une multitude de petits rats. D’autre part, plusieurs rats mâles ensemble ont du mal à vivre en bonne entente.\n\nLe rat domestique a besoin que l’on s’occupe de lui. S’il s’ennuie, il peut devenir agressif ou développer des troubles du comportement. Il faut donc jouer avec lui très régulièrement.",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Is adopting a single rat a good idea?",
+                    "body": "The rat is a gregarious animal, it lives in groups. These groups are often family groups of several dozen individuals in which there is a strict hierarchy established using social codes. Each rat knows its place, whether dominant or dominated.\n\nThe domestic rat is very sociable and loves the company of its fellow rats. It is therefore recommended to adopt at least two rats at the same time. Living alone goes against one's natural way of life and can lead to non-species-conforming behaviors\n\nHowever, avoid putting together a male and a female at the risk of ending up with a multitude of small rats. On the other hand, several male rats together have difficulty living together.\n\nThe domestic rat needs to be taken care of. If he is bored, he can become aggressive or develop behavioral problems. It is therefore necessary to play with him very regularly.",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://static.nationalgeographic.fr/files/styles/image_3200/public/01-rat-friends-nationalgeographic_1162144.jpg?w=1900&h=1267",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Savez vous que le museau du chien et l’équivalent a l’empreinte digitale chez l’humain",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Do you know that the muzzle of the dog and the equivalent has the fingerprint in the human",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TIP",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Les chow-chow ont la langue bleu. Selon une légende bouddhiste l’ancêtre du chow-chow devait ramener des morceaux de bois brulé ou de charbon pour réchauffer son maître. Sa langue est donc maintenant bleue.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Chow-chows have blue tongues. According to a Buddhist legend, the ancestor of the chow-chow had to bring back pieces of burnt wood or coal to warm his master. His tongue is now blue.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Les chiens transpirent par les pattes et par le museau, donc si votre chien va dans une flaque d’eau c’est pour se rafraîchir",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "According to a study, dogs detect if you have a disease such as cancer or diabetes.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Selon une études les chiens détectent si on a une maladie tel un cancer ou diabète.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "According to a study, dogs detect if you have a disease such as cancer or diabetes.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 2
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Selon des mythes les chats blancs sont présage de l’argent et du bonheur",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "According to myths, white cats are an omen of money and happiness",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 3
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Le ronronnement ne montre pas toujours que le chat est bien, il peut aussi signifier qu’il a mal ou qu’il est stressé. Le ronronnement est comme une auto-relaxation   ",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Purring does not always show that the cat is well, it can also mean that he is in pain or stressed. Purring is like self-relaxation ",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 3
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Les chats peuvent boire avec leur patte si le bol est trop petit car il n’aime pas se mouiller les moustaches ",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "Cats can drink with their paw if the bowl is too small because they don't like to get their whiskers wet ",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 3
+    },{
+        "langContent": [
+            {
+                "lang": "fr",
+                "content": {
+                    "title": "Les oreilles des chats peuvent tourner a 180 degrès, c’est grace au 32 muscles comme les autres félins, lion, tigre etc",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            },
+            {
+                "lang": "en",
+                "content": {
+                    "title": "The ears of cats can turn 180 degrees, it is thanks to 32 muscles like other felines, lion, tiger etc.",
+                    "body": "",
+                    "urlLabel": ""
+                }
+            }
+        ],
+        
+        "type": "TEXT",
+        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "url": "url",
+        "specieId": 3
     }
 ]
