@@ -21,9 +21,15 @@ export class AdviceLang {
         this.url = advice.url;
         this.created = advice.created;
 
-        const langContent = advice.langContent.find(
+        let langContent = advice.langContent.find(
             (langContent) => langContent.lang === lang
         );
+
+        if (!langContent) {
+            langContent = advice.langContent.find(
+                (langContent) => langContent.lang === 'fr'
+            );
+        }
 
         this.title = langContent.content.title;
         this.body = langContent.content.body;
