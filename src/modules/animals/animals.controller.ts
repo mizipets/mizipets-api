@@ -29,6 +29,7 @@ import { RacesService } from './race/races.service';
 import { SpeciesService } from './specie/species.service';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
+import { Age } from './enum/age.enum';
 
 @Controller('animals')
 export class AnimalsController {
@@ -63,6 +64,7 @@ export class AnimalsController {
         @Query('sex') sex: Sex,
         @Query('raceId') raceId: string,
         @Query('specieId') specieId: string,
+        @Query('age') age: string,
         @Query('ownerId') ownerId: string,
         @Query('isAdoption') isAdoption: string,
         @Query('isLost') isLost: string,
@@ -79,6 +81,7 @@ export class AnimalsController {
             params.specie = await this.speciesService.getById(
                 parseInt(specieId)
             );
+        if (age) params.age = age;
         if (ownerId) params.ownerId = parseInt(ownerId);
         if (isAdoption) params.isAdoption = isAdoption === 'true';
         if (isLost) params.isLost = isLost === 'true';
@@ -184,6 +187,7 @@ export class Search {
     sex: Sex;
     race: Race;
     specie: Specie;
+    age: string;
     ownerId: number;
     limit: boolean;
     isAdoption: boolean;

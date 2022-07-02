@@ -10,7 +10,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
+import { Between, In, Not, Repository } from 'typeorm';
 import {
     AdoptionReferences,
     Favorites
@@ -29,6 +29,7 @@ import { Search } from './animals.controller';
 import { Roles } from '../authentication/enum/roles.emum';
 import { S3Service } from '../s3/s3.service';
 import { RoomService } from '../room/room.service';
+import { Age } from './enum/age.enum';
 
 @Injectable()
 export class AnimalsService {
@@ -120,7 +121,6 @@ export class AnimalsService {
 
     async getAnimal(user: User, params: Search): Promise<Animal[]> {
         const userDB = await this.usersService.getById(user.id, ['favorites']);
-
         const reference = userDB.favorites.find(
             (favorite) => favorite.type === ServiceType.ADOPTION
         ).reference as AdoptionReferences;
@@ -136,8 +136,10 @@ export class AnimalsService {
         if (params.race) originalQuery.race = params.race;
         if (params.specie)
             originalQuery.race = { specie: { id: params.specie.id } };
-        if (params.isAdoption !== undefined)
+
+        if (params.isAdoption !== undefined) {
             originalQuery.isAdoption = params.isAdoption;
+        }
         if (params.isLost !== undefined) originalQuery.isLost = params.isLost;
 
         const currentOwnerQuery = Object.assign({}, originalQuery);
@@ -146,7 +148,7 @@ export class AnimalsService {
                 ? params.ownerId
                 : Not(params.isSwipe ? user.id : -1)
         };
-
+        
         const lastOwnerQuery = Object.assign({}, originalQuery);
         lastOwnerQuery.lastOwner = {
             id: params.ownerId ? params.ownerId : Not(user.id)
@@ -158,12 +160,19 @@ export class AnimalsService {
             queries.push(lastOwnerQuery);
         }
 
-        const animals = await this.repository.find({
+        let animals = await this.repository.find({
             where: queries,
             relations: ['race', 'race.specie', 'owner', 'reminders'],
             take: params.limit ? 5 : null
         });
 
+        if (params.age) {   
+            let range = this.getAgeRange(params.age);
+            animals = animals.filter(
+                (animal) => animal.birthDate.getTime() < range[0].getTime() &&
+                animal.birthDate.getTime() > range[1].getTime());
+        }
+        
         return animals.map((animal: Animal) => {
             animal.owner.removeSensitiveData();
             return animal;
@@ -290,5 +299,42 @@ export class AnimalsService {
 
         animal.reports.push(user);
         await this.repository.save(animal);
+    }
+
+    getAgeRange(age: string): Date[] {
+        console.log(age);
+        const currentTime = new Date();
+        let lower: Date;
+        let upper: Date;
+        switch (age) {
+            case Age.newBorn:
+                lower = currentTime;
+                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 2));
+                break;
+
+            case Age.young:
+                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 2));
+                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 5));
+                break;
+
+            case Age.adult:
+                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 5));
+                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 8));
+                break;
+
+            case Age.old:
+                console.log("AAAAAAAA");
+                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 8));
+                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 30));
+                break;
+
+            default:
+                break;
+        }
+        console.log(lower);
+        console.log(upper);
+
+
+        return [ lower, upper ];
     }
 }
