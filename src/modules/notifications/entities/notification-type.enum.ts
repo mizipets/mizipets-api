@@ -1,4 +1,5 @@
 export enum NotificationType {
     MESSAGE = 'MESSAGE',
-    REMINDER = 'REMINDER'
+    REMINDER = 'REMINDER',
+    ADOPTED = 'ADOPTED'
 }

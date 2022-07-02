@@ -20,6 +20,9 @@ import { FavoritesService } from '../favorites/favorites.service';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { MessageService } from './message.service';
 import { RoomStatus } from './enums/room-status.enum';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationDTO } from '../notifications/dto/notification.dto';
+import { NotificationType } from '../notifications/entities/notification-type.enum';
 
 @Injectable()
 export class RoomService {
@@ -31,7 +34,8 @@ export class RoomService {
         private messageService: MessageService,
         @Inject(forwardRef(() => FavoritesService))
         private favoritesService: FavoritesService,
-        @InjectRepository(Room) private readonly repository: Repository<Room>
+        @InjectRepository(Room) private readonly repository: Repository<Room>,
+        private readonly notificationsService: NotificationsService
     ) {}
 
     async create(user: User, animal: Animal): Promise<Room> {
@@ -206,6 +210,23 @@ export class RoomService {
         });
         await Promise.all(
             roomsToClose.map(async (roomToClose) => {
+                const notification: NotificationDTO = {
+                    type: NotificationType.ADOPTED,
+                    title: `${roomToClose.animal.name} ${
+                        roomToClose.adoptant.preferences.lang === 'fr'
+                            ? 'adoptée'
+                            : 'adopted'
+                    }`,
+                    body: `${roomToClose.animal.name} ${
+                        roomToClose.adoptant.preferences.lang === 'fr'
+                            ? 'a été adopté par un autre utilisateur'
+                            : 'was adopted by another user'
+                    }`
+                };
+                await this.notificationsService.sendToUserIds(
+                    [roomToClose.adoptant.id],
+                    notification
+                );
                 await this.close(roomToClose);
             })
         );
