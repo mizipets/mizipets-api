@@ -20,7 +20,10 @@ import { join } from 'path';
                 }
             },
             defaults: {
-                from: process.env.MAIL_FROM
+                from: {
+                    name: process.env.MAIL_NAME,
+                    address: process.env.MAIL_FROM
+                }
             },
             template: {
                 dir: join(__dirname, 'templates'),
