@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-06-25
+ */
 import { Specie } from '../../animals/entities/specie.entity';
 import { Advice } from '../entities/advices.entity';
 import { AdviceType } from '../enums/advice-type.enum';

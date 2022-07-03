@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-06-20
+ */
 import { Module } from '@nestjs/common';
 import { AnimalsModule } from '../animals/animals.module';
 import { NotificationsModule } from '../notifications/notifications.module';

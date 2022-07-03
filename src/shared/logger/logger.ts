@@ -1,3 +1,7 @@
+/**
+ * @author Maxime D'HARBOULLE
+ * @create 2022-06-05
+ */
 import { Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import {
     createLogger,
