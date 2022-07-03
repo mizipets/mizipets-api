@@ -148,7 +148,7 @@ export class AnimalsService {
                 ? params.ownerId
                 : Not(params.isSwipe ? user.id : -1)
         };
-        
+
         const lastOwnerQuery = Object.assign({}, originalQuery);
         lastOwnerQuery.lastOwner = {
             id: params.ownerId ? params.ownerId : Not(user.id)
@@ -166,13 +166,15 @@ export class AnimalsService {
             take: params.limit ? 5 : null
         });
 
-        if (params.age) {   
-            let range = this.getAgeRange(params.age);
+        if (params.age) {
+            const range = this.getAgeRange(params.age);
             animals = animals.filter(
-                (animal) => animal.birthDate.getTime() < range[0].getTime() &&
-                animal.birthDate.getTime() > range[1].getTime());
+                (animal) =>
+                    animal.birthDate.getTime() < range[0].getTime() &&
+                    animal.birthDate.getTime() > range[1].getTime()
+            );
         }
-        
+
         return animals.map((animal: Animal) => {
             animal.owner.removeSensitiveData();
             return animal;
@@ -302,39 +304,49 @@ export class AnimalsService {
     }
 
     getAgeRange(age: string): Date[] {
-        console.log(age);
         const currentTime = new Date();
         let lower: Date;
         let upper: Date;
         switch (age) {
             case Age.newBorn:
                 lower = currentTime;
-                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 2));
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 2)
+                );
                 break;
 
             case Age.young:
-                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 2));
-                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 5));
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 2)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 5)
+                );
                 break;
 
             case Age.adult:
-                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 5));
-                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 8));
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 5)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 8)
+                );
                 break;
 
             case Age.old:
-                console.log("AAAAAAAA");
-                lower = new Date(new Date().setFullYear(currentTime.getFullYear() - 8));
-                upper = new Date(new Date().setFullYear(currentTime.getFullYear() - 30));
+                console.log('AAAAAAAA');
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 8)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 30)
+                );
                 break;
 
             default:
                 break;
         }
-        console.log(lower);
-        console.log(upper);
 
-
-        return [ lower, upper ];
+        return [lower, upper];
     }
 }
