@@ -84,6 +84,25 @@ export class UsersController {
         await this.userService.updateFlutterToken(tokenDTO.token, parseInt(id));
     }
 
+    @Put(':id/lang')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
+    async updateLang(
+        @Request() req,
+        @Param('id') id: string,
+        @Body() body: { lang: string }
+    ): Promise<void> {
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't update this user");
+        const user = await this.userService.getById(parseInt(id));
+        user.preferences.lang = body.lang;
+        const updateUser = {
+            preferences: user.preferences
+        } as UpdateUserDto;
+
+        await this.userService.update(parseInt(id), updateUser);
+    }
+
     @Put(':id/close')
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)

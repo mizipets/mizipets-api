@@ -115,7 +115,10 @@ export class UsersService {
 
         user.firstname = userDto.firstname ?? user.firstname;
         user.lastname = userDto.lastname ?? user.lastname;
-        user.email = userDto.email.match(isEmail) ? userDto.email : user.email;
+        user.email =
+            userDto.email && userDto.email.match(isEmail)
+                ? userDto.email
+                : user.email;
         user.address = userDto.address ?? user.address;
         user.preferences = userDto.preferences ?? user.preferences;
         user.shelter = userDto.shelter ?? user.shelter;
