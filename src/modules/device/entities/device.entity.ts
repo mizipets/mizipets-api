@@ -10,7 +10,6 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import { IsString } from 'class-validator';
 
 @Entity('devices')
 export class Device {

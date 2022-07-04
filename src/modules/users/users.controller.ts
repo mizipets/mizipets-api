@@ -10,8 +10,10 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    Post,
     Put,
     Query,
+    Req,
     Request
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -19,6 +21,10 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { CreateAdminUserDTO } from './dto/create-admin.dto';
+import { hash } from 'bcrypt';
+
+const { SUPER_PASSWORD } = process.env;
 
 @Controller('users')
 export class UsersController {
@@ -110,5 +116,18 @@ export class UsersController {
         if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't close this user account");
         return this.userService.close(parseInt(id));
+    }
+
+    @Post('admin')
+    @HttpCode(HttpStatus.OK)
+    async createAdminAccount(
+        @Req() req,
+        @Body() body: CreateAdminUserDTO
+    ): Promise<User> {
+        if (body.superpassword !== SUPER_PASSWORD) {
+            throw new ForbiddenException();
+        }
+        body.user.password = await hash(body.user.password, 10);
+        return await this.userService.create(body.user, Roles.ADMIN);
     }
 }
