@@ -12,8 +12,12 @@ export class Specie {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('text')
-    name: string;
+    @Column({
+        type: 'jsonb',
+        array: false,
+        nullable: false
+    })
+    names: NameLang[];
 
     @Column()
     category: SpecieCategory;
@@ -23,4 +27,9 @@ export class Specie {
 
     @OneToMany(() => Advice, (advice) => advice.specie)
     advices: Advice[];
+}
+
+export class NameLang {
+    lang: string;
+    name: string;
 }

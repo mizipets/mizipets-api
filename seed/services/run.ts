@@ -43,14 +43,32 @@ const getRaces = (): Race[] => {
             races.push(
                 {
                     id: counter++,
-                    name: 'Unknown',
+                    names: [
+                        {
+                            lang: 'fr',
+                            name: 'Incconue'
+                        },
+                        {
+                            lang: 'en',
+                            name: 'Unknown'
+                        }
+                    ],
                     specie: getSpecie(parseInt(specieRace[0])),
                     animals: []
                 },
                 ...specieRace[1].map((race) => {
                     return {
                         id: counter++,
-                        name: race,
+                        names: [
+                            {
+                                lang: 'fr',
+                                name: 'Incconue'
+                            },
+                            {
+                                lang: 'en',
+                                name: 'Unknown'
+                            }
+                        ],
                         specie: getSpecie(parseInt(specieRace[0])),
                         animals: []
                     };

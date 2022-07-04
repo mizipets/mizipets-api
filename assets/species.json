@@ -1,57 +1,156 @@
 [
     {
         "id": 1,
-        "name": "Unknown",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Inconnue"
+            },
+            {
+                "lang": "en",
+                "name": "Unknown"
+            }
+        ],
         "category": "UNKNOWN"
     },
     {
         "id": 2,
-        "name": "Dog",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Chien"
+            },
+            {
+                "lang": "en",
+                "name": "Dog"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 3,
-        "name": "Cat",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Chat"
+            },
+            {
+                "lang": "en",
+                "name": "Cat"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 4,
-        "name": "Rabbit",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Lapin"
+            },
+            {
+                "lang": "en",
+                "name": "Rabbit"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 5,
-        "name": "Horse",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Cheval"
+            },
+            {
+                "lang": "en",
+                "name": "Horse"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 6,
-        "name": "Hamster",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Hamster"
+            },
+            {
+                "lang": "en",
+                "name": "Hamster"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 7,
-        "name": "Guinea pig",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Cochon d'inde"
+            },
+            {
+                "lang": "en",
+                "name": "Guinea pig"
+            }
+        ],
         "category": "MAMMAL"
     },
     {
         "id": 8,
-        "name": "Snake",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Serpent"
+            },
+            {
+                "lang": "en",
+                "name": "Snake"
+            }
+        ],
         "category": "REPTILE"
     },
     {
         "id": 9,
-        "name": "Lezard",
+        "names": [
+            {
+                "lang": "fr",
+                "name": "Lezard"
+            },
+            {
+                "lang": "en",
+                "name": "Lizard"
+            }
+        ],
         "category": "REPTILE"
     },
     {
         "id": 10,
-        "name": "Turtle",
+        "names": [
+            {
+                "lang": "fr",
+                "name": ""
+            },
+            {
+                "lang": "en",
+                "name": "Turtle"
+            }
+        ],
         "category": "REPTILE"
     },
     {
         "id": 11,
-        "name": "Ferret",
+        "names": [
+            {
+                "lang": "fr",
+                "name": ""
+            },
+            {
+                "lang": "en",
+                "name": "Ferret"
+            }
+        ],
         "category": "MAMMAL"
     }
 ]

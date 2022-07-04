@@ -10,15 +10,19 @@ import {
     PrimaryGeneratedColumn
 } from 'typeorm';
 import { Animal } from './animal.entity';
-import { Specie } from './specie.entity';
+import { NameLang, Specie } from './specie.entity';
 
 @Entity('races')
 export class Race {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('text')
-    name: string;
+    @Column({
+        type: 'jsonb',
+        array: false,
+        nullable: false
+    })
+    names: NameLang[];
 
     @ManyToOne(() => Specie, (specie) => specie.races)
     specie: Specie;
