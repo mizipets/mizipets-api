@@ -10,7 +10,7 @@ import {
     NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, In, Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import {
     AdoptionReferences,
     Favorites

@@ -22,7 +22,6 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { UsersService } from '../users/users.service';
 import { Message } from './entities/message.entity';
 import { Room } from './entities/room.entity';
-import { RoomStatus } from './enums/room-status.enum';
 import { MessageService } from './message.service';
 import { RoomService } from './room.service';
 

@@ -29,7 +29,6 @@ import { RacesService } from './race/races.service';
 import { SpeciesService } from './specie/species.service';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
-import { Age } from './enum/age.enum';
 
 @Controller('animals')
 export class AnimalsController {

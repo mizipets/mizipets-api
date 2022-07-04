@@ -2,15 +2,7 @@
  * @author Latif SAGNA
  * @create 2022-03-11
  */
-import {
-    Body,
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    Put
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';

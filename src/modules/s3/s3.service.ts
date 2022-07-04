@@ -20,8 +20,7 @@ const {
     AWS_S3_BUCKET_URL,
     AWS_S3_BUCKET_NAME,
     AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY,
-    PORT
+    AWS_SECRET_ACCESS_KEY
 } = process.env;
 
 const s3 = new AWS.S3({

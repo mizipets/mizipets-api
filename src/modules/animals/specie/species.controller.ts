@@ -13,10 +13,8 @@ import {
 import { Roles } from '../../authentication/enum/roles.emum';
 import { OnlyRoles } from '../../authentication/guards/role.decorator';
 import { SpeciesService } from './species.service';
-import { Specie } from '../entities/specie.entity';
 import { UsersService } from '../../users/users.service';
 import { SpecieDTO } from './specie.dto';
-import { map } from 'rxjs';
 
 @Controller('species')
 export class SpeciesController {
