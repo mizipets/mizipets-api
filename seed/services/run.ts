@@ -59,14 +59,15 @@ const getRaces = (): Race[] => {
                 ...specieRace[1].map((race) => {
                     return {
                         id: counter++,
+                        name: race,
                         names: [
                             {
                                 lang: 'fr',
-                                name: 'Incconue'
+                                name: race[0]
                             },
                             {
                                 lang: 'en',
-                                name: 'Unknown'
+                                name: race[1]
                             }
                         ],
                         specie: getSpecie(parseInt(specieRace[0])),

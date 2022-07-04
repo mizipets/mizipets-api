@@ -21,6 +21,7 @@ export class SpecieDTO {
             );
         }
         this.name = nameLang.name;
-        this.races = specie.races.map((race) => new RaceDTO(race));
+        if (specie.races)
+            this.races = specie.races.map((race) => new RaceDTO(race)) ?? [];
     }
 }
