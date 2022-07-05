@@ -4,7 +4,7 @@
  */
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, In, Repository } from 'typeorm';
+import { FindConditions, In, Not, Repository } from 'typeorm';
 import { FavoritesService } from '../favorites/favorites.service';
 import { Advice } from './entities/advices.entity';
 
@@ -22,11 +22,13 @@ export class AdvicesService {
     }
 
     async getRandom(): Promise<Advice[]> {
-        return await this.repository
-            .createQueryBuilder()
-            .orderBy('RANDOM()')
-            .limit(20)
-            .getMany();
+        return await this.repository.find({
+            where: {
+                specie: {
+                    id: Not(In([2, 3, 5]))
+                }
+            }
+        });
     }
 
     async getById(id: number): Promise<Advice> {

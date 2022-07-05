@@ -66,7 +66,7 @@
                 }
             }
         ],
-        "type": "TIP",
+        "type": "TEXT",
         "imageUrl": "https://lemagduchat.ouest-france.fr/images/dossiers/2020-05/yeux-chat-brillent-073706.jpg",
         "url": "url",
         "specieId": 3
@@ -478,7 +478,7 @@
         "type": "TEXT",
         "imageUrl": "https://static.nationalgeographic.fr/files/styles/image_3200/public/01-rat-friends-nationalgeographic_1162144.jpg?w=1900&h=1267",
         "url": "url",
-        "specieId": 2
+        "specieId": 6
     },{
         "langContent": [
             {
@@ -499,8 +499,8 @@
             }
         ],
         
-        "type": "TIP",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "type": "TEXT",
+        "imageUrl": "https://img.freepik.com/photos-gratuite/chien-dans-pouf-bleu_1321-3324.jpg",
         "url": "url",
         "specieId": 2
     },{
@@ -524,7 +524,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://www.illicoveto.com/wp-content/uploads/Chow-chow-768x958.jpg",
         "url": "url",
         "specieId": 2
     },{
@@ -548,7 +548,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://img.freepik.com/photos-gratuite/adorable-chien-basenji-brun-blanc-souriant-donnant-haut-cinq-isole-blanc_346278-1657.jpg",
         "url": "url",
         "specieId": 2
     },{
@@ -572,7 +572,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://fr.freepik.com/photos-gratuite/chien-chihuahua-mignon-yeux-tristes-recouverts-couverture-rouge_9931030.htm#query=chien%20humain%20malade&position=16&from_view=search",
         "url": "url",
         "specieId": 2
     },{
@@ -596,7 +596,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://p2j6y5p7.rocketcdn.me/wp-content/uploads/2022/03/reve-de-chat-blanc-signification.jpg",
         "url": "url",
         "specieId": 3
     },{
@@ -620,7 +620,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://p2j6y5p7.rocketcdn.me/wp-content/uploads/2022/03/reve-de-chat-blanc-signification.jpg",
         "url": "url",
         "specieId": 3
     },{
@@ -644,7 +644,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://lemagduchat.ouest-france.fr/images/dossiers/2019-04/chat-boit-082616.jpg",
         "url": "url",
         "specieId": 3
     },{
@@ -668,7 +668,7 @@
         ],
         
         "type": "TEXT",
-        "imageUrl": "https://image.shutterstock.com/image-photo/adorable-welsh-springer-spaniel-dog-600w-1823409425.jpg",
+        "imageUrl": "https://img.freepik.com/photos-gratuite/mignon-chaton-gingembre-maine-coon-est-allonge-meubles-speciaux-pour-chat_613910-20322.jpg",
         "url": "url",
         "specieId": 3
     }
