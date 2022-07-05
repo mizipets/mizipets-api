@@ -308,35 +308,70 @@ export class AnimalsService {
         let lower: Date;
         let upper: Date;
         switch (age) {
-            case Age.newBorn:
+            case Age.a:
                 lower = currentTime;
                 upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 1)
+                );
+                break;
+
+            case Age.b:
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 1)
+                );
+                upper = new Date(
                     new Date().setFullYear(currentTime.getFullYear() - 2)
                 );
                 break;
 
-            case Age.young:
+            case Age.c:
                 lower = new Date(
                     new Date().setFullYear(currentTime.getFullYear() - 2)
                 );
                 upper = new Date(
-                    new Date().setFullYear(currentTime.getFullYear() - 5)
+                    new Date().setFullYear(currentTime.getFullYear() - 4)
                 );
                 break;
 
-            case Age.adult:
+            case Age.d:
                 lower = new Date(
-                    new Date().setFullYear(currentTime.getFullYear() - 5)
+                    new Date().setFullYear(currentTime.getFullYear() - 4)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 6)
+                );
+                break;
+
+            case Age.e:
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 6)
                 );
                 upper = new Date(
                     new Date().setFullYear(currentTime.getFullYear() - 8)
                 );
                 break;
 
-            case Age.old:
-                console.log('AAAAAAAA');
+            case Age.f:
                 lower = new Date(
                     new Date().setFullYear(currentTime.getFullYear() - 8)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 10)
+                );
+                break;
+
+            case Age.g:
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 10)
+                );
+                upper = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 12)
+                );
+                break;
+
+            case Age.h:
+                lower = new Date(
+                    new Date().setFullYear(currentTime.getFullYear() - 12)
                 );
                 upper = new Date(
                     new Date().setFullYear(currentTime.getFullYear() - 30)
