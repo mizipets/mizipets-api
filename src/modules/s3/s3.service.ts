@@ -21,7 +21,6 @@ const {
     AWS_S3_BUCKET_NAME,
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
-    PORT
 } = process.env;
 
 const s3 = new AWS.S3({
@@ -52,21 +51,21 @@ export class S3Service {
             throw new ForbiddenException('Only images are allowed');
 
         const photo = await this.uploadToS3(type, id, file);
+        const key = photo && photo.key ? photo.key : photo.Key;
 
         if (type === 'animal') {
             const animal = await this.animalService.getById(id);
             if (animal.owner.id !== userId)
                 throw new ForbiddenException('Wrong access');
 
-            await this.animalService.updateImages(id, this.keyToUrl(photo.key));
+            await this.animalService.updateImages(id, this.keyToUrl(key));
         }
 
         if (type === 'avatar') {
             const user = await this.userService.getById(id);
             if (user.id !== userId)
                 throw new ForbiddenException('Wrong access');
-
-            await this.userService.updateAvatar(id, this.keyToUrl(photo.key));
+            await this.userService.updateAvatar(id, this.keyToUrl(key));
         }
         return photo.key;
     }
@@ -81,6 +80,7 @@ export class S3Service {
         file: any
     ): Promise<any> {
         const newUuid = uuidv4();
+        console.log(`key: ${type}_${id}_${newUuid}`);
         try {
             return await s3
                 .upload({
