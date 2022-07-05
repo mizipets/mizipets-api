@@ -76,10 +76,9 @@ export class UsersService {
         return !!user;
     }
 
-    async create(userDto: CreateUserDto): Promise<User> {
+    async create(userDto: CreateUserDto, role = Roles.STANDARD): Promise<User> {
         const favorites = await this.favoritesService.createFavoritesForUser();
         const newUser = new User();
-        let role: Roles = Roles.STANDARD;
         let shelter: Shelter = null;
 
         if (userDto.shelter && userDto.shelter.name !== '') {
@@ -103,7 +102,6 @@ export class UsersService {
         newUser.notifications = [];
         newUser.devices = [];
 
-        this.repository.create(newUser);
         return this.repository.save(newUser);
     }
 
@@ -115,7 +113,10 @@ export class UsersService {
 
         user.firstname = userDto.firstname ?? user.firstname;
         user.lastname = userDto.lastname ?? user.lastname;
-        user.email = userDto.email.match(isEmail) ? userDto.email : user.email;
+        user.email =
+            userDto.email && userDto.email.match(isEmail)
+                ? userDto.email
+                : user.email;
         user.address = userDto.address ?? user.address;
         user.preferences = userDto.preferences ?? user.preferences;
         user.shelter = userDto.shelter ?? user.shelter;

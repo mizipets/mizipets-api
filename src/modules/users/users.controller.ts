@@ -10,8 +10,10 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    Post,
     Put,
     Query,
+    Req,
     Request
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -25,6 +27,11 @@ import {
     ApiForbiddenResponse,
     ApiNoContentResponse
 } from '@nestjs/swagger';
+import { CreateAdminUserDTO } from './dto/create-admin.dto';
+import { hash } from 'bcrypt';
+
+const { SUPER_PASSWORD } = process.env;
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -116,6 +123,25 @@ export class UsersController {
         await this.userService.updateFlutterToken(tokenDTO.token, parseInt(id));
     }
 
+    @Put(':id/lang')
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.STANDARD, Roles.PRO)
+    async updateLang(
+        @Request() req,
+        @Param('id') id: string,
+        @Body() body: { lang: string }
+    ): Promise<void> {
+        if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
+            throw new ForbiddenException("Can't update this user");
+        const user = await this.userService.getById(parseInt(id));
+        user.preferences.lang = body.lang;
+        const updateUser = {
+            preferences: user.preferences
+        } as UpdateUserDto;
+
+        await this.userService.update(parseInt(id), updateUser);
+    }
+
     @Put(':id/close')
     @ApiNoContentResponse({
         description: 'User account closed'
@@ -129,5 +155,18 @@ export class UsersController {
         if (req.user.id !== parseInt(id) && req.user.role !== Roles.ADMIN)
             throw new ForbiddenException("Can't close this user account");
         return this.userService.close(parseInt(id));
+    }
+
+    @Post('admin')
+    @HttpCode(HttpStatus.OK)
+    async createAdminAccount(
+        @Req() req,
+        @Body() body: CreateAdminUserDTO
+    ): Promise<User> {
+        if (body.superpassword !== SUPER_PASSWORD) {
+            throw new ForbiddenException();
+        }
+        body.user.password = await hash(body.user.password, 10);
+        return await this.userService.create(body.user, Roles.ADMIN);
     }
 }
