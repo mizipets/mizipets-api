@@ -16,12 +16,17 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServicesService } from './services.service';
 import { Service } from './entities/service.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
-
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+@ApiTags('Services')
 @Controller('services')
 export class ServicesController {
     constructor(private readonly servicesService: ServicesService) {}
 
     @Get()
+    @ApiOkResponse({
+        description: 'All services retrieved',
+        type: [Service]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async getAll(): Promise<Service[]> {
@@ -29,6 +34,10 @@ export class ServicesController {
     }
 
     @Get('active')
+    @ApiOkResponse({
+        description: 'All active services retrieved',
+        type: [Service]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     public async getAllActive(): Promise<Service[]> {
@@ -36,6 +45,10 @@ export class ServicesController {
     }
 
     @Get(':id')
+    @ApiOkResponse({
+        description: 'Service retrieved',
+        type: Service
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async getById(@Param('id') id: number): Promise<Service> {
@@ -43,6 +56,10 @@ export class ServicesController {
     }
 
     @Put(':id')
+    @ApiOkResponse({
+        description: 'Service updated',
+        type: Service
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async update(
@@ -53,6 +70,10 @@ export class ServicesController {
     }
 
     @Put(':id/activate')
+    @ApiOkResponse({
+        description: 'Service activated',
+        type: Service
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async activate(@Param('id') id: string): Promise<Service> {
@@ -60,6 +81,10 @@ export class ServicesController {
     }
 
     @Put(':id/deactivate')
+    @ApiOkResponse({
+        description: 'Service deactivated',
+        type: Service
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     public async deactivate(@Param('id') id: string): Promise<Service> {

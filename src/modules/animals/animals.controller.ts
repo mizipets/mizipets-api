@@ -30,7 +30,15 @@ import { SpeciesService } from './specie/species.service';
 import { Race } from './entities/race.entity';
 import { Specie } from './entities/specie.entity';
 import { Age } from './enum/age.enum';
+import {
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
+    ApiOkResponse,
+    ApiTags
+} from '@nestjs/swagger';
 
+@ApiTags('Animals')
 @Controller('animals')
 export class AnimalsController {
     constructor(
@@ -40,6 +48,10 @@ export class AnimalsController {
     ) {}
 
     @Post()
+    @ApiCreatedResponse({
+        description: '',
+        type: Animal
+    })
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async create(@Req() req, @Body() dto: CreateAnimalDTO): Promise<Animal> {
@@ -47,6 +59,10 @@ export class AnimalsController {
     }
 
     @Post('adoption')
+    @ApiCreatedResponse({
+        description: '',
+        type: Animal
+    })
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async createAdoption(
@@ -57,6 +73,10 @@ export class AnimalsController {
     }
 
     @Get()
+    @ApiOkResponse({
+        description: 'Animals retrieved',
+        type: [Animal]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getAnimals(
@@ -94,12 +114,20 @@ export class AnimalsController {
     }
 
     @Get('fetched')
+    @ApiOkResponse({
+        description: 'Animals fetched',
+        type: [Animal]
+    })
     @HttpCode(HttpStatus.OK)
-    async getFetchedAnimals() {
+    async getFetchedAnimals(): Promise<Animal[]> {
         return this.animalsService.getFetchedAnimals();
     }
 
     @Put('adoption/:id/like')
+    @ApiOkResponse({
+        description: 'Likes retrieved',
+        type: [Favorites]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async like(@Req() req, @Param('id') id: string): Promise<Favorites> {
@@ -107,6 +135,10 @@ export class AnimalsController {
     }
 
     @Put('adoption/:id/dislike')
+    @ApiOkResponse({
+        description: 'Dislikes retrieved',
+        type: [Favorites]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async dislike(@Req() req, @Param('id') id: string): Promise<Favorites> {
@@ -114,6 +146,10 @@ export class AnimalsController {
     }
 
     @Get(':id')
+    @ApiOkResponse({
+        description: 'Animal retrieved',
+        type: Animal
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getById(@Param('id') id: string): Promise<Animal> {
@@ -121,6 +157,13 @@ export class AnimalsController {
     }
 
     @Put(':id')
+    @ApiOkResponse({
+        description: 'Animal updated',
+        type: Animal
+    })
+    @ApiForbiddenResponse({
+        description: "Can't update the animal of someone else!"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async update(
@@ -138,7 +181,14 @@ export class AnimalsController {
     }
 
     @Put(':id/lost')
-    @HttpCode(HttpStatus.CREATED)
+    @ApiOkResponse({
+        description: 'Lost animal updated',
+        type: Animal
+    })
+    @ApiForbiddenResponse({
+        description: "Can't update the animal of someone else!"
+    })
+    @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async updateLostAnimal(
         @Req() req,
@@ -156,6 +206,12 @@ export class AnimalsController {
     }
 
     @Delete(':id')
+    @ApiNoContentResponse({
+        description: 'Animal deleted'
+    })
+    @ApiForbiddenResponse({
+        description: "Can't delete the animal of someone else!"
+    })
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async delete(@Req() req, @Param('id') id: string): Promise<void> {
@@ -173,6 +229,9 @@ export class AnimalsController {
     }
 
     @Post(':id/report/:userId')
+    @ApiNoContentResponse({
+        description: 'Animal reported'
+    })
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async report(
