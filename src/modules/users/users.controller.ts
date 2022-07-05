@@ -19,18 +19,28 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-
+import {
+    ApiTags,
+    ApiOkResponse,
+    ApiForbiddenResponse,
+    ApiNoContentResponse
+} from '@nestjs/swagger';
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
     @Get()
+    @ApiOkResponse({
+        description: 'Users retrieved',
+        type: [User]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     async getAll(
         @Query('favorites') favorites: string,
         @Query('animals') animals: string
-    ) {
+    ): Promise<User[]> {
         const relations = [];
         if (favorites === 'true') relations.push('favorites');
         if (animals === 'true') relations.push('animals');
@@ -38,6 +48,10 @@ export class UsersController {
     }
 
     @Get(':id')
+    @ApiOkResponse({
+        description: 'User retrieved by id',
+        type: User
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getById(
@@ -52,6 +66,10 @@ export class UsersController {
     }
 
     @Get('email/:email')
+    @ApiOkResponse({
+        description: 'User retrieved by email',
+        type: User
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.ADMIN)
     async getByEmail(@Param('email') email: string): Promise<User> {
@@ -59,6 +77,13 @@ export class UsersController {
     }
 
     @Put(':id')
+    @ApiOkResponse({
+        description: 'User updated',
+        type: User
+    })
+    @ApiForbiddenResponse({
+        description: "Can't update this user"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async update(
@@ -72,6 +97,13 @@ export class UsersController {
     }
 
     @Put(':id/flutterToken')
+    @ApiOkResponse({
+        description: "User's token updated",
+        type: User
+    })
+    @ApiForbiddenResponse({
+        description: "Can't update this user"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO)
     async updateFlutterToken(
@@ -85,6 +117,12 @@ export class UsersController {
     }
 
     @Put(':id/close')
+    @ApiNoContentResponse({
+        description: 'User account closed'
+    })
+    @ApiForbiddenResponse({
+        description: "Can't close this user account"
+    })
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async close(@Request() req, @Param('id') id: string): Promise<void> {

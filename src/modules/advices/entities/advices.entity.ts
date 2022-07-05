@@ -2,6 +2,7 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-06-25
  */
+import { ApiProperty } from '@nestjs/swagger';
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -14,21 +15,27 @@ import { AdviceType } from '../enums/advice-type.enum';
 
 @Entity('advices')
 export class Advice {
+    @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
 
+    @ApiProperty()
     @Column('text')
     type: AdviceType;
 
+    @ApiProperty()
     @Column('text')
     imageUrl: string;
 
+    @ApiProperty({ type: () => Specie })
     @ManyToOne(() => Specie, (specie) => specie.advices)
     specie: Specie;
 
+    @ApiProperty()
     @Column('text')
     url: string;
 
+    @ApiProperty()
     @Column({
         type: 'jsonb',
         array: false,
@@ -36,17 +43,22 @@ export class Advice {
     })
     langContent: AdviceContentLang[];
 
+    @ApiProperty()
     @CreateDateColumn()
     created: Date;
 }
 
-export class AdviceContentLang {
-    lang: string;
-    content: AdviceContent;
-}
-
 export class AdviceContent {
+    @ApiProperty()
     title: string;
+    @ApiProperty()
     body: string;
+    @ApiProperty()
     urlLabel: string;
+}
+export class AdviceContentLang {
+    @ApiProperty()
+    lang: string;
+    @ApiProperty()
+    content: AdviceContent;
 }

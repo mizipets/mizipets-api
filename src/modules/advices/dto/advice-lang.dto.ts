@@ -2,19 +2,29 @@
  * @author Maxime D'HARBOULLE
  * @create 2022-06-25
  */
+import { ApiProperty } from '@nestjs/swagger';
 import { Specie } from '../../animals/entities/specie.entity';
 import { Advice } from '../entities/advices.entity';
 import { AdviceType } from '../enums/advice-type.enum';
 
 export class AdviceLang {
+    @ApiProperty()
     private id: number;
+    @ApiProperty()
     private type: AdviceType;
+    @ApiProperty()
     private imageUrl: string;
+    @ApiProperty()
     private specie: Specie;
+    @ApiProperty()
     private url: string;
+    @ApiProperty()
     private title: string;
+    @ApiProperty()
     private body: string;
+    @ApiProperty()
     private urlLabel: string;
+    @ApiProperty()
     private created: Date;
 
     constructor(advice: Advice, lang: string) {

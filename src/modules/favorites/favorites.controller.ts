@@ -18,12 +18,26 @@ import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { ServiceType } from '../services/enums/service-type.enum';
 import { FavoritesService } from './favorites.service';
 import { Favorites } from './entities/favorites.entity';
+import {
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
+    ApiOkResponse,
+    ApiTags
+} from '@nestjs/swagger';
 
+@ApiTags('Favorites')
 @Controller('favorites')
 export class FavoritesController {
     constructor(private readonly favoritesService: FavoritesService) {}
 
     @Get(':userId')
+    @ApiOkResponse({
+        description: 'User favorites retrieved',
+        type: [Favorites]
+    })
+    @ApiForbiddenResponse({
+        description: "Can't access others favorites"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async getFavoritesOfUser(
@@ -37,6 +51,13 @@ export class FavoritesController {
     }
 
     @Get(':userId/populated')
+    @ApiOkResponse({
+        description: 'User populated favorites retrieved',
+        type: [Favorites]
+    })
+    @ApiForbiddenResponse({
+        description: "Can't access others favorites"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async getPopulatedFavoritesOfUser(
@@ -52,6 +73,10 @@ export class FavoritesController {
     }
 
     @Post(':userId/:type/:referenceID')
+    @ApiNoContentResponse({
+        description: 'Favorite added',
+        type: Favorites
+    })
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async addFavorite(
@@ -67,6 +92,10 @@ export class FavoritesController {
     }
 
     @Delete(':userId/:type/:referenceID')
+    @ApiNoContentResponse({
+        description: 'Favorite deleted',
+        type: Favorites
+    })
     @HttpCode(HttpStatus.NO_CONTENT)
     @OnlyRoles(Roles.STANDARD, Roles.PRO, Roles.ADMIN)
     async removeFavorite(

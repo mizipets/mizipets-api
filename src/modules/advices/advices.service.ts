@@ -17,11 +17,11 @@ export class AdvicesService {
         private favoritesService: FavoritesService
     ) {}
 
-    async getAll() {
+    async getAll(): Promise<Advice[]> {
         return await this.repository.find();
     }
 
-    async getRandom() {
+    async getRandom(): Promise<Advice[]> {
         return await this.repository
             .createQueryBuilder()
             .orderBy('RANDOM()')
@@ -29,7 +29,7 @@ export class AdvicesService {
             .getMany();
     }
 
-    async getById(id: number) {
+    async getById(id: number): Promise<Advice> {
         return await this.repository.findOne({
             where: {
                 id: id
@@ -37,7 +37,7 @@ export class AdvicesService {
         });
     }
 
-    async getBy(where: FindConditions<Advice>) {
+    async getBy(where: FindConditions<Advice>): Promise<Advice[]> {
         return await this.repository.find({
             where: where
         });
@@ -49,7 +49,7 @@ export class AdvicesService {
         });
     }
 
-    async getByIds(ids: number[]) {
+    async getByIds(ids: number[]): Promise<Advice[]> {
         return await this.repository.find({
             where: {
                 id: In(ids)

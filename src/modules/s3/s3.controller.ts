@@ -18,12 +18,23 @@ import { S3Service } from './s3.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { Roles } from '../authentication/enum/roles.emum';
-
+import {
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
+    ApiTags
+} from '@nestjs/swagger';
+@ApiTags('Upload')
 @Controller('upload')
 export class S3Controller {
     constructor(private readonly s3Service: S3Service) {}
 
     @Post(':id')
+    @ApiNoContentResponse({
+        description: 'File uploaded'
+    })
+    @ApiForbiddenResponse({
+        description: "Can't upload this file"
+    })
     @UseInterceptors(
         FileInterceptor('file', {
             limits: {
