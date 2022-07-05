@@ -10,10 +10,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
-<<<<<<< HEAD
 import { ApiProperty } from '@nestjs/swagger';
-=======
->>>>>>> staging
 
 @Entity('devices')
 export class Device {

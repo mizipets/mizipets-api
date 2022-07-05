@@ -3,13 +3,15 @@
  * @create 2022-02-25
  */
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from "@nestjs/swagger";
 
 const { NAME, ENV } = process.env;
 
+@ApiTags('Root')
 @Controller()
 export class RootController {
     @Get()
     hello(): string {
-        return `Bienvenue à ${NAME} en environment ${ENV}.`;
+        return `Welcome to ${NAME}. The current environment is ${ENV}.`;
     }
 }

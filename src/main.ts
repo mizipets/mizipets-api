@@ -41,9 +41,9 @@ async function bootstrap() {
     );
 
     const config = new DocumentBuilder()
-        .setTitle(`${NAME} $${ENV}`)
+        .setTitle(`${NAME}`)
         .setDescription(
-            'Mizipets is a mobile application providing services for pets'
+            'Mizipets is a mobile application that promotes animal well-being providing different services.'
         )
         .setVersion('1.0')
         .build();

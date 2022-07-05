@@ -25,6 +25,7 @@ import {
     ApiOkResponse,
     ApiTags
 } from '@nestjs/swagger';
+
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthenticationController {
