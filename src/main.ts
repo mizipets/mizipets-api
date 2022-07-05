@@ -33,7 +33,7 @@ async function bootstrap() {
     app.use(helmet());
     app.setGlobalPrefix(process.env.API_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ disableErrorMessages: false }));
-    if (ENV === 'local') {
+    if (true || ENV === 'local') {
         app.use(morgan('tiny'));
     }
     app.useGlobalFilters(
