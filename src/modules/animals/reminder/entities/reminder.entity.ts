@@ -5,27 +5,35 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Animal } from '../../entities/animal.entity';
 import moment from 'moment';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('reminders')
 export class Reminder {
+    @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
 
+    @ApiProperty()
     @Column('text')
     name: string;
 
+    @ApiProperty()
     @Column()
     isReccurent: boolean;
 
+    @ApiProperty()
     @Column('text')
     recurrence: Recurrence;
 
+    @ApiProperty()
     @Column()
     start: Date;
 
+    @ApiProperty()
     @Column({ default: true })
     isOn: boolean;
 
+    @ApiProperty({ type: () => Animal })
     @ManyToOne(() => Animal, (animal) => animal.reminders)
     animal: Animal;
 

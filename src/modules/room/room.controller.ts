@@ -16,16 +16,21 @@ import {
     Query,
     Req
 } from '@nestjs/common';
+import {
+    ApiCreatedResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiTags
+} from '@nestjs/swagger';
 import { AnimalsService } from '../animals/animals.service';
 import { Roles } from '../authentication/enum/roles.emum';
 import { OnlyRoles } from '../authentication/guards/role.decorator';
 import { UsersService } from '../users/users.service';
 import { Message } from './entities/message.entity';
 import { Room } from './entities/room.entity';
-import { RoomStatus } from './enums/room-status.enum';
 import { MessageService } from './message.service';
 import { RoomService } from './room.service';
-
+@ApiTags('Room')
 @Controller('room')
 export class RoomController {
     constructor(
@@ -36,6 +41,13 @@ export class RoomController {
     ) {}
 
     @Post(':animalId')
+    @ApiCreatedResponse({
+        description: 'Room created',
+        type: Room
+    })
+    @ApiNotFoundResponse({
+        description: 'Missing user or animal'
+    })
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async createRoom(
@@ -54,6 +66,13 @@ export class RoomController {
     }
 
     @Get(':animalId')
+    @ApiCreatedResponse({
+        description: 'Room retrieved',
+        type: Room
+    })
+    @ApiNotFoundResponse({
+        description: "Room doesn't exist or missing user or animal"
+    })
     @HttpCode(HttpStatus.CREATED)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getRoom(
@@ -78,6 +97,10 @@ export class RoomController {
     }
 
     @Get()
+    @ApiOkResponse({
+        description: 'Rooms retrieved',
+        type: [Room]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getRooms(
@@ -94,6 +117,13 @@ export class RoomController {
     }
 
     @Get(':roomId/:animalId/orCreate')
+    @ApiOkResponse({
+        description: 'Room retrieved or created',
+        type: Room
+    })
+    @ApiNotFoundResponse({
+        description: "Room doesn't exist or missing user or animal"
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
     async getOrCreateRoom(
@@ -138,6 +168,9 @@ export class RoomController {
     }
 
     @Put(':roomId/requestGive')
+    @ApiOkResponse({
+        description: 'Request sent'
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async requestGive(
@@ -148,6 +181,9 @@ export class RoomController {
     }
 
     @Put(':roomId/acceptRequestGive')
+    @ApiOkResponse({
+        description: 'Request accepted'
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async acceptRequestGive(
@@ -162,6 +198,9 @@ export class RoomController {
     }
 
     @Put(':roomId/refuseRequestGive')
+    @ApiOkResponse({
+        description: 'Request refused'
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async refuseRequestGive(
@@ -176,6 +215,9 @@ export class RoomController {
     }
 
     @Put(':roomId/close')
+    @ApiOkResponse({
+        description: 'Room closed'
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async close(@Param('roomId') roomId: string): Promise<void> {
@@ -184,6 +226,9 @@ export class RoomController {
     }
 
     @Delete(':roomId')
+    @ApiOkResponse({
+        description: 'Room archived'
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async delete(@Param('roomId') roomId: string): Promise<void> {
@@ -192,6 +237,10 @@ export class RoomController {
     }
 
     @Get(':roomId/messages')
+    @ApiOkResponse({
+        description: 'Room messages',
+        type: [Message]
+    })
     @HttpCode(HttpStatus.OK)
     @OnlyRoles(Roles.PRO, Roles.STANDARD)
     async messages(
