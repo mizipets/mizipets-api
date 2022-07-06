@@ -185,7 +185,7 @@ export class AnimalsService {
         return this.repository.find({
             where: {
                 isAdoption: true,
-                deletedDate: Not(null)
+                deletedDate: null
             },
             order: { id: 'DESC' },
             take: 5
