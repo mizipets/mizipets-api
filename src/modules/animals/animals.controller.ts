@@ -205,6 +205,31 @@ export class AnimalsController {
         return this.animalsService.updateLostAnimal(parseInt(id), lost);
     }
 
+    @Put(':id/adoption')
+    @ApiOkResponse({
+        description: 'Lost animal updated',
+        type: Animal
+    })
+    @ApiForbiddenResponse({
+        description: "Can't update the animal of someone else!"
+    })
+    @HttpCode(HttpStatus.OK)
+    @OnlyRoles(Roles.PRO, Roles.STANDARD, Roles.ADMIN)
+    async updateAdoptionAnimal(
+      @Req() req,
+      @Param('id') id: string,
+      @Query('isAdoption') isAdoption: string
+    ): Promise<Animal> {
+        const animal = await this.animalsService.getById(parseInt(id));
+        if (req.user.id !== animal.owner.id && req.user.role !== Roles.ADMIN) {
+            throw new ForbiddenException(
+              "Can't update the animal of someone else!"
+            );
+        }
+        const lost = isAdoption === 'true';
+        return this.animalsService.updateAdoptionAnimal(parseInt(id), lost);
+    }
+
     @Delete(':id')
     @ApiNoContentResponse({
         description: 'Animal deleted'

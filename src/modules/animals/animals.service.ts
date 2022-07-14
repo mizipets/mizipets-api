@@ -217,6 +217,16 @@ export class AnimalsService {
         return this.getById(id);
     }
 
+    async updateAdoptionAnimal(id: number, isAdoption: boolean): Promise<Animal> {
+        await this.repository
+          .createQueryBuilder()
+          .update(Animal)
+          .set({ isAdoption: isAdoption })
+          .where('id = :id', { id: id })
+          .execute();
+        return this.getById(id);
+    }
+
     async save(animal: Animal): Promise<Animal> {
         return await this.repository.save(animal);
     }
@@ -381,7 +391,6 @@ export class AnimalsService {
             default:
                 break;
         }
-
         return [lower, upper];
     }
 }
