@@ -183,7 +183,10 @@ export class AnimalsService {
 
     async getFetchedAnimals(): Promise<Animal[]> {
         return this.repository.find({
-            where: { isAdoption: true },
+            where: {
+                isAdoption: true,
+                deletedDate: null
+            },
             order: { id: 'DESC' },
             take: 5
         });
